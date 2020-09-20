@@ -62,7 +62,7 @@ public class RunExperiment {
 		}
 	}
 
-	private static void doExperiment(Mission mission, String exptTag, ExptParams eparams, boolean actuallyRun) {
+	public static void doExperiment(Mission mission, String exptTag, ExptParams eparams, boolean actuallyRun) {
 		Process middleware;
 
 		int faultInstanceFileNum = 0;

@@ -18,34 +18,22 @@ import org.uma.jmetal.solution.Solution;
 public class JMetalMutationRunner extends AbstractAlgorithmRunner {
 	
 	private void test() {
-	    Problem<DoubleSolution> problem = ProblemUtils.<DoubleSolution>loadProblem("test.prb");
-	    Algorithm<List<DoubleSolution>> algorithm;
-	    CrossoverOperator<DoubleSolution> crossover;
-	    MutationOperator<DoubleSolution> mutation;
-	    SelectionOperator<List<DoubleSolution>, DoubleSolution> selection;
+		String problemName = "test.prb";
+		
+	    Problem<FaultInstanceSetSolution> problem = ProblemUtils.<FaultInstanceSetSolution>loadProblem(problemName);
+	    Algorithm<List<FaultInstanceSetSolution>> algorithm;
+	    CrossoverOperator<FaultInstanceSetSolution> crossover;
+	    MutationOperator<FaultInstanceSetSolution> mutation;
+	    SelectionOperator<List<FaultInstanceSetSolution>, FaultInstanceSetSolution> selection;
+	   
+	    // TODO: define crossover and mutation
+	    crossover = createOnePointCrossover();
+	    mutation = simpleVariableAdjustment();
 	    
-	    String problemName = "test.prb";
-	    
-	    algorithm = new NSGAIIBuilder<DoubleSolution>(problem, crossover, mutation).build();
-	    
-	    
-//	        .setSelectionOperator(selection)
-//          .setMaxEvaluations(25000)
-//	        .setPopulationSize(100)
-//	        .build();
+	    algorithm = new NSGAIIBuilder<FaultInstanceSetSolution>(problem, crossover, mutation)
+	        .setSelectionOperator(selection)
+            .setMaxEvaluations(25000)
+	        .setPopulationSize(100)
+	        .build();
 	}
-	
-//    private void runMutationTest() {
-//      Problem<FaultInstanceSetSolution> problem;
-//    	Algorithm<List<FaultInstanceSetSolution>> algorithm;
-//    	CrossoverOperator<FaultInstanceSetSolution> crossover;
-//      MutationOperator<FaultInstanceSetSolution> mutation;
-//      SelectionOperator<List<FaultInstanceSetSolution>, FaultInstanceSetSolution> selection;
-        
-//    	algorithm = new NSGAIIBuilder<FaultInstanceSetSolution>(problem, crossover, mutation)
-//    			.setSelectionOperator(selection)
-//    			.setMaxEvaluations(25000)
-//    			.setPopulationSize(100)
-//    			.build() ;
-//    }
 }
