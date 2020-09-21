@@ -21,7 +21,7 @@ public class FaultInstanceSetSolution implements Solution<FaultInstance> {
 	private ExptParams eparams;
 	private boolean actuallyRun;
 	
-	private double exptRunTime = 1200.0;
+	private double exptRunTime;
 	
 	private List<FaultInstance> contents = new ArrayList<FaultInstance>();
 	

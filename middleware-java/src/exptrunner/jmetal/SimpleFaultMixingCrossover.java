@@ -33,19 +33,41 @@ public class SimpleFaultMixingCrossover implements CrossoverOperator<FaultInstan
 
 	public List<FaultInstanceSetSolution> doCrossover(FaultInstanceSetSolution cx, FaultInstanceSetSolution cy) {
 		List<FaultInstanceSetSolution> output = new ArrayList<FaultInstanceSetSolution>();
-		// TODO: generate the cut points for each 0 -> len, splitting into left and
-		// right
-		// copy X_left, Y_right
-		// copy Y_left, X_right
-		// add these to the output
 
-		// output.add(new_c1);
-		// output.add(new_c2);
+		FaultInstanceSetSolution new1 = new FaultInstanceSetSolution(cx);
+		FaultInstanceSetSolution new2 = new FaultInstanceSetSolution(cy);
+		int new1_index = 0;
+		int new2_index = 0;
+
+		int xlimit = cx.getNumberOfVariables();
+		int ylimit = cy.getNumberOfVariables();
+
+		int xcut = randomGenerator.nextInt(xlimit);
+		int ycut = randomGenerator.nextInt(ylimit);
+
+		for (int x = 0; x < xlimit; x++) {
+			if (x <= xcut) {
+				new1.setVariable(new1_index++, cx.getVariable(x));
+			} else {
+				new2.setVariable(new2_index++, cx.getVariable(x));
+			}
+		}
+		
+		for (int y = 0; y < ylimit; y++) {
+			if (y <= ycut) {
+				new2.setVariable(new2_index++, cy.getVariable(y));
+			} else {
+				new1.setVariable(new1_index++, cy.getVariable(y));
+			}
+		}
+		
+		output.add(new1);
+		output.add(new2);
 		return output;
 	}
 
 	public List<FaultInstanceSetSolution> execute(List<FaultInstanceSetSolution> source) {
-		// TODO Auto-generated method stub
+		// TODO: pick a method and perform the crossover here
 		return null;
 	}
 
