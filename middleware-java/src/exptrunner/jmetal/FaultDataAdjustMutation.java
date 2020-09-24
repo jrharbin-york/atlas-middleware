@@ -5,13 +5,10 @@ import java.io.IOException;
 import java.util.Random;
 
 import org.uma.jmetal.operator.mutation.MutationOperator;
-import org.uma.jmetal.util.pseudorandom.RandomGenerator;
-
 import atlasdsl.faults.Fault;
 import atlassharedclasses.FaultInstance;
 
 public class FaultDataAdjustMutation implements MutationOperator<FaultInstanceSetSolution> {
-
 	private enum MutationType {
 		EXPAND_TIME_LENGTH, CONTRACT_TIME_LENGTH, CHANGE_ADDITIONAL_INFO, MOVE_TIME_START,
 	}
@@ -59,8 +56,7 @@ public class FaultDataAdjustMutation implements MutationOperator<FaultInstanceSe
 				output.absShiftTimes(absTimeShift);
 				break;
 			case CHANGE_ADDITIONAL_INFO:
-				System.out.println("Change additional info: not yet implemented");
-				mutationLog.write("Change additional info: not yet implemented\n");
+				mutationLog.write("Change additional info\n");
 				output = changeAdditionalInfo(input);
 			}
 			System.out.println("Mutated fault = " + output.toString());
@@ -120,7 +116,7 @@ public class FaultDataAdjustMutation implements MutationOperator<FaultInstanceSe
 		for (int i = 0; i < source.getNumberOfVariables(); i++) {
 			FaultInstance faultInstance = source.getVariable(i);
 		    FaultInstance fiOut = mutatePossiblyMultipleTimes(faultInstance, MAX_INDIVIDUAL_MUTATIONS);
-			output.setVariable(i, fiOut);
+			output.setContents(i, fiOut);
 		}
 		return output;
 	}

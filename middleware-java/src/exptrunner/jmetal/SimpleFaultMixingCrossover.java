@@ -47,17 +47,17 @@ public class SimpleFaultMixingCrossover implements CrossoverOperator<FaultInstan
 
 		for (int x = 0; x < xlimit; x++) {
 			if (x <= xcut) {
-				new1.setVariable(new1_index++, cx.getVariable(x));
+				new1.setContents(new1_index++, cx.getVariable(x));
 			} else {
-				new2.setVariable(new2_index++, cx.getVariable(x));
+				new2.setContents(new2_index++, cx.getVariable(x));
 			}
 		}
 		
 		for (int y = 0; y < ylimit; y++) {
 			if (y <= ycut) {
-				new2.setVariable(new2_index++, cy.getVariable(y));
+				new2.setContents(new2_index++, cy.getVariable(y));
 			} else {
-				new1.setVariable(new1_index++, cy.getVariable(y));
+				new1.setContents(new1_index++, cy.getVariable(y));
 			}
 		}
 		
@@ -66,9 +66,13 @@ public class SimpleFaultMixingCrossover implements CrossoverOperator<FaultInstan
 		return output;
 	}
 
-	public List<FaultInstanceSetSolution> execute(List<FaultInstanceSetSolution> source) {
-		// TODO: pick a method and perform the crossover here
-		return null;
+	public List<FaultInstanceSetSolution> execute(List<FaultInstanceSetSolution> solutions) {
+		if (null == solutions) {
+			throw new JMetalException("Null parameter") ;
+		} else if (solutions.size() != 2) {
+			throw new JMetalException("There must be two parents instead of " + solutions.size()) ;
+		}
+		return doCrossover(solutions.get(0), solutions.get(1)) ;
 	}
 
 	public double getCrossoverProbability() {
