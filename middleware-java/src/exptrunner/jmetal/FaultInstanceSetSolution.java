@@ -1,21 +1,17 @@
 package exptrunner.jmetal;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
-// This is for jmetal 5
 import org.uma.jmetal.solution.*;
 
 import atlasdsl.*;
 import atlasdsl.faults.Fault;
 import atlassharedclasses.FaultInstance;
-import exptrunner.ExptParams;
-import exptrunner.FaultInstanceSet;
-import exptrunner.ResultInfo;
+
 
 public class FaultInstanceSetSolution implements Solution<FaultInstance> {
 	private static final long serialVersionUID = 1L;
@@ -30,7 +26,10 @@ public class FaultInstanceSetSolution implements Solution<FaultInstance> {
 	private double exptRunTime;
 	private double outputViolations;
 	
+	private Map<Object,Object> attributes = new HashMap<Object,Object>();
+	
 	private List<FaultInstance> contents = new ArrayList<FaultInstance>();
+	private Object attrib;
 	
 	FaultInstanceSetSolution(Mission mission, String exptTag, boolean actuallyRun, double exptRunTime) {
 		this.mission = mission;
@@ -93,7 +92,6 @@ public class FaultInstanceSetSolution implements Solution<FaultInstance> {
 			double exValue = Double.parseDouble(extraData);
 			// The speed faults intensity is relative to the max value
 			if (f.getName().contains("SPEEDFAULT")) {
-				System.out.println("speedfault intensity");
 				intensity = exValue / MAX_SPEED_VALUE;
 			}
 		}
@@ -110,7 +108,7 @@ public class FaultInstanceSetSolution implements Solution<FaultInstance> {
 		return total;
 	}
 
-	private double faultCostProportion() {
+	public double faultCostProportion() {
 		return 1 - ((totalActiveFaultTimeLengthScaledByIntensity() / (contents.size() * exptRunTime)));
 	}
 
@@ -119,7 +117,7 @@ public class FaultInstanceSetSolution implements Solution<FaultInstance> {
 	}
 
 	public void setConstraint(int index, double value) {
-		// This does nothing as the constraint is computed dynamically
+		
 	}
 
 	public int getNumberOfVariables() {
@@ -127,8 +125,7 @@ public class FaultInstanceSetSolution implements Solution<FaultInstance> {
 	}
 
 	public int getNumberOfObjectives() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 1;
 	}
 
 	public int getNumberOfConstraints() {
@@ -140,29 +137,6 @@ public class FaultInstanceSetSolution implements Solution<FaultInstance> {
 		FaultInstanceSetSolution copy = new FaultInstanceSetSolution(this);
 		return copy;
 	}
-
-	public void setAttribute(Object id, Object value) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Object getAttribute(Object id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean hasAttribute(Object id) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public Map getAttributes() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
 	public List<FaultInstance> getFaultInstances() {
 		return contents;
@@ -171,4 +145,26 @@ public class FaultInstanceSetSolution implements Solution<FaultInstance> {
 	public void setContents(int index, FaultInstance fi) {
 		contents.add(index, fi);
 	}
+
+	public int numberOfFaults() {
+		return contents.size();
+	}
+
+	public void setAttribute(Object id, Object value) {
+		attributes.put(id,value);
+	}
+
+	public Object getAttribute(Object id) {
+		return attributes.get(id);
+	}
+
+	public boolean hasAttribute(Object id) {
+		return attributes.containsKey(id);
+	}
+
+	public Map<Object, Object> getAttributes() {
+		return attributes;
+	}
+	
+	
 }

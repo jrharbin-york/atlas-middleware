@@ -6,18 +6,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 
-import java.util.Optional;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-import atlasdsl.loader.*;
 import atlassharedclasses.FaultInstance;
 import exptrunner.ExptHelper;
-import exptrunner.ExptParams;
 import faultgen.*;
 import atlasdsl.*;
-import atlasdsl.faults.Fault;
-import atlasdsl.faults.MotionFault;
 
 public class RunExperiment {
 

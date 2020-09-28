@@ -13,8 +13,6 @@ import org.uma.jmetal.problem.Problem;
 import atlasdsl.Mission;
 import atlasdsl.faults.Fault;
 import atlassharedclasses.FaultInstance;
-import exptrunner.ExptParams;
-import exptrunner.FaultInstanceSet;
 
 public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution> {
 

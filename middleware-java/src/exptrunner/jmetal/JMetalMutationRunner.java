@@ -6,36 +6,28 @@ import java.util.List;
 import java.util.Random;
 
 import org.uma.jmetal.algorithm.Algorithm;
-import org.uma.jmetal.algorithm.multiobjective.nsgaii.NSGAII;
 import org.uma.jmetal.algorithm.multiobjective.nsgaii.NSGAIIBuilder;
+import org.uma.jmetal.algorithm.multiobjective.spea2.SPEA2Builder;
 import org.uma.jmetal.example.AlgorithmRunner;
 import org.uma.jmetal.operator.crossover.CrossoverOperator;
 import org.uma.jmetal.operator.mutation.MutationOperator;
 import org.uma.jmetal.operator.selection.SelectionOperator;
 import org.uma.jmetal.operator.selection.impl.BinaryTournamentSelection;
 import org.uma.jmetal.problem.Problem;
-import org.uma.jmetal.solution.doublesolution.DoubleSolution;
-import org.uma.jmetal.solution.integersolution.IntegerSolution;
+
 import org.uma.jmetal.util.AbstractAlgorithmRunner;
 import org.uma.jmetal.util.JMetalException;
 import org.uma.jmetal.util.JMetalLogger;
-import org.uma.jmetal.util.ProblemUtils;
-import org.uma.jmetal.util.pseudorandom.RandomGenerator;
 
 import atlasdsl.Mission;
 import atlasdsl.loader.DSLLoadFailed;
 import atlasdsl.loader.DSLLoader;
 import atlasdsl.loader.GeneratedDSLLoader;
-
-import org.uma.jmetal.solution.Solution;
-
-// Multi-variables for the individual fault instances
-// The constraint is the cost
-// The objective is the goal violations
-// Can we handle varaible length faults then?
+import exptrunner.jmetal.test.ATLASEvaluationProblemDummy;
 
 public class JMetalMutationRunner extends AbstractAlgorithmRunner {
 
+	static private int popSize = 10;
 	static private int initialFaultCount = 10;
 	static private boolean actuallyRun = false;
 	static private double exptRunTime = 1200.0;
@@ -55,16 +47,13 @@ public class JMetalMutationRunner extends AbstractAlgorithmRunner {
 		Random crossoverRNG = new Random();
 		Random mutationRNG = new Random();
 
-		Problem<FaultInstanceSetSolution> problem = new ATLASEvaluationProblem(problemRNG, mission, initialFaultCount,
+		Problem<FaultInstanceSetSolution> problem = new ATLASEvaluationProblemDummy(problemRNG, mission, initialFaultCount,
 				actuallyRun, exptRunTime, LOG_FILE_DIR);
+		
 		Algorithm<List<FaultInstanceSetSolution>> algorithm;
 		CrossoverOperator<FaultInstanceSetSolution> crossover;
 		MutationOperator<FaultInstanceSetSolution> mutation;
 		SelectionOperator<List<FaultInstanceSetSolution>, FaultInstanceSetSolution> selection;
-
-
-
-		int popSize = 10;
 
 		try {
 			crossover = new SimpleFaultMixingCrossover(crossoverProb, crossoverRNG);
@@ -72,7 +61,7 @@ public class JMetalMutationRunner extends AbstractAlgorithmRunner {
 			selection = new BinaryTournamentSelection<FaultInstanceSetSolution>();
 
 			algorithm = new NSGAIIBuilder<FaultInstanceSetSolution>(problem, crossover, mutation, popSize)
-					.setSelectionOperator(selection).setMaxEvaluations(50000).setOffspringPopulationSize(offspringPopulationSize).build();
+					.setSelectionOperator(selection).setOffspringPopulationSize(offspringPopulationSize).build();
 
 			AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm).execute();
 
@@ -91,6 +80,7 @@ public class JMetalMutationRunner extends AbstractAlgorithmRunner {
 		}
 	}
 
+	// JMetalLogger.logger.info(... )
 	public static void main(String[] args) throws JMetalException, FileNotFoundException {
 		DSLLoader dslloader = new GeneratedDSLLoader();
 		Mission mission;
