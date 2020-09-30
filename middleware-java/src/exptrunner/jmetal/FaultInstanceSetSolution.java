@@ -15,10 +15,8 @@ import atlassharedclasses.FaultInstance;
 
 public class FaultInstanceSetSolution implements Solution<FaultInstance> {
 	private static final long serialVersionUID = 1L;
-	// Variable is a FaultInstance
-	// Mutation also does the length change
 
-	// TODO: better way of propagating this constant
+	// TODO: better way of propagating this constant - look it up somewhere else
 	private static final double MAX_SPEED_VALUE = 5.0;
 	
 	private Mission mission;
@@ -27,9 +25,7 @@ public class FaultInstanceSetSolution implements Solution<FaultInstance> {
 	private double outputViolations;
 	
 	private Map<Object,Object> attributes = new HashMap<Object,Object>();
-	
 	private List<FaultInstance> contents = new ArrayList<FaultInstance>();
-	private Object attrib;
 	
 	FaultInstanceSetSolution(Mission mission, String exptTag, boolean actuallyRun, double exptRunTime) {
 		this.mission = mission;
@@ -125,7 +121,7 @@ public class FaultInstanceSetSolution implements Solution<FaultInstance> {
 	}
 
 	public int getNumberOfObjectives() {
-		return 1;
+		return 2;
 	}
 
 	public int getNumberOfConstraints() {
@@ -166,5 +162,7 @@ public class FaultInstanceSetSolution implements Solution<FaultInstance> {
 		return attributes;
 	}
 	
-	
+	public String toString() {
+		return contents.toString();
+	}
 }

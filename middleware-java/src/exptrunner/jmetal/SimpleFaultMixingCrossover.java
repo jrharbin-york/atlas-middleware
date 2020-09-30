@@ -41,7 +41,10 @@ public class SimpleFaultMixingCrossover implements CrossoverOperator<FaultInstan
 
 		int xlimit = cx.getNumberOfVariables();
 		int ylimit = cy.getNumberOfVariables();
-
+		
+		System.out.println("crossover input cx = " + cx.toString());
+		System.out.println("crossover input cy = " + cy.toString());
+		
 		int xcut = randomGenerator.nextInt(xlimit);
 		int ycut = randomGenerator.nextInt(ylimit);
 
@@ -63,6 +66,8 @@ public class SimpleFaultMixingCrossover implements CrossoverOperator<FaultInstan
 		
 		output.add(new1);
 		output.add(new2);
+		System.out.println("crossover output new1 = " + new1.toString());
+		System.out.println("crossover output new2 = " + new2.toString());
 		return output;
 	}
 

@@ -2,12 +2,14 @@ package exptrunner.jmetal;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.algorithm.multiobjective.nsgaii.NSGAIIBuilder;
-import org.uma.jmetal.algorithm.multiobjective.spea2.SPEA2Builder;
+
 import org.uma.jmetal.example.AlgorithmRunner;
 import org.uma.jmetal.operator.crossover.CrossoverOperator;
 import org.uma.jmetal.operator.mutation.MutationOperator;
@@ -29,8 +31,10 @@ public class JMetalMutationRunner extends AbstractAlgorithmRunner {
 
 	static private int popSize = 10;
 	static private int initialFaultCount = 10;
-	static private boolean actuallyRun = false;
+	static private boolean actuallyRun = true;
 	static private double exptRunTime = 1200.0;
+	
+	static private int maxEvaluations = 25000;
 	
 	static double crossoverProb = 0.1;
 	static double mutationProb = 0.2;
@@ -47,8 +51,12 @@ public class JMetalMutationRunner extends AbstractAlgorithmRunner {
 		Random crossoverRNG = new Random();
 		Random mutationRNG = new Random();
 
-		Problem<FaultInstanceSetSolution> problem = new ATLASEvaluationProblemDummy(problemRNG, mission, initialFaultCount,
-				actuallyRun, exptRunTime, LOG_FILE_DIR);
+		Map<GoalsToCount, Integer> goals = new HashMap<GoalsToCount,Integer>();
+		goals.put(GoalsToCount.DISCOVERY_GOALS, 1);
+		goals.put(GoalsToCount.OBSTACLE_AVOIDANCE_GOALS, 1);
+		
+		Problem<FaultInstanceSetSolution> problem = new ATLASEvaluationProblem(problemRNG, mission, initialFaultCount,
+				actuallyRun, exptRunTime, LOG_FILE_DIR, goals);
 		
 		Algorithm<List<FaultInstanceSetSolution>> algorithm;
 		CrossoverOperator<FaultInstanceSetSolution> crossover;
@@ -61,7 +69,9 @@ public class JMetalMutationRunner extends AbstractAlgorithmRunner {
 			selection = new BinaryTournamentSelection<FaultInstanceSetSolution>();
 
 			algorithm = new NSGAIIBuilder<FaultInstanceSetSolution>(problem, crossover, mutation, popSize)
-					.setSelectionOperator(selection).setOffspringPopulationSize(offspringPopulationSize).build();
+					.setMaxEvaluations(maxEvaluations)
+					.setSelectionOperator(selection)
+					.setOffspringPopulationSize(offspringPopulationSize).build();
 
 			AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm).execute();
 

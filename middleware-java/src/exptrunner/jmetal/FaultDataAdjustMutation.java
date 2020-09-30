@@ -124,5 +124,4 @@ public class FaultDataAdjustMutation implements MutationOperator<FaultInstanceSe
 	public double getMutationProbability() {
 		return mutationProb;
 	}
-
 }

@@ -3,7 +3,9 @@ package exptrunner.jmetal;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Scanner;
@@ -19,6 +21,7 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 	private static final long serialVersionUID = 1L;
 	private static final double INITIAL_MIN_SPEED_VALUE = 1.0;
 	private static final double INITIAL_MAX_SPEED_VALUE = 5.0;
+	private static final int DETECTIONS_PER_OBJECT_EXPECTED = 2;
 	private int INITIAL_VARAIBLE_SIZE = 10;
 	private int runCount = 0;
 	private Random rng;
@@ -29,12 +32,21 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 	private double exptRunTime;
 	private String logFileDir;
 	
-	public ATLASEvaluationProblem(Random rng, Mission mission, int initialFaultCount, boolean actuallyRun, double exptRunTime, String logFileDir) {
+	// This gives the weights for these different goals
+	private Map<GoalsToCount, Integer> goalsToCount = new HashMap<GoalsToCount, Integer>();
+	
+	public ATLASEvaluationProblem(Random rng, Mission mission, int initialFaultCount, boolean actuallyRun, double exptRunTime, String logFileDir, Map<GoalsToCount, Integer> goalsToCount) {
 		this.rng = rng;
 		this.initialFaultCount = initialFaultCount;
 		this.mission = mission;
 		this.exptRunTime = exptRunTime;
 		this.logFileDir = logFileDir;
+		this.actuallyRun = actuallyRun;
+		this.goalsToCount = goalsToCount;
+	}
+	
+	public int goalWeight(GoalsToCount g) {
+		return goalsToCount.getOrDefault(g, 0);
 	}
 
 	public int getNumberOfVariables() {
@@ -47,7 +59,7 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 	}
 
 	public int getNumberOfConstraints() {
-		return 1;
+		return 0;
 	}
 
 	public String getName() {
@@ -72,7 +84,10 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 		// Read the goal result file here - process the given goals
 		// Write it out to a common result file - with the fault info
 		File f = new File(logFileDir + "/goalLog.log");
-		int count = 0;
+		int detections = 0;
+		int totalScore = 0;
+		int avoidanceViolations = 0;
+		
 		Scanner reader;
 		try {
 			reader = new Scanner(f);
@@ -80,15 +95,27 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 				String line = reader.nextLine();
 				String[] fields = line.split(",");
 				String goalClass = fields[0];
-				String time = fields[1];
-				String robot = fields[2];
-				String num = fields[3];
 				if (goalClass.equals("atlasdsl.DiscoverObjects")) {
-					count++;
+					String time = fields[1];
+					String robot = fields[2];
+					String num = fields[3];
+					
+					detections += 1;
+				}
+				
+				if (goalClass.equals("atlasdsl.AvoidOthers")) {
+					avoidanceViolations += 1;
 				}
 			}
+			
+			
+			totalScore += (mission.getEnvironmentalObjects().size() * DETECTIONS_PER_OBJECT_EXPECTED) - detections;
+			totalScore = Math.max(totalScore, 0);
+			System.out.println("detections = " + detections + ",totalCount = " + totalScore);
 			reader.close();
-			solution.setObjective(0, count);
+			
+			solution.setObjective(0, -totalScore);
+			solution.setObjective(1, -avoidanceViolations);
 			
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
@@ -99,7 +126,6 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 	
 	public void evaluate(FaultInstanceSetSolution solution) {
 		performATLASExperiment(solution);
-		// TODO: why is evaulate void?
 	}
 	
 	private FaultInstance setupAdditionalInfo(FaultInstance input) {
@@ -138,6 +164,7 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 			FaultInstance fi = newFaultInstance(f);
 			fiss.setContents(i++, fi);
 		}
+		System.out.println("Initial chromosome = " + fiss.toString());
 	}
 
 	public FaultInstanceSetSolution createSolution() {
