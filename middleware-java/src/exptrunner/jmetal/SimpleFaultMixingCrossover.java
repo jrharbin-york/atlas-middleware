@@ -41,43 +41,51 @@ public class SimpleFaultMixingCrossover implements CrossoverOperator<FaultInstan
 
 		int xlimit = cx.getNumberOfVariables();
 		int ylimit = cy.getNumberOfVariables();
-		
-		System.out.println("crossover input cx = " + cx.toString());
-		System.out.println("crossover input cy = " + cy.toString());
-		
-		int xcut = randomGenerator.nextInt(xlimit);
-		int ycut = randomGenerator.nextInt(ylimit);
 
-		for (int x = 0; x < xlimit; x++) {
-			if (x <= xcut) {
-				new1.setContents(new1_index++, cx.getVariable(x));
-			} else {
-				new2.setContents(new2_index++, cx.getVariable(x));
+		// TODO: check if we need to add the originals here
+		output.add(cx);
+		output.add(cy);
+
+		if (xlimit > 0 && ylimit > 0) {
+			System.out.println("crossover input cx = " + cx.toString());
+			System.out.println("crossover input cy = " + cy.toString());
+
+			int xcut = randomGenerator.nextInt(xlimit);
+			int ycut = randomGenerator.nextInt(ylimit);
+
+			for (int x = 0; x < xlimit; x++) {
+				if (x <= xcut) {
+					new1.setContents(new1_index++, cx.getVariable(x));
+				} else {
+					new2.setContents(new2_index++, cx.getVariable(x));
+				}
 			}
-		}
-		
-		for (int y = 0; y < ylimit; y++) {
-			if (y <= ycut) {
-				new2.setContents(new2_index++, cy.getVariable(y));
-			} else {
-				new1.setContents(new1_index++, cy.getVariable(y));
+
+			for (int y = 0; y < ylimit; y++) {
+				if (y <= ycut) {
+					new2.setContents(new2_index++, cy.getVariable(y));
+				} else {
+					new1.setContents(new1_index++, cy.getVariable(y));
+				}
 			}
+
+			output.add(new1);
+			output.add(new2);
+			System.out.println("crossover output new1 = " + new1.toString());
+			System.out.println("crossover output new2 = " + new2.toString());
+		} else {
+			System.out.println("Not performing crossover - one chromosome is empty");
 		}
-		
-		output.add(new1);
-		output.add(new2);
-		System.out.println("crossover output new1 = " + new1.toString());
-		System.out.println("crossover output new2 = " + new2.toString());
 		return output;
 	}
 
 	public List<FaultInstanceSetSolution> execute(List<FaultInstanceSetSolution> solutions) {
 		if (null == solutions) {
-			throw new JMetalException("Null parameter") ;
+			throw new JMetalException("Null parameter");
 		} else if (solutions.size() != 2) {
-			throw new JMetalException("There must be two parents instead of " + solutions.size()) ;
+			throw new JMetalException("There must be two parents instead of " + solutions.size());
 		}
-		return doCrossover(solutions.get(0), solutions.get(1)) ;
+		return doCrossover(solutions.get(0), solutions.get(1));
 	}
 
 	public double getCrossoverProbability() {

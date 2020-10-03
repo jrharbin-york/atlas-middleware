@@ -22,9 +22,9 @@ public class FaultInstanceSetSolution implements Solution<FaultInstance> {
 	private Mission mission;
 	private boolean actuallyRun;
 	private double exptRunTime;
-	private double outputViolations;
 	
 	private Map<Object,Object> attributes = new HashMap<Object,Object>();
+	private Map<Integer,Double> objectives = new HashMap<Integer,Double>();
 	private List<FaultInstance> contents = new ArrayList<FaultInstance>();
 	
 	FaultInstanceSetSolution(Mission mission, String exptTag, boolean actuallyRun, double exptRunTime) {
@@ -39,24 +39,21 @@ public class FaultInstanceSetSolution implements Solution<FaultInstance> {
 		this.exptRunTime = other.exptRunTime;
 		this.contents = new ArrayList<FaultInstance>(contents);
 	}
-	
+		
 	public void setObjective(int index, double value) {
-		if (index == 0) {
-			outputViolations = value;
-		}
+		objectives.put(index,value);
 	}
 
 	public double getObjective(int index) {
-		if (index == 0) {
-			return outputViolations;
-		} else {
-			return 0.0;
-		}
+		return objectives.get(index);
 	}
 
 	public double[] getObjectives() {
-		double [] res =  new double [1];
-		res[0] = getObjective(0);
+		int size = objectives.size();
+		double [] res = new double [size];
+		for (int i = 0; i < size; i++) {
+			res[i] = getObjective(i);
+		}
 		return res;
 	}
 
@@ -105,7 +102,7 @@ public class FaultInstanceSetSolution implements Solution<FaultInstance> {
 	}
 
 	public double faultCostProportion() {
-		return 1 - ((totalActiveFaultTimeLengthScaledByIntensity() / (contents.size() * exptRunTime)));
+		return ((totalActiveFaultTimeLengthScaledByIntensity() / (contents.size() * exptRunTime)));
 	}
 
 	public double getConstraint(int index) {
@@ -121,7 +118,7 @@ public class FaultInstanceSetSolution implements Solution<FaultInstance> {
 	}
 
 	public int getNumberOfObjectives() {
-		return 2;
+		return 3;
 	}
 
 	public int getNumberOfConstraints() {
@@ -164,5 +161,10 @@ public class FaultInstanceSetSolution implements Solution<FaultInstance> {
 	
 	public String toString() {
 		return contents.toString();
+	}
+
+	public boolean hasFaultInstanceMatching(FaultInstanceLambda object) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

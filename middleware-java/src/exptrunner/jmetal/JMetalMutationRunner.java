@@ -2,76 +2,98 @@ package exptrunner.jmetal;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 
 import org.uma.jmetal.algorithm.Algorithm;
-import org.uma.jmetal.algorithm.multiobjective.nsgaii.NSGAIIBuilder;
-
+import org.uma.jmetal.algorithm.multiobjective.nsgaii.NSGAIIMeasures;
 import org.uma.jmetal.example.AlgorithmRunner;
 import org.uma.jmetal.operator.crossover.CrossoverOperator;
 import org.uma.jmetal.operator.mutation.MutationOperator;
 import org.uma.jmetal.operator.selection.SelectionOperator;
+import org.uma.jmetal.operator.selection.impl.BestSolutionSelection;
 import org.uma.jmetal.operator.selection.impl.BinaryTournamentSelection;
+import org.uma.jmetal.operator.selection.impl.RankingAndCrowdingSelection;
 import org.uma.jmetal.problem.Problem;
 
 import org.uma.jmetal.util.AbstractAlgorithmRunner;
 import org.uma.jmetal.util.JMetalException;
 import org.uma.jmetal.util.JMetalLogger;
+import org.uma.jmetal.util.comparator.DominanceComparator;
+import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
+import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
 
 import atlasdsl.Mission;
 import atlasdsl.loader.DSLLoadFailed;
 import atlasdsl.loader.DSLLoader;
 import atlasdsl.loader.GeneratedDSLLoader;
 import exptrunner.jmetal.test.ATLASEvaluationProblemDummy;
+import exptrunner.jmetal.test.ATLASEvaluationProblemDummy.EvaluationProblemDummyChoices;
 
 public class JMetalMutationRunner extends AbstractAlgorithmRunner {
 
-	static private int popSize = 10;
-	static private int initialFaultCount = 10;
+	static private int populationSize = 4;
+	static private int matingPoolSize = populationSize;
 	static private boolean actuallyRun = true;
 	static private double exptRunTime = 1200.0;
-	
-	static private int maxEvaluations = 25000;
-	
-	static double crossoverProb = 0.1;
-	static double mutationProb = 0.2;
+
+	static private int maxIterations = 16;
+
+	static double crossoverProb = 0.4;
+	static double mutationProb = 0.5;
 	static int offspringPopulationSize = 10;
-	
+
 	// TODO: move this back to RunExperiment?
 	static private String LOG_FILE_DIR = RunExperiment.ABS_MIDDLEWARE_PATH + "logs/";
 
 	static private String referenceParetoFront = "";
 
-	private static void jMetalRun(Mission mission) {
+	public static void jMetalRun(Mission mission, Optional<EvaluationProblemDummyChoices> testChoice_o) {
 
 		Random problemRNG = new Random();
 		Random crossoverRNG = new Random();
 		Random mutationRNG = new Random();
 
-		Map<GoalsToCount, Integer> goals = new HashMap<GoalsToCount,Integer>();
+		Map<GoalsToCount, Integer> goals = new HashMap<GoalsToCount, Integer>();
 		goals.put(GoalsToCount.DISCOVERY_GOALS, 1);
 		goals.put(GoalsToCount.OBSTACLE_AVOIDANCE_GOALS, 1);
-		
-		Problem<FaultInstanceSetSolution> problem = new ATLASEvaluationProblem(problemRNG, mission, initialFaultCount,
-				actuallyRun, exptRunTime, LOG_FILE_DIR, goals);
-		
-		Algorithm<List<FaultInstanceSetSolution>> algorithm;
-		CrossoverOperator<FaultInstanceSetSolution> crossover;
-		MutationOperator<FaultInstanceSetSolution> mutation;
-		SelectionOperator<List<FaultInstanceSetSolution>, FaultInstanceSetSolution> selection;
+
+		Problem<FaultInstanceSetSolution> problem;
 
 		try {
+
+			if (testChoice_o.isEmpty()) {
+				problem = new ATLASEvaluationProblem(problemRNG, mission, actuallyRun, exptRunTime,
+						LOG_FILE_DIR, goals);
+			} else {
+				EvaluationProblemDummyChoices testChoice = testChoice_o.get();
+				problem = new ATLASEvaluationProblemDummy(problemRNG, mission, actuallyRun,
+						exptRunTime, LOG_FILE_DIR, testChoice);
+			}
+
+			Algorithm<List<FaultInstanceSetSolution>> algorithm;
+			CrossoverOperator<FaultInstanceSetSolution> crossover;
+			MutationOperator<FaultInstanceSetSolution> mutation;
+			SelectionOperator<List<FaultInstanceSetSolution>, FaultInstanceSetSolution> selection;
+			SolutionListEvaluator<FaultInstanceSetSolution> evaluator;
+			Comparator<FaultInstanceSetSolution> dominanceComparator;
+
 			crossover = new SimpleFaultMixingCrossover(crossoverProb, crossoverRNG);
 			mutation = new FaultDataAdjustMutation(mutationRNG, "mutation.log", mutationProb);
 			selection = new BinaryTournamentSelection<FaultInstanceSetSolution>();
+			dominanceComparator = new DominanceComparator<>();
+			//selection = new RankingAndCrowdingSelection<FaultInstanceSetSolution>(solutionsSelectCount, dominanceComparator);
+			//selection = new BestSolutionSelection<FaultInstanceSetSolution>(dominanceComparator);
 
-			algorithm = new NSGAIIBuilder<FaultInstanceSetSolution>(problem, crossover, mutation, popSize)
-					.setMaxEvaluations(maxEvaluations)
-					.setSelectionOperator(selection)
-					.setOffspringPopulationSize(offspringPopulationSize).build();
+			evaluator = new SequentialSolutionListEvaluator<FaultInstanceSetSolution>();
+			
+
+			algorithm = new NSGAIIMeasures(problem, maxIterations, populationSize, matingPoolSize,
+					offspringPopulationSize, crossover, mutation, selection, dominanceComparator, evaluator);
 
 			AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm).execute();
 
@@ -90,13 +112,12 @@ public class JMetalMutationRunner extends AbstractAlgorithmRunner {
 		}
 	}
 
-	// JMetalLogger.logger.info(... )
 	public static void main(String[] args) throws JMetalException, FileNotFoundException {
 		DSLLoader dslloader = new GeneratedDSLLoader();
 		Mission mission;
 		try {
 			mission = dslloader.loadMission();
-			jMetalRun(mission);
+			jMetalRun(mission, Optional.empty());
 		} catch (DSLLoadFailed e) {
 			System.out.println("DSL loading failed - configuration problems");
 			e.printStackTrace();

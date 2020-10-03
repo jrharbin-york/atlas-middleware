@@ -62,13 +62,9 @@ public class RunExperiment {
 			boolean actuallyRun, double timeLimit) throws InterruptedException, IOException {
 		Process middleware;
 
-		int faultInstanceFileNum = 0;
 		double returnValue = 0;
 
-		// TODO: generate fresh MOOS code if required - need to specify the MOOSTimeWarp
-		// here?
-
-		String faultInstanceFileName = "expt_" + exptTag + Integer.toString(faultInstanceFileNum);
+		String faultInstanceFileName = "expt_" + exptTag;
 		exptLog("Running experiment with fault instance file " + faultInstanceFileName);
 		// Generate a fault instance file for the experiment according to the experiment
 		// parameters

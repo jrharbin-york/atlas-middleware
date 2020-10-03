@@ -2,7 +2,9 @@ package exptrunner.jmetal;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +12,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.Scanner;
 
+import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.problem.Problem;
 
 import atlasdsl.Mission;
@@ -26,7 +29,8 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 	private int runCount = 0;
 	private Random rng;
 	
-	private int initialFaultCount;
+	private boolean realExperiment = true;
+	
 	private Mission mission;
 	private boolean actuallyRun;
 	private double exptRunTime;
@@ -34,15 +38,25 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 	
 	// This gives the weights for these different goals
 	private Map<GoalsToCount, Integer> goalsToCount = new HashMap<GoalsToCount, Integer>();
+	private Object algorithm;
 	
-	public ATLASEvaluationProblem(Random rng, Mission mission, int initialFaultCount, boolean actuallyRun, double exptRunTime, String logFileDir, Map<GoalsToCount, Integer> goalsToCount) {
+	private FileWriter tempLog;
+	private int variableFixedSize;
+	
+	public ATLASEvaluationProblem(Random rng, Mission mission, boolean actuallyRun, double exptRunTime, String logFileDir, Map<GoalsToCount, Integer> goalsToCount) throws IOException {
 		this.rng = rng;
-		this.initialFaultCount = initialFaultCount;
 		this.mission = mission;
 		this.exptRunTime = exptRunTime;
 		this.logFileDir = logFileDir;
 		this.actuallyRun = actuallyRun;
 		this.goalsToCount = goalsToCount;
+		this.variableFixedSize = mission.getFaultsAsList().size();
+		
+		tempLog = new FileWriter("tempLog.res");
+	}
+	
+	public void setFakeExperiment() {
+		realExperiment = false;
 	}
 	
 	public int goalWeight(GoalsToCount g) {
@@ -51,11 +65,11 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 
 	public int getNumberOfVariables() {
 		// TODO: this is fixed
-		return INITIAL_VARAIBLE_SIZE;
+		return variableFixedSize;
 	}
 
 	public int getNumberOfObjectives() {
-		return 1;
+		return 3;
 	}
 
 	public int getNumberOfConstraints() {
@@ -67,11 +81,7 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 	}
 
 	public void performATLASExperiment(FaultInstanceSetSolution solution) {
-		// Generate the fault instance file corresponding to this
-		// Call RunExperiment.doExperiment with
 		String exptTag = "exptGA-" + (runCount++);
-		// TODO: change exptrunner to use the fault instance set directly - not via file
-		// TODO: exptrunner has to return its double value 
 		try {
 			RunExperiment.doExperiment(mission, exptTag, solution.getFaultInstances(), actuallyRun, exptRunTime);
 			readLogFiles(logFileDir, solution);
@@ -79,13 +89,30 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 			e.printStackTrace();
 		}
 	}
+	
+	public void fakeExperiment(FaultInstanceSetSolution solution) {
+		int missedDetections = 0;
+		int avoidanceViolations = 0;
+		double timeProp = solution.faultCostProportion();
+		
+		//solution.setObjective(2, timeProp);
+		//if (solution.hasFaultInstanceMatching((FaultInstance fi) ->
+		//{ if fi.	})) {
+			//missedDetections += 1;
+		//}
+		
+		solution.setObjective(0, missedDetections);
+		solution.setObjective(1, avoidanceViolations);
+	}
+	
+	
 
 	public void readLogFiles(String logFileDir, FaultInstanceSetSolution solution) {
 		// Read the goal result file here - process the given goals
 		// Write it out to a common result file - with the fault info
 		File f = new File(logFileDir + "/goalLog.log");
 		int detections = 0;
-		int totalScore = 0;
+		int missedDetections = 0;
 		int avoidanceViolations = 0;
 		
 		Scanner reader;
@@ -99,6 +126,7 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 					String time = fields[1];
 					String robot = fields[2];
 					String num = fields[3];
+					// TODO: check the uniqueness of the detections
 					
 					detections += 1;
 				}
@@ -109,13 +137,23 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 			}
 			
 			
-			totalScore += (mission.getEnvironmentalObjects().size() * DETECTIONS_PER_OBJECT_EXPECTED) - detections;
-			totalScore = Math.max(totalScore, 0);
-			System.out.println("detections = " + detections + ",totalCount = " + totalScore);
+			missedDetections = (mission.getEnvironmentalObjects().size() * DETECTIONS_PER_OBJECT_EXPECTED) - detections;
+			missedDetections = Math.max(missedDetections, 0);
+			double timeProp = solution.faultCostProportion();
+			
+			String logRes = missedDetections + "," + avoidanceViolations + "," + timeProp + "\n";
+			System.out.println(solution);
+			System.out.println(logRes);
+			tempLog.write(logRes);
+			tempLog.flush();
+			System.out.println(logRes);
 			reader.close();
 			
-			solution.setObjective(0, -totalScore);
+			
+			
+			solution.setObjective(0, -missedDetections);
 			solution.setObjective(1, -avoidanceViolations);
+			solution.setObjective(2, timeProp);
 			
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
@@ -125,7 +163,10 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 	}
 	
 	public void evaluate(FaultInstanceSetSolution solution) {
-		performATLASExperiment(solution);
+		if (realExperiment)
+			performATLASExperiment(solution);
+		else 
+			fakeExperiment(solution);
 	}
 	
 	private FaultInstance setupAdditionalInfo(FaultInstance input) {
@@ -158,11 +199,17 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 	private void setupInitialPopulation(FaultInstanceSetSolution fiss) {
 		System.out.println("Setting up initial population...");
 		List<Fault> allFaults = mission.getFaultsAsList();
+		
+		Collections.shuffle(allFaults, rng);
+
 		int i = 0;
+		int limit = rng.nextInt(allFaults.size()-1) + 1;
 		
 		for (Fault f : allFaults) {
-			FaultInstance fi = newFaultInstance(f);
-			fiss.setContents(i++, fi);
+			if (i < limit) {
+				FaultInstance fi = newFaultInstance(f);
+				fiss.setContents(i++, fi);
+			}
 		}
 		System.out.println("Initial chromosome = " + fiss.toString());
 	}
@@ -171,5 +218,9 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 		FaultInstanceSetSolution fiss = new FaultInstanceSetSolution(mission, "TAGTEST", actuallyRun, exptRunTime);
 		setupInitialPopulation(fiss);
 		return fiss;
+	}
+	
+	public void setAlgorithm(Algorithm<List<FaultInstance>> algorithm) {
+		this.algorithm = algorithm;
 	}
 }
