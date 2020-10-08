@@ -57,4 +57,12 @@ public class Point {
 	public Point sub(Point dp) {
 		return new Point(this.x - dp.x, this.y - dp.y, this.z - dp.z);
 	}
+	
+	public double distanceSqrTo(double otherx, double othery) {
+		return Math.pow((otherx - this.x),2.0) + Math.pow((othery - this.y),2.0); 
+	}
+	
+	public double distanceTo(double otherx, double othery) {
+		return Math.sqrt(distanceSqrTo(otherx, othery));
+	}
 }

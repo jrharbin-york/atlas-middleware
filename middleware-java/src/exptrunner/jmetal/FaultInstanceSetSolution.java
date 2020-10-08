@@ -45,7 +45,9 @@ public class FaultInstanceSetSolution implements Solution<FaultInstance> {
 	}
 
 	public double getObjective(int index) {
-		return objectives.get(index);
+		if ((objectives.get(index)) != null) {
+			return objectives.get(index);
+		} else return 0.0;
 	}
 
 	public double[] getObjectives() {
@@ -163,8 +165,7 @@ public class FaultInstanceSetSolution implements Solution<FaultInstance> {
 		return contents.toString();
 	}
 
-	public boolean hasFaultInstanceMatching(FaultInstanceLambda object) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean testAllFaultInstances(FaultInstanceLambdaBoolean test) {
+		return contents.stream().anyMatch((FaultInstance fi) -> { return test.op(fi); });
 	}
 }

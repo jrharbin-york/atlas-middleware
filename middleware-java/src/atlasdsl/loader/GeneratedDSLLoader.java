@@ -202,6 +202,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 		GoalAction ga1 = new AvoidOthers(4.0);
 		
 		
+		
 		GoalRegion grmutualAvoidance = new StaticGoalRegion(
 			new Region(new Point(0.0, 0.0, 0.0),
 			           new Point(1000.0, 1000.0, 0.0)));
@@ -227,6 +228,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 		
 		
 		
+		
 		GoalRegion grprimarySensorSweep = new StaticGoalRegion(
 			new Region(new Point(0.0, 0.0, 0.0),
 			           new Point(1000.0, 1000.0, 0.0)));
@@ -244,6 +246,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 		GoalTemporalConstraints gt3 = new GoalTemporalConstraints(0.0, 1200.0);
 		
 		GoalAction ga3 = new SensorCover(5.0, 1, SensorType.SONAR);
+		
 		
 		
 		
@@ -273,6 +276,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 		
 		
 		
+		
 		List<EnvironmentalObject> ga4Objs = new ArrayList<EnvironmentalObject>();
 		ga4Objs.add(eo1);
 		ga4Objs.add(eo3);
@@ -289,6 +293,34 @@ public class GeneratedDSLLoader implements DSLLoader {
 		
 		
 		mission.addGoal("findTestObjects", findTestObjects);
+ 
+ 
+ 
+ 
+ 
+ 
+		
+		Robot [] grp5 = {rbrian,rella,rfrank,rgilda,rhenry,rlinda}; 
+		GoalParticipants gptrackDistances = new StaticParticipants(grp5, mission);
+		
+		
+		
+		GoalTemporalConstraints gt5 = new GoalTemporalConstraints(0.0, 1201.0);
+		
+		
+		
+		GoalAction ga5 = new TrackDistances();
+		
+		
+		GoalRegion grtrackDistances = new StaticGoalRegion(
+			new Region(new Point(0.0, 0.0, 0.0),
+			           new Point(0.0, 0.0, 0.0)));
+		
+		
+		Goal trackDistances = new Goal("trackDistances", mission, gt5, gptrackDistances, Optional.of(grtrackDistances), ga5);
+		
+		
+		mission.addGoal("trackDistances", trackDistances);
 	
 
 	
@@ -313,7 +345,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 	
 	FaultImpact fi1;
 	try {	
-		fi1 = new MotionFault(srella_2, "UP_LOITER", "speed=5.0");
+		fi1 = new MotionFault(srella_2, "speed", "5.0");
 	} catch (InvalidComponentType e) {
 		throw new DSLLoadFailed("MotionFault 1 is not using a MotionSource as its affected component");
 	}
@@ -329,7 +361,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 	
 	FaultImpact fi2;
 	try {	
-		fi2 = new MotionFault(srella_2, "UP_HEADING", "heading=180");
+		fi2 = new MotionFault(srella_2, "heading", "180.0");
 	} catch (InvalidComponentType e) {
 		throw new DSLLoadFailed("MotionFault 2 is not using a MotionSource as its affected component");
 	}
@@ -345,7 +377,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 	
 	FaultImpact fi3;
 	try {	
-		fi3 = new MotionFault(srfrank_3, "UP_LOITER", "speed=5.0");
+		fi3 = new MotionFault(srfrank_3, "speed", "5.0");
 	} catch (InvalidComponentType e) {
 		throw new DSLLoadFailed("MotionFault 3 is not using a MotionSource as its affected component");
 	}
@@ -361,7 +393,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 	
 	FaultImpact fi4;
 	try {	
-		fi4 = new MotionFault(srgilda_3, "UP_LOITER", "speed=5.0");
+		fi4 = new MotionFault(srgilda_3, "speed", "5.0");
 	} catch (InvalidComponentType e) {
 		throw new DSLLoadFailed("MotionFault 4 is not using a MotionSource as its affected component");
 	}
@@ -377,7 +409,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 	
 	FaultImpact fi5;
 	try {	
-		fi5 = new MotionFault(srhenry_3, "UP_LOITER", "speed=5.0");
+		fi5 = new MotionFault(srhenry_3, "speed", "5.0");
 	} catch (InvalidComponentType e) {
 		throw new DSLLoadFailed("MotionFault 5 is not using a MotionSource as its affected component");
 	}
@@ -393,7 +425,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 	
 	FaultImpact fi6;
 	try {	
-		fi6 = new MotionFault(srfrank_3, "UP_HEADING", "heading=153");
+		fi6 = new MotionFault(srfrank_3, "heading", "153.0");
 	} catch (InvalidComponentType e) {
 		throw new DSLLoadFailed("MotionFault 6 is not using a MotionSource as its affected component");
 	}
@@ -409,7 +441,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 	
 	FaultImpact fi7;
 	try {	
-		fi7 = new MotionFault(srgilda_3, "UP_HEADING", "heading=350");
+		fi7 = new MotionFault(srgilda_3, "heading", "350.0");
 	} catch (InvalidComponentType e) {
 		throw new DSLLoadFailed("MotionFault 7 is not using a MotionSource as its affected component");
 	}
@@ -425,7 +457,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 	
 	FaultImpact fi8;
 	try {	
-		fi8 = new MotionFault(srhenry_3, "UP_HEADING", "heading=153");
+		fi8 = new MotionFault(srhenry_3, "heading", "153.0");
 	} catch (InvalidComponentType e) {
 		throw new DSLLoadFailed("MotionFault 8 is not using a MotionSource as its affected component");
 	}

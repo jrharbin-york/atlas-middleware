@@ -42,7 +42,7 @@ public class SimpleFaultMixingCrossover implements CrossoverOperator<FaultInstan
 		int xlimit = cx.getNumberOfVariables();
 		int ylimit = cy.getNumberOfVariables();
 
-		// TODO: check if we need to add the originals here
+		// TODO: check if we need to add the originals here?
 		output.add(cx);
 		output.add(cy);
 

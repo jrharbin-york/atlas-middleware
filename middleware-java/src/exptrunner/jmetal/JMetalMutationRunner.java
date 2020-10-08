@@ -18,6 +18,7 @@ import org.uma.jmetal.operator.selection.SelectionOperator;
 import org.uma.jmetal.operator.selection.impl.BestSolutionSelection;
 import org.uma.jmetal.operator.selection.impl.BinaryTournamentSelection;
 import org.uma.jmetal.operator.selection.impl.RankingAndCrowdingSelection;
+import org.uma.jmetal.operator.selection.impl.TournamentSelection;
 import org.uma.jmetal.problem.Problem;
 
 import org.uma.jmetal.util.AbstractAlgorithmRunner;
@@ -36,15 +37,16 @@ import exptrunner.jmetal.test.ATLASEvaluationProblemDummy.EvaluationProblemDummy
 
 public class JMetalMutationRunner extends AbstractAlgorithmRunner {
 
-	static private int populationSize = 4;
+	static private int populationSize = 20;
 	static private int matingPoolSize = populationSize;
 	static private boolean actuallyRun = true;
 	static private double exptRunTime = 1200.0;
 
-	static private int maxIterations = 16;
+	static private int maxIterations = 20000;
+	static private int maxGenerations = 400;
 
-	static double crossoverProb = 0.4;
-	static double mutationProb = 0.5;
+	static double crossoverProb = 0.2;
+	static double mutationProb = 0.6;
 	static int offspringPopulationSize = 10;
 
 	// TODO: move this back to RunExperiment?
@@ -69,10 +71,17 @@ public class JMetalMutationRunner extends AbstractAlgorithmRunner {
 			if (testChoice_o.isEmpty()) {
 				problem = new ATLASEvaluationProblem(problemRNG, mission, actuallyRun, exptRunTime,
 						LOG_FILE_DIR, goals);
+				
 			} else {
 				EvaluationProblemDummyChoices testChoice = testChoice_o.get();
-				problem = new ATLASEvaluationProblemDummy(problemRNG, mission, actuallyRun,
+				if (testChoice == EvaluationProblemDummyChoices.EXPT_RUNNER_FAKE_FAULTS) {
+					problem = new ATLASEvaluationProblem(problemRNG, mission, actuallyRun, exptRunTime,
+							LOG_FILE_DIR, goals);
+					((ATLASEvaluationProblem) problem).setFakeExperiment();
+				} else {
+						problem = new ATLASEvaluationProblemDummy(problemRNG, mission, actuallyRun,
 						exptRunTime, LOG_FILE_DIR, testChoice);
+				}
 			}
 
 			Algorithm<List<FaultInstanceSetSolution>> algorithm;
@@ -92,13 +101,13 @@ public class JMetalMutationRunner extends AbstractAlgorithmRunner {
 			evaluator = new SequentialSolutionListEvaluator<FaultInstanceSetSolution>();
 			
 
-			algorithm = new NSGAIIMeasures(problem, maxIterations, populationSize, matingPoolSize,
+			algorithm = new NSGAIIMeasures(problem, maxIterations, maxGenerations, populationSize, matingPoolSize,
 					offspringPopulationSize, crossover, mutation, selection, dominanceComparator, evaluator);
 
 			AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm).execute();
-
 			List<FaultInstanceSetSolution> population = algorithm.getResult();
 			long computingTime = algorithmRunner.getComputingTime();
+			
 
 			JMetalLogger.logger.info("Total execution time: " + computingTime + "ms");
 

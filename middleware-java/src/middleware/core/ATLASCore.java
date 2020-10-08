@@ -42,6 +42,7 @@ public abstract class ATLASCore {
 	protected List<FaultInstance> activeFaults = new ArrayList<FaultInstance>();
 	
 	protected List<SensorDetectionLambda> sensorWatchers = new ArrayList<SensorDetectionLambda>();
+	protected List<PositionUpdateLambda> positionWatchers = new ArrayList<PositionUpdateLambda>();
 	
 	private FaultGenerator faultGen;
 	
@@ -53,8 +54,8 @@ public abstract class ATLASCore {
 		fromCI = new CIEventQueue(this, mission, CI_QUEUE_CAPACITY);
 		queues.add(fromCI);
 		faultGen = new FaultGenerator(this,mission);
-		
-		fuzzEngine = new FixedNumericVariableChangeFuzzingEngine();
+		fuzzEngine = new NullFuzzingEngine();
+		//fuzzEngine = new FixedNumericVariableChangeFuzzingEngine();
 	}
 	
 	protected CARSTranslations getCARSTranslationOutput() {
@@ -164,5 +165,19 @@ public abstract class ATLASCore {
 
 	protected FuzzingEngine getFuzzingEngine() {
 		return fuzzEngine;
+	}
+	
+	public void setupPositionWatcher(PositionUpdateLambda l) {
+		positionWatchers.add(l);
+	}
+	
+	protected void notifyPositionUpdate(GPSPositionReading gps) {
+		for (PositionUpdateLambda watcher : positionWatchers) { 
+			watcher.op(gps);
+		}
+	}
+
+	public double getTimeLimit() {
+		return timeLimit;
 	}
 }

@@ -134,7 +134,7 @@ public class MOOSEventQueue extends ATLASEventQueue<MOOSEvent> {
 					// TODO: for now, assume the position sensor updates are provided directly
 					// by base position
 					GPSPositionReading gps = new GPSPositionReading(x, y, entityName);
-
+					core.notifyPositionUpdate(gps);
 					try {
 						String msg = atlasOMapper.serialise(gps);
 
