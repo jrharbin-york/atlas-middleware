@@ -116,7 +116,8 @@ public class FaultDataAdjustMutation implements MutationOperator<FaultInstanceSe
 		for (int i = 0; i < source.getNumberOfVariables(); i++) {
 			FaultInstance faultInstance = source.getVariable(i);
 		    FaultInstance fiOut = mutatePossiblyMultipleTimes(faultInstance, MAX_INDIVIDUAL_MUTATIONS);
-			output.setContents(i, fiOut);
+		    System.out.println("contents length = " + output.getNumberOfVariables());
+			output.addContents(i, fiOut);
 		}
 		return output;
 	}

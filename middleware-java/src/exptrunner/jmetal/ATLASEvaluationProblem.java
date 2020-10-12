@@ -14,6 +14,7 @@ import java.util.Scanner;
 
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.problem.Problem;
+import org.uma.jmetal.solution.Solution;
 
 import atlasdsl.Mission;
 import atlasdsl.faults.Fault;
@@ -25,11 +26,14 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 	private static final double INITIAL_MIN_SPEED_VALUE = 1.0;
 	private static final double INITIAL_MAX_SPEED_VALUE = 5.0;
 	private static final int DETECTIONS_PER_OBJECT_EXPECTED = 2;
-	private int INITIAL_VARIABLE_SIZE = 10;
+	
+	private String fakeLogFileName = "/home/atlas/atlas/atlas-middleware/middleware-java/tempres/customLog.res";
+	
 	private int runCount = 0;
 	private Random rng;
 
-	private boolean realExperiment = true;
+	private int realExperiment;
+	private int evaluationNumber;
 
 	private Mission mission;
 	private boolean actuallyRun;
@@ -56,8 +60,9 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 		tempLog = new FileWriter("tempLog.res");
 	}
 
-	public void setFakeExperiment() {
-		realExperiment = false;
+	public void setFakeExperimentNum(int n) {
+		realExperiment = n;
+		System.out.println("realExperiment = " + realExperiment);
 	}
 
 	public int goalWeight(GoalsToCount g) {
@@ -70,7 +75,7 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 	}
 
 	public int getNumberOfObjectives() {
-		return 2;
+		return 3;
 	}
 
 	public int getNumberOfConstraints() {
@@ -94,48 +99,79 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 	public void fakeExperiment(FaultInstanceSetSolution solution) {
 		int missedDetections = 0;
 		int avoidanceViolations = 0;
+		
+		double k = 1.0;
 		double timeProp = solution.faultCostProportion();
 
-		//solution.setObjective(2, -timeProp);
-		// solution.setObjective(2, 0);
-
-		if (solution.testAllFaultInstances((FaultInstance fi) -> {
+		solution.setObjective(2, timeProp);
+		
+		List<FaultInstance> res1 = solution.testAllFaultInstances((FaultInstance fi) -> {
 			return (fi.getStartTime() > 300.0) && (fi.getEndTime() < 400.0) && (fi.getLength() < 100.0);
-		})) {
-			missedDetections += 1;
-		}
-		;
-
-		if (solution.testAllFaultInstances((FaultInstance fi) -> {
+		});
+		for (FaultInstance fi : res1) {
+			//missedDetections += 1;
+			missedDetections += Math.pow(fi.getLength(),k);
+		};
+		
+		List<FaultInstance> res2 = solution.testAllFaultInstances((FaultInstance fi) -> {
 			return (fi.getStartTime() > 1000.0) && (fi.getEndTime() < 1100.0) && (fi.getLength() < 100.0);
-		})) {
-			missedDetections += 1;
-		}
-		;
+		});
+		for (FaultInstance fi : res2) {
+			//missedDetections += 1;
+			missedDetections += Math.pow(fi.getLength(),k);
+		};
 
-		if (solution.testAllFaultInstances((FaultInstance fi) -> {
+		List<FaultInstance> res3 = solution.testAllFaultInstances((FaultInstance fi) -> {
 			return (fi.getStartTime() > 100.0) && (fi.getEndTime() < 200.0)
 					&& (fi.getFault().getName().contains("SPEEDFAULT-ELLA"));
-		})) {
-			avoidanceViolations += 1;
-		}
-		;
+		});
+		for (FaultInstance fi : res3) {
+			avoidanceViolations += Math.pow(fi.getLength(),k);
+		};
 
 		solution.setObjective(0, -missedDetections);
 		solution.setObjective(1, -avoidanceViolations);
 
-		String logRes = missedDetections + "," + avoidanceViolations + "," + timeProp + "\n";
-
-		System.out.println(solution);
-		System.out.println(logRes);
+		String logRes = missedDetections + "," + avoidanceViolations + "," + timeProp;
+		System.out.println(logRes + ":<" + solution.hashCode() + ">|" + solution);
 		try {
-			System.out.println(logRes);
-			tempLog.write(logRes);
+			tempLog.write(logRes + "\n");
 			tempLog.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
 
+	public void fakeExperimentLogTrace(FaultInstanceSetSolution solution) {
+		File f = new File(fakeLogFileName);
+		int lineNum = 0;
+
+		Scanner reader;
+		try {
+			reader = new Scanner(f);
+			// Find the result from the line num
+			while (reader.hasNextLine()) {
+				String line = reader.nextLine();
+				String[] fields = line.split(",");
+				if (evaluationNumber == lineNum) {
+					int detections = Integer.valueOf(fields[0]);
+					int collisions = Integer.valueOf(fields[1]);
+					int missedDetections = Integer.valueOf(fields[2]);
+					
+					solution.setObjective(0, -missedDetections);
+					solution.setObjective(1, -collisions);
+					String solutionHash = "<HASH:" + Integer.toString(solution.hashCode()) + ">";
+					System.out.println(detections + "," + collisions + "," + missedDetections + "=" + solutionHash + solution);
+				}
+				lineNum++;
+			}
+			reader.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		evaluationNumber++;
 	}
 
 	public void readLogFiles(String logFileDir, FaultInstanceSetSolution solution) {
@@ -182,7 +218,7 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 
 			solution.setObjective(0, -missedDetections);
 			solution.setObjective(1, -avoidanceViolations);
-			//solution.setObjective(2, timeProp);
+			// solution.setObjective(2, timeProp);
 
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
@@ -191,11 +227,11 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 		}
 
 		// TODO: better way, get max_dist this from a region?
-		//double MAX_DIST = 1000.0;
-		//double contribution = 0.0;
-		//int objectCount = mission.getEnvironmentalObjects().size();
+		// double MAX_DIST = 1000.0;
+		// double contribution = 0.0;
+		// int objectCount = mission.getEnvironmentalObjects().size();
 
-		//try {
+		// try {
 //			reader = new Scanner(pf);
 //			while (reader.hasNextLine()) {
 //				String line = reader.nextLine();
@@ -216,10 +252,14 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 	}
 
 	public void evaluate(FaultInstanceSetSolution solution) {
-		if (realExperiment)
+		if (realExperiment == 0)
 			performATLASExperiment(solution);
-		else
+
+		if (realExperiment == 1)
 			fakeExperiment(solution);
+
+		if (realExperiment == 2)
+			fakeExperimentLogTrace(solution);
 	}
 
 	private FaultInstance setupAdditionalInfo(FaultInstance input) {
@@ -261,7 +301,7 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 		for (Fault f : allFaults) {
 			if (i < limit) {
 				FaultInstance fi = newFaultInstance(f);
-				fiss.setContents(i++, fi);
+				fiss.addContents(i++, fi);
 			}
 		}
 		System.out.println("Initial chromosome = " + fiss.toString());

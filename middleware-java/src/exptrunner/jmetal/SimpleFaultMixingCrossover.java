@@ -55,17 +55,17 @@ public class SimpleFaultMixingCrossover implements CrossoverOperator<FaultInstan
 
 			for (int x = 0; x < xlimit; x++) {
 				if (x <= xcut) {
-					new1.setContents(new1_index++, cx.getVariable(x));
+					new1.addContents(new1_index++, cx.getVariable(x));
 				} else {
-					new2.setContents(new2_index++, cx.getVariable(x));
+					new2.addContents(new2_index++, cx.getVariable(x));
 				}
 			}
 
 			for (int y = 0; y < ylimit; y++) {
 				if (y <= ycut) {
-					new2.setContents(new2_index++, cy.getVariable(y));
+					new2.addContents(new2_index++, cy.getVariable(y));
 				} else {
-					new1.setContents(new1_index++, cy.getVariable(y));
+					new1.addContents(new1_index++, cy.getVariable(y));
 				}
 			}
 

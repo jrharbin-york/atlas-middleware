@@ -37,7 +37,11 @@ public class FaultInstanceSetSolution implements Solution<FaultInstance> {
 		this.mission = other.mission;
 		this.actuallyRun = other.actuallyRun;
 		this.exptRunTime = other.exptRunTime;
-		this.contents = new ArrayList<FaultInstance>(contents);
+		this.contents = new ArrayList<FaultInstance>(other.contents.size());;
+		
+		for (FaultInstance fi : contents) {
+			this.contents.add(new FaultInstance(fi));
+		}
 	}
 		
 	public void setObjective(int index, double value) {
@@ -138,6 +142,10 @@ public class FaultInstanceSetSolution implements Solution<FaultInstance> {
 	}
 	
 	public void setContents(int index, FaultInstance fi) {
+		contents.set(index, fi);
+	}
+	
+	public void addContents(int index, FaultInstance fi) {
 		contents.add(index, fi);
 	}
 
@@ -165,7 +173,14 @@ public class FaultInstanceSetSolution implements Solution<FaultInstance> {
 		return contents.toString();
 	}
 
-	public boolean testAllFaultInstances(FaultInstanceLambdaBoolean test) {
-		return contents.stream().anyMatch((FaultInstance fi) -> { return test.op(fi); });
+	public List<FaultInstance> testAllFaultInstances(FaultInstanceLambdaBoolean test) {
+		List<FaultInstance> res = new ArrayList<FaultInstance>();
+		for (FaultInstance fi : contents) {
+			if (test.op(fi)) {
+				res.add(fi);
+			}
+		}
+		
+		return res;
 	}
 }

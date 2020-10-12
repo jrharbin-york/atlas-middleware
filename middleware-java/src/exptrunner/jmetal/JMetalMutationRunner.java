@@ -37,17 +37,17 @@ import exptrunner.jmetal.test.ATLASEvaluationProblemDummy.EvaluationProblemDummy
 
 public class JMetalMutationRunner extends AbstractAlgorithmRunner {
 
-	static private int populationSize = 20;
+	static private int populationSize = 50;
 	static private int matingPoolSize = populationSize;
 	static private boolean actuallyRun = true;
 	static private double exptRunTime = 1200.0;
 
-	static private int maxIterations = 20000;
-	static private int maxGenerations = 400;
+	static private int maxIterations = 2000000;
+	static private int maxGenerations = 10;
 
 	static double crossoverProb = 0.2;
 	static double mutationProb = 0.6;
-	static int offspringPopulationSize = 10;
+	static int offspringPopulationSize = 50;
 
 	// TODO: move this back to RunExperiment?
 	static private String LOG_FILE_DIR = RunExperiment.ABS_MIDDLEWARE_PATH + "logs/";
@@ -67,20 +67,26 @@ public class JMetalMutationRunner extends AbstractAlgorithmRunner {
 		Problem<FaultInstanceSetSolution> problem;
 
 		try {
-
 			if (testChoice_o.isEmpty()) {
 				problem = new ATLASEvaluationProblem(problemRNG, mission, actuallyRun, exptRunTime,
 						LOG_FILE_DIR, goals);
 				
 			} else {
 				EvaluationProblemDummyChoices testChoice = testChoice_o.get();
+								
 				if (testChoice == EvaluationProblemDummyChoices.EXPT_RUNNER_FAKE_FAULTS) {
 					problem = new ATLASEvaluationProblem(problemRNG, mission, actuallyRun, exptRunTime,
 							LOG_FILE_DIR, goals);
-					((ATLASEvaluationProblem) problem).setFakeExperiment();
+					((ATLASEvaluationProblem) problem).setFakeExperimentNum(1);
 				} else {
+					if (testChoice == EvaluationProblemDummyChoices.EXPT_RUNNER_LOG_FAULTS) {
+						problem = new ATLASEvaluationProblem(problemRNG, mission, actuallyRun, exptRunTime,
+								LOG_FILE_DIR, goals);
+						((ATLASEvaluationProblem) problem).setFakeExperimentNum(2);
+					} else {
 						problem = new ATLASEvaluationProblemDummy(problemRNG, mission, actuallyRun,
-						exptRunTime, LOG_FILE_DIR, testChoice);
+								exptRunTime, LOG_FILE_DIR, testChoice);
+					}
 				}
 			}
 
@@ -93,7 +99,7 @@ public class JMetalMutationRunner extends AbstractAlgorithmRunner {
 
 			crossover = new SimpleFaultMixingCrossover(crossoverProb, crossoverRNG);
 			mutation = new FaultDataAdjustMutation(mutationRNG, "mutation.log", mutationProb);
-			selection = new BinaryTournamentSelection<FaultInstanceSetSolution>();
+			selection = new TournamentSelection<FaultInstanceSetSolution>(5);
 			dominanceComparator = new DominanceComparator<>();
 			//selection = new RankingAndCrowdingSelection<FaultInstanceSetSolution>(solutionsSelectCount, dominanceComparator);
 			//selection = new BestSolutionSelection<FaultInstanceSetSolution>(dominanceComparator);
