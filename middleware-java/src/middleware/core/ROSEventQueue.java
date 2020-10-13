@@ -121,10 +121,11 @@ public class ROSEventQueue extends ATLASEventQueue<MOOSEvent> {
 					String entityName = m.group(1);
 					double x = Double.parseDouble(m.group(2));
 					double y = Double.parseDouble(m.group(3));
+					double speed = 0.0;
 
 					// TODO: for now, assume the position sensor updates are provided directly
 					// by base position
-					GPSPositionReading gps = new GPSPositionReading(x, y, entityName);
+					GPSPositionReading gps = new GPSPositionReading(x, y, speed, entityName);
 
 					try {
 						String msg = atlasOMapper.serialise(gps);

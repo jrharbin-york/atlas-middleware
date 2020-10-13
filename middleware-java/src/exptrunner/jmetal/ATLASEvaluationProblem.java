@@ -179,7 +179,8 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 		// Write it out to a common result file - with the fault info
 		File f = new File(logFileDir + "/goalLog.log");
 		// TODO: fix path
-		File pf = new File("/home/atlas/atlas/atlas-middleware/middleware-java/logs/positions.log");
+		File pf = new File("/home/atlas/atlas/atlas-middleware/middleware-java/logs/objectPositions.log");
+		File robotDistFile = new File("/home/atlas/atlas/atlas-middleware/middleware-java/logs/robotDistances.log");
 		int detections = 0;
 		int missedDetections = 0;
 		int avoidanceViolations = 0;
@@ -206,18 +207,12 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 
 			missedDetections = (mission.getEnvironmentalObjects().size() * DETECTIONS_PER_OBJECT_EXPECTED) - detections;
 			missedDetections = Math.max(missedDetections, 0);
-			double timeProp = solution.faultCostProportion();
+			
 
-			String logRes = missedDetections + "," + avoidanceViolations + "," + timeProp + "\n";
-			System.out.println(solution);
-			System.out.println(logRes);
-			tempLog.write(logRes);
-			tempLog.flush();
-			System.out.println(logRes);
+
 			reader.close();
 
-			solution.setObjective(0, -missedDetections);
-			solution.setObjective(1, -avoidanceViolations);
+
 			// solution.setObjective(2, timeProp);
 
 		} catch (FileNotFoundException e1) {
@@ -227,28 +222,56 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 		}
 
 		// TODO: better way, get max_dist this from a region?
-		// double MAX_DIST = 1000.0;
-		// double contribution = 0.0;
-		// int objectCount = mission.getEnvironmentalObjects().size();
+		double MAX_DIST = 1000.0;
+		
+		double distFactor = 10.0;
+		int objectCount = mission.getEnvironmentalObjects().size();
+		
+		double combinedDistMetric = missedDetections;
+		double avoidanceMetric = avoidanceViolations;
+		double timeProp = solution.faultCostProportion();
 
-		// try {
-//			reader = new Scanner(pf);
-//			while (reader.hasNextLine()) {
-//				String line = reader.nextLine();
-//				String[] fields = line.split(",");
-//				String label = fields[0];
-//				String dist = fields[1];
-//				double distVal = Math.min(Double.parseDouble(dist), MAX_DIST);
-//				contribution += (distVal / MAX_DIST) / objectCount;
-//			}
-//			System.out.println("added to missedDetections = " + (1 - contribution));
-//			missedDetections += (1 - contribution);
-//
-//		} catch (FileNotFoundException e1) {
-//			e1.printStackTrace();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
+		try {
+			reader = new Scanner(pf);
+			while (reader.hasNextLine()) {
+				String line = reader.nextLine();
+				String[] fields = line.split(",");
+				String label = fields[0];
+				double dist = Double.valueOf(fields[1]);
+				double sensorWorkingDist = Double.valueOf(fields[2]);
+				double otherRobotDist = Double.valueOf(fields[3]);
+				
+				combinedDistMetric += missedDetections + (distFactor * dist);
+				//avoidanceMetric += avoidanceViolations + (distFactor * dist);
+			}
+			reader.close();
+			
+			reader = new Scanner(robotDistFile);
+			while (reader.hasNextLine()) {
+				String line = reader.nextLine();
+				String[] fields = line.split(",");
+				String label = fields[0];
+				double dist = Double.valueOf(fields[1]);
+				avoidanceMetric += avoidanceViolations + (distFactor * dist);
+			}
+			reader.close();
+			
+			solution.setObjective(0, -combinedDistMetric);
+			solution.setObjective(1, -avoidanceMetric);
+			solution.setObjective(2, timeProp);
+			
+			String logRes = missedDetections + "," + combinedDistMetric + "," + avoidanceViolations + "," + avoidanceMetric + "," + timeProp + "\n";
+			System.out.println(solution);
+			System.out.println(logRes);
+			tempLog.write(logRes);
+			tempLog.flush();
+			System.out.println(logRes);
+			
+		} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void evaluate(FaultInstanceSetSolution solution) {

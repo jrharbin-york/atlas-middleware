@@ -63,6 +63,10 @@ class DiscoverObjects extends GoalAction {
 	attr int robotsNeededPerObject;
 }
 
+class TrackDistances extends GoalAction {
+	
+}
+
 class SensorCover extends Cover {
 	attr double density;
 	attr int samplesPerUnit;

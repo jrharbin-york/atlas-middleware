@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ASCII"?>
-<atlas:Mission xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:atlas="http://www.github.com/jrharbin-york/atlas-middleware/dsl/mission" xmlns:atlas_1="http://www.github.com/jrharbin-york/atlas-middleware/dsl/components" xmlns:atlas_2="http://www.github.com/jrharbin-york/atlas-middleware/dsl/faults" xmi:id="_8OLx8HP4Eeqc6cv9mBHIKw">
+<atlas:Mission xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:atlas="http://www.github.com/jrharbin-york/atlas-middleware/dsl/mission" xmlns:atlas_1="http://www.github.com/jrharbin-york/atlas-middleware/dsl/components" xmlns:atlas_2="http://www.github.com/jrharbin-york/atlas-middleware/dsl/faults" xsi:schemaLocation="http://www.github.com/jrharbin-york/atlas-middleware/dsl/mission ../com.github.atlas.dsl/mission.ecore" xmi:id="_8OLx8HP4Eeqc6cv9mBHIKw">
   <robots xmi:id="_gWMvsHP-Eeqc6cv9mBHIKw" name="ella">
     <componentProperties xsi:type="atlas_1:PointProperty" xmi:id="_AVi8AHQREeqc6cv9mBHIKw" name="startLocation">
       <value xmi:id="_Bnz1IHQREeqc6cv9mBHIKw" x="200.0" y="-85.0"/>
@@ -169,6 +169,17 @@
       <staticRegion xmi:id="_wBWMsIi0EeqQioZ_JAeWZg">
         <corner1 xmi:id="_xmjP8Ii0EeqQioZ_JAeWZg"/>
         <corner2 xmi:id="_yH9T4Ii0EeqQioZ_JAeWZg"/>
+      </staticRegion>
+    </region>
+  </goals>
+  <goals xmi:id="_TppaAAjqEeuL7OuiDbZQfQ" name="trackDistances">
+    <requirements xmi:id="_WR3ZcAjqEeuL7OuiDbZQfQ" latestFinishTime="1201.0"/>
+    <participants xsi:type="atlas:StaticParticipants" xmi:id="_aknBAAjqEeuL7OuiDbZQfQ" participants="_Y_ymkKyYEeqTYY1ormOQgg _gWMvsHP-Eeqc6cv9mBHIKw _gx4mIHP-Eeqc6cv9mBHIKw _hNarkHP-Eeqc6cv9mBHIKw _hkfHwHP-Eeqc6cv9mBHIKw _a3uYkKyYEeqTYY1ormOQgg"/>
+    <action xsi:type="atlas:TrackDistances" xmi:id="_ubSQgAjqEeuL7OuiDbZQfQ"/>
+    <region xsi:type="atlas:StaticGoalRegion" xmi:id="_fBfcAAjqEeuL7OuiDbZQfQ">
+      <staticRegion xmi:id="_flkZcAjqEeuL7OuiDbZQfQ">
+        <corner1 xmi:id="_gTvHAAjqEeuL7OuiDbZQfQ"/>
+        <corner2 xmi:id="_gytiAAjqEeuL7OuiDbZQfQ"/>
       </staticRegion>
     </region>
   </goals>

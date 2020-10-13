@@ -38,7 +38,7 @@ public class MOOSEventQueue extends ATLASEventQueue<MOOSEvent> {
 	public MOOSEventQueue(ATLASCore core, Mission mission, int queueCapacity) {
 		super(core, queueCapacity, '.');
 		this.mission = mission;
-		nodeReportScanner = Pattern.compile("NAME=([^,]+),X=([^,]+),Y=([^,]+)");
+		nodeReportScanner = Pattern.compile("NAME=([^,]+),X=([^,]+),Y=([^,]+),SPD=([^,]+)");
 		detectionScanner = Pattern.compile("x=([^,]+),y=([^,]+),label=([^,]+),vname=([^,]+)");
 		hazardScanner = Pattern.compile("vname=([^,]+),x=([^,]+),y=([^,]+),label=([^,]+),type=([^,]+),color=([^,]+),width=([^,]+)");
 		atlasOMapper = new ATLASObjectMapper();
@@ -130,10 +130,11 @@ public class MOOSEventQueue extends ATLASEventQueue<MOOSEvent> {
 					String entityName = m.group(1);
 					double x = Double.parseDouble(m.group(2));
 					double y = Double.parseDouble(m.group(3));
+					double speed = Double.parseDouble(m.group(4));
 
-					// TODO: for now, assume the position sensor updates are provided directly
-					// by base position
-					GPSPositionReading gps = new GPSPositionReading(x, y, entityName);
+					// For now, assume the position sensor updates are provided directly
+					// by sim internal, rather than an explicit sensor
+					GPSPositionReading gps = new GPSPositionReading(x, y, speed, entityName);
 					core.notifyPositionUpdate(gps);
 					try {
 						String msg = atlasOMapper.serialise(gps);

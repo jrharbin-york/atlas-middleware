@@ -34,6 +34,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="robotsNeededPerObject"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TrackDistances" eSuperTypes="#//GoalAction"/>
   <eClassifiers xsi:type="ecore:EClass" name="SensorCover" eSuperTypes="#//Cover">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="density" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="samplesPerUnit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
