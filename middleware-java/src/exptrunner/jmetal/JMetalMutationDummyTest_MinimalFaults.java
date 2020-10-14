@@ -21,10 +21,14 @@ public class JMetalMutationDummyTest_MinimalFaults {
 		try {
 			mission = dslloader.loadMission();
 			for (int i = 0; i < runCount; i++) {
-				JMetalMutationRunner.jMetalRun(mission, Optional.of(EvaluationProblemDummyChoices.MINIMAL_FAULT_INSTANCE_COUNT));
+				JMetalMutationRunner.jMetalRun(mission, 
+						Optional.of(EvaluationProblemDummyChoices.MINIMAL_FAULT_INSTANCE_COUNT),
+						Optional.empty());
 			}
 		} catch (DSLLoadFailed e) {
 			System.out.println("DSL loading failed - configuration problems");
+			e.printStackTrace();
+		} catch (ExptError e) {
 			e.printStackTrace();
 		}
 	}

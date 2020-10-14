@@ -2,6 +2,7 @@ package exptrunner.jmetal;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -54,7 +55,7 @@ public class JMetalMutationRunner extends AbstractAlgorithmRunner {
 
 	static private String referenceParetoFront = "";
 
-	public static void jMetalRun(Mission mission, Optional<EvaluationProblemDummyChoices> testChoice_o) {
+	public static void jMetalRun(Mission mission, Optional<EvaluationProblemDummyChoices> testChoice_o, Optional<List<Metrics>> metrics_o) throws ExptError {
 
 		Random problemRNG = new Random();
 		Random crossoverRNG = new Random();
@@ -65,23 +66,28 @@ public class JMetalMutationRunner extends AbstractAlgorithmRunner {
 		goals.put(GoalsToCount.OBSTACLE_AVOIDANCE_GOALS, 1);
 
 		Problem<FaultInstanceSetSolution> problem;
-
+			
 		try {
 			if (testChoice_o.isEmpty()) {
+				if (!metrics_o.isPresent()) {
+					throw new ExptError("No metrics selected");
+				}
+				List<Metrics> metrics = metrics_o.get();
 				problem = new ATLASEvaluationProblem(problemRNG, mission, actuallyRun, exptRunTime,
-						LOG_FILE_DIR, goals);
+						LOG_FILE_DIR, goals, metrics);
 				
 			} else {
 				EvaluationProblemDummyChoices testChoice = testChoice_o.get();
-								
+				// Just use dummy metrics
+				List<Metrics> metrics = new ArrayList<Metrics>();
 				if (testChoice == EvaluationProblemDummyChoices.EXPT_RUNNER_FAKE_FAULTS) {
 					problem = new ATLASEvaluationProblem(problemRNG, mission, actuallyRun, exptRunTime,
-							LOG_FILE_DIR, goals);
+							LOG_FILE_DIR, goals, metrics);
 					((ATLASEvaluationProblem) problem).setFakeExperimentNum(1);
 				} else {
 					if (testChoice == EvaluationProblemDummyChoices.EXPT_RUNNER_LOG_FAULTS) {
 						problem = new ATLASEvaluationProblem(problemRNG, mission, actuallyRun, exptRunTime,
-								LOG_FILE_DIR, goals);
+								LOG_FILE_DIR, goals, metrics);
 						((ATLASEvaluationProblem) problem).setFakeExperimentNum(2);
 					} else {
 						problem = new ATLASEvaluationProblemDummy(problemRNG, mission, actuallyRun,
@@ -126,15 +132,21 @@ public class JMetalMutationRunner extends AbstractAlgorithmRunner {
 			e.printStackTrace();
 		}
 	}
-
+	
 	public static void main(String[] args) throws JMetalException, FileNotFoundException {
 		DSLLoader dslloader = new GeneratedDSLLoader();
 		Mission mission;
 		try {
 			mission = dslloader.loadMission();
-			jMetalRun(mission, Optional.empty());
+			List<Metrics> metrics = new ArrayList<Metrics>();
+			metrics.add(Metrics.COMBINED_DIST_METRIC);
+			metrics.add(Metrics.TIME_PROP);
+			
+			jMetalRun(mission, Optional.empty(), Optional.of(metrics));
 		} catch (DSLLoadFailed e) {
 			System.out.println("DSL loading failed - configuration problems");
+			e.printStackTrace();
+		} catch (ExptError e) {
 			e.printStackTrace();
 		}
 	}

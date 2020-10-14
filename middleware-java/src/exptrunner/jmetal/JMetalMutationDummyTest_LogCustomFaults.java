@@ -21,10 +21,14 @@ public class JMetalMutationDummyTest_LogCustomFaults {
 		try {
 			mission = dslloader.loadMission();
 			for (int i = 0; i < runCount; i++) {
-				JMetalMutationRunner.jMetalRun(mission, Optional.of(EvaluationProblemDummyChoices.EXPT_RUNNER_LOG_FAULTS));
+				JMetalMutationRunner.jMetalRun(mission, 
+						Optional.of(EvaluationProblemDummyChoices.EXPT_RUNNER_LOG_FAULTS),
+						Optional.empty());
 			}
 		} catch (DSLLoadFailed e) {
 			System.out.println("DSL loading failed - configuration problems");
+			e.printStackTrace();
+		} catch (ExptError e) {
 			e.printStackTrace();
 		}
 	}

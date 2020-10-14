@@ -17,9 +17,13 @@ public class JMetalMutationDummyTest_MaximalFaults {
 		Mission mission;
 		try {
 			mission = dslloader.loadMission();
-			JMetalMutationRunner.jMetalRun(mission, Optional.of(EvaluationProblemDummyChoices.MAXIMAL_FAULT_INSTANCE_COUNT));
+			JMetalMutationRunner.jMetalRun(mission, 
+					Optional.of(EvaluationProblemDummyChoices.MAXIMAL_FAULT_INSTANCE_COUNT),
+					Optional.empty());
 		} catch (DSLLoadFailed e) {
 			System.out.println("DSL loading failed - configuration problems");
+			e.printStackTrace();
+		} catch (ExptError e) {
 			e.printStackTrace();
 		}
 	}

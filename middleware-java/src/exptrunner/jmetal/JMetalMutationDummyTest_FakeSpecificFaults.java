@@ -1,6 +1,8 @@
 package exptrunner.jmetal;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.uma.jmetal.util.JMetalException;
@@ -21,10 +23,14 @@ public class JMetalMutationDummyTest_FakeSpecificFaults {
 		try {
 			mission = dslloader.loadMission();
 			for (int i = 0; i < runCount; i++) {
-				JMetalMutationRunner.jMetalRun(mission, Optional.of(EvaluationProblemDummyChoices.EXPT_RUNNER_FAKE_FAULTS));
+				JMetalMutationRunner.jMetalRun(mission, 
+						Optional.of(EvaluationProblemDummyChoices.EXPT_RUNNER_FAKE_FAULTS), 
+						Optional.empty());
 			}
 		} catch (DSLLoadFailed e) {
 			System.out.println("DSL loading failed - configuration problems");
+			e.printStackTrace();
+		} catch (ExptError e) {
 			e.printStackTrace();
 		}
 	}
