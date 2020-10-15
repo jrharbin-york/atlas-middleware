@@ -1,7 +1,5 @@
 package test.moosmapping;
 
-import moosmapping.*;
-
 import atlascarsgenerator.ConversionFailed;
 import atlascarsgenerator.MOOSCodeGen;
 
@@ -10,6 +8,7 @@ import atlascollectiveintgenerator.*;
 import atlasdsl.*;
 import atlasdsl.loader.*;
 import carsmapping.CARSSimulation;
+import carsspecific.moos.moosmapping.*;
 
 public class TestMapping {
 	public static void testCodeGeneration1(String code_dir) {

@@ -11,18 +11,15 @@ public abstract class ATLASEventQueue<E> extends ArrayBlockingQueue<E> implement
 	protected ATLASObjectMapper atlasOMapper;
 	protected ATLASCore core;
 	
-	private boolean continueLoop = true;
-	private char progressChar;
-	private List<VoidLambda> afterHooks = new ArrayList<VoidLambda>();
-	private int eventCount = 0;
-	private final int CHAR_COUNT_LIMIT = 320;
-	private final int EVENTS_PER_PRINTED_CHAR = 8;
+	protected boolean continueLoop = true;
+	protected char progressChar;
+	protected List<VoidLambda> afterHooks = new ArrayList<VoidLambda>();
+	protected int eventCount = 0;
+	protected final int CHAR_COUNT_LIMIT = 320;
+	protected final int EVENTS_PER_PRINTED_CHAR = 8;
 	
 	public ATLASEventQueue(ATLASCore core, int capacity, char progressChar) {
 		super(capacity);
-		this.core = core;
-		progressChar = '.';
-		this.progressChar = progressChar;
 	}
 	
 	public void registerAfterHook(VoidLambda v) {

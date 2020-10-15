@@ -186,6 +186,14 @@ public class GeneratedDSLLoader implements DSLLoader {
 	EnvironmentalObject eo3 = new EnvironmentalObject(3, new Point(100.0,-150.0,0.0), false);
 	mission.addObject(eo3);
 	
+	ArrayList<Point> eopoints0 = new ArrayList<Point>();
+		eopoints0.add(new Point(5.0, 10.0, 0.0));
+		eopoints0.add(new Point(7.0, -2.0, 0.0));
+		eopoints0.add(new Point(32.0, 1.0, 0.0));
+		eopoints0.add(new Point(-6.0, -21.0, 0.0));
+	EnvironmentalObstacle eob0 = new EnvironmentalObstacle("bigrock", eopoints0);
+	mission.addObstacle(eob0);
+	
  
  
  

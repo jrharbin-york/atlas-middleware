@@ -100,6 +100,9 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="objects" upperBound="-1"
         eType="ecore:EClass http://www.github.com/jrharbin-york/atlas-middleware/dsl/region#//EnvironmentalObject"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="obstacles" upperBound="-1"
+        eType="ecore:EClass http://www.github.com/jrharbin-york/atlas-middleware/dsl/region#//EnvironmentalObstacle"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="messages" upperBound="-1"
         eType="ecore:EClass http://www.github.com/jrharbin-york/atlas-middleware/dsl/message#//Message"
         containment="true"/>

@@ -106,6 +106,7 @@ void ATLASLinkConsumer::onMessage(const Message *message) {
         double endTime = stod(matches[1]);
         string key = matches[2];
         string val = matches[3];
+        cout << "From ActiveMQ" << key << endl;
         CMOOSMsg *moosemsg = new CMOOSMsg(MOOS_STRING, key, val);
         if (atlas_int)
                 atlas_int->fromMQHook(*moosemsg, endTime);

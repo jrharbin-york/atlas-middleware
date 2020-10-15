@@ -32,3 +32,8 @@ class EnvironmentalObject extends Point {
 	attr boolean isHazard;
 	attr int label;
 }
+
+class EnvironmentalObstacle {
+	val Polygon poly;
+	attr String label;
+}
