@@ -21,7 +21,7 @@ public class JMetalMutationDummyTest_LogCustomFaults {
 		try {
 			mission = dslloader.loadMission();
 			for (int i = 0; i < runCount; i++) {
-				JMetalMutationRunner.jMetalRun(mission, 
+				JMetalMutationRunner.jMetalRun("", mission, 
 						Optional.of(EvaluationProblemDummyChoices.EXPT_RUNNER_LOG_FAULTS),
 						Optional.empty());
 			}

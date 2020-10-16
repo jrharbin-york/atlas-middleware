@@ -23,7 +23,7 @@ public class JMetalMutationDummyTest_FakeSpecificFaults {
 		try {
 			mission = dslloader.loadMission();
 			for (int i = 0; i < runCount; i++) {
-				JMetalMutationRunner.jMetalRun(mission, 
+				JMetalMutationRunner.jMetalRun("", mission, 
 						Optional.of(EvaluationProblemDummyChoices.EXPT_RUNNER_FAKE_FAULTS), 
 						Optional.empty());
 			}
