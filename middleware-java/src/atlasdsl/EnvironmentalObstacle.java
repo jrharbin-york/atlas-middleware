@@ -1,0 +1,27 @@
+package atlasdsl;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import atlassharedclasses.*;
+
+public class EnvironmentalObstacle {
+	private List<Point> polygon = new ArrayList<Point>();
+	private String label;
+	
+	public EnvironmentalObstacle(String label, List<Point> polygon) {
+		this.polygon = polygon;
+		this.label = label;  
+	}			
+	
+	public String pointsList() {
+		return polygon.stream()
+				.map(p -> p.getX() + "," + p.getY())
+				.collect(Collectors.joining(":"));
+	}
+	
+	public String getLabel() {
+		return label;
+	}
+}

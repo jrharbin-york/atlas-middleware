@@ -151,14 +151,15 @@ class ComputerCIshoreside {
 			API.setPatrolAroundRegion(robot, region, VERTICAL_STEP_SIZE_INITIAL_SWEEP,
 					("UUV_COORDINATE_UPDATE_INIITAL_" + robot.toUpperCase()));
 
+			CollectiveIntLog.logCI("Starting sweep robot " + robot);
+			API.startVehicle(robot);
+			
 			CollectiveIntLog.logCI("Setting robot " + robot + " to scan region " + region.toString());
 			robotSweepRegions.put(robot, region);
-
-			API.startVehicle(robot);
-			CollectiveIntLog.logCI("Starting sweep robot " + robot);
 		}
 
 		for (String robot : cameraRobots) {
+			CollectiveIntLog.logCI("Starting camera robot " + robot);
 			API.startVehicle(robot);
 			API.setDepth(robot, CAMERA_DIVE_DEPTH, "DEPTH_SET_MESSAGE_" + robot);
 			CollectiveIntLog.logCI("Starting camera robot " + robot);

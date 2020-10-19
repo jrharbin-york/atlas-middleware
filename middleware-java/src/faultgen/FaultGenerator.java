@@ -23,8 +23,6 @@ public class FaultGenerator {
 	private ATLASCore core;
 	private FaultFileIO faultFileIO;
 	
-	private CountHashmap<Fault> countFaults;
-	
 	// This holds the fault instances that have been read from the definition file, 
 	// but not yet injected. Sorted in order of injection time
 	private PriorityQueue<FaultInstance> scheduledFaults = new PriorityQueue<FaultInstance>();

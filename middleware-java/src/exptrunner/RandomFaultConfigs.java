@@ -6,14 +6,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import atlasdsl.Mission;
-import atlasdsl.faults.Fault;
-import atlasdsl.loader.DSLLoader;
-import atlasdsl.loader.GeneratedDSLLoader;
 import atlassharedclasses.FaultInstance;
 import faultgen.FaultFileCreator;
 import faultgen.FaultFileIO;

@@ -18,10 +18,13 @@ import atlasdsl.faults.Fault;
 import atlassharedclasses.Point;
 
 import faultgen.FaultGenerator;
+import middleware.core.ATLASCore;
 
 public class GUITest {
 	
 	private final double DEFAULT_FAULT_TIME_LENGTH = 10.0;
+	
+	JLabel timeLabel = new JLabel("time = <...>");
 	
 	JFrame f;
 	JPanel robotsPanel = new JPanel();
@@ -36,6 +39,8 @@ public class GUITest {
     private Mission mission;
     private FaultButtonListener buttonListener = new FaultButtonListener();
     private FaultChoiceListener faultChoiceListener = new FaultChoiceListener();
+    
+    private ATLASCore core;
     
     private FaultGenerator faultGen;
     private String chosenFault = "";
@@ -81,10 +86,15 @@ public class GUITest {
 	}
 	
     private void setupLabels() {
+    	timeLabel.setVisible(true);
+    	robotsPanel.add(timeLabel);
+    	
     	for (Robot r : mission.getAllRobots()) {
     		//chosenRobotName = r.getName();
 	    	JLabel l = new JLabel(robotLabelText(r));
 	    	l.setVisible(true);
+
+	    	
 	    	robotLabels.put(r, l);
 	    	robotsPanel.add(l);
     	}
@@ -114,6 +124,8 @@ public class GUITest {
     }
     
     private void updateLabels() {
+    	timeLabel.setText("time = " + Double.toString(core.getTime()));
+    	
     	for (Map.Entry<Robot, JLabel> entry : robotLabels.entrySet()) {
     		JLabel l = entry.getValue();
     		Robot r = entry.getKey();
@@ -135,7 +147,9 @@ public class GUITest {
     	
     }
     
-    public GUITest(Mission mission, FaultGenerator faultGen) {
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	public GUITest(ATLASCore core, Mission mission, FaultGenerator faultGen) {
+    	this.core = core;
     	this.mission = mission;
     	this.faultGen = faultGen;
     	
@@ -162,8 +176,8 @@ public class GUITest {
     	List<String> robotNames = mission.getAllRobots().stream().map(r -> r.getName()).collect(Collectors.toList());
     	List<String> faultNames = mission.getFaultsAsList().stream().map(f -> f.getName()).collect(Collectors.toList());
     	
-    	JComboBox<?> robotChoice = new JComboBox(robotNames.toArray());
-    	JComboBox<?> faultChoice = new JComboBox(faultNames.toArray());
+		JComboBox<?> robotChoice = new JComboBox(robotNames.toArray());
+		JComboBox<?> faultChoice = new JComboBox(faultNames.toArray());
     	
     	robotChoice.setSelectedIndex(1);
         injectButton.addActionListener(buttonListener);

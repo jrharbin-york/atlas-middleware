@@ -129,6 +129,7 @@ class Mission {
 	val Atlas.Region[*] regions;
 	val Goal[*] goals;
 	val Atlas.EnvironmentalObject[*] objects;
+	val Atlas.EnvironmentalObstacle[*] obstacles;
 	val Atlas.Message[*] messages;
 	val Atlas.Fault[*] faults;
 }

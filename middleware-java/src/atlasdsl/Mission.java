@@ -17,6 +17,7 @@ public class Mission {
 	private Map<String,Computer> computers = new LinkedHashMap<String,Computer>();
 	private Map<String,Region> regions = new LinkedHashMap<String,Region>();
 	private Map<Integer,EnvironmentalObject> objects = new LinkedHashMap<Integer,EnvironmentalObject>();
+	private Map<String,EnvironmentalObstacle> obstacles = new LinkedHashMap<String,EnvironmentalObstacle>();
 	private Map<String,Goal> goals = new LinkedHashMap<String,Goal>();
 	private Map<String,Message> messages = new LinkedHashMap<String,Message>();
 	private Map<String,Fault> faults = new LinkedHashMap<String,Fault>();
@@ -144,5 +145,9 @@ public class Mission {
 
 	public List<Fault> getFaultsAsList() {
 		return new ArrayList<Fault>(faults.values());
+	}
+
+	public void addObstacle(EnvironmentalObstacle eob) {
+		obstacles.put(eob.getLabel(), eob);
 	}
 }
