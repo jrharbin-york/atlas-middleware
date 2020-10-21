@@ -150,4 +150,8 @@ public class Mission {
 	public void addObstacle(EnvironmentalObstacle eob) {
 		obstacles.put(eob.getLabel(), eob);
 	}
+	
+	public Map<String,EnvironmentalObstacle> getObstacles() {
+		return obstacles;
+	}
 }

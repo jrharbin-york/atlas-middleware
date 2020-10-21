@@ -4,7 +4,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
+
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.io.ParseException;
+import org.locationtech.jts.io.WKTReader;
 
 import atlassharedclasses.Point;
 import middleware.core.ATLASCore;
@@ -17,17 +24,51 @@ public class TrackDistances extends GoalAction {
 	// TODO: track the robot distances from each other too!
 	protected Map<EnvironmentalObject, Double> objectDistances = new HashMap<EnvironmentalObject, Double>();
 	protected Map<EnvironmentalObject, Double> sensorWorkingDistances = new HashMap<EnvironmentalObject, Double>();
+	
+	protected Map<String, Geometry> obstacleGeometry = new HashMap<String, Geometry>();
+	protected Map<String, Double> collisions  = new HashMap<String,Double>();
+	
 	protected Map<String, Double> interRobotDistances = new HashMap<String, Double>();
 	protected Map<String, Point> positions = new HashMap<String, Point>();
 	
 	private boolean writtenYet = false;
+	
+	private WKTReader jtsReader = new WKTReader();
 	//protected Map<EnvironmentalObstacle,Boolean> obstacleInside = new HashMap<EnvironmentalObstacle,Double>();
 
 	private double maxSpeedThreshold;
 	
-	public TrackDistances() {	
+	private void setupObstacleGeometry() {
+		GeometryFactory gf = new GeometryFactory();
+		for (Entry<String, EnvironmentalObstacle> eo_e : mission.getObstacles().entrySet()) {
+			String label = eo_e.getKey();
+			EnvironmentalObstacle eo = eo_e.getValue();
+			Coordinate [] coords = new Coordinate[5];
+			Geometry p = gf.createLineString(coords); 
+			obstacleGeometry.put(label, p);
+		}
+	}
+	
+	private void checkPointIntersection(Point p) throws ParseException {
+		// TODO: convert ATLAS point to JTS point
+		Geometry jtsP = jtsReader.read("POINT (" + p.getX() + "," + p.getY() + ")");
+		
+		for (Entry<String, Geometry> eo_e : obstacleGeometry.entrySet()) {
+			
+			Geometry g = eo_e.getValue();
+			String name = eo_e.getKey();
+			if (g.contains(jtsP)) {
+				Double time = core.getTime();
+				// TODO: also put the label there
+				collisions.put(name, time);
+			}
+		}
+	}
+	
+	public TrackDistances() {
 		// TODO: setting maxSpeedThreshold to a default
 		this.maxSpeedThreshold = 2.0;
+
 	}
 
 	private void writeResultsOut() {
@@ -114,6 +155,8 @@ public class TrackDistances extends GoalAction {
 		this.completionTime = core.getTimeLimit();
 		this.mission = mission;
 		
+		setupObstacleGeometry();
+		
 		for (EnvironmentalObject eo : mission.getEnvironmentalObjects()) {
 			objectDistances.put(eo, Double.MAX_VALUE);
 			sensorWorkingDistances.put(eo, Double.MAX_VALUE);
@@ -127,6 +170,11 @@ public class TrackDistances extends GoalAction {
 			
 			positions.put(name, new Point(x,y));
 			checkDistanceToObjects(name, x, y, speed);
+			try {
+				checkPointIntersection(new Point(x,y));
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
 		});
 	}
 }
