@@ -18,8 +18,8 @@ public class GeneratedDSLLoader implements DSLLoader {
 		Robot rella = new Robot("ella");
 		rella.setPointComponentProperty("startLocation", new Point(200.0,-85.0,0.0));
 		rella.setDoubleComponentProperty("maxSpeed", 5.0);
-		rella.setDoubleComponentProperty("startSpeed", 1.6);
 		rella.setDoubleComponentProperty("maxDepth", 20.0);
+		rella.setDoubleComponentProperty("startSpeed", 1.6);
 		
  
 		Sensor srella_1 = new Sensor(SensorType.SONAR);
@@ -489,6 +489,70 @@ public class GeneratedDSLLoader implements DSLLoader {
 	
 	Fault f9 = new Fault("COORDINATE-ELLA", fi9, Optional.empty(), ft9);
 	mission.addFault(f9);
+	 
+	
+	
+	FaultImpact fi10;
+	try {	
+		fi10 = new MotionFault(srbrian_3, "speed", "5.0");
+	} catch (InvalidComponentType e) {
+		throw new DSLLoadFailed("MotionFault 10 is not using a MotionSource as its affected component");
+	}
+	
+	
+	
+	FaultTimeProperties ft10 = new FaultTimeProperties(0.0, 1200.0, 1200.0, 3, 0.8); 
+	
+	Fault f10 = new Fault("SPEEDFAULT-BRIAN", fi10, Optional.empty(), ft10);
+	mission.addFault(f10);
+	 
+	
+	
+	FaultImpact fi11;
+	try {	
+		fi11 = new MotionFault(srlinda_3, "speed", "5.0");
+	} catch (InvalidComponentType e) {
+		throw new DSLLoadFailed("MotionFault 11 is not using a MotionSource as its affected component");
+	}
+	
+	
+	
+	FaultTimeProperties ft11 = new FaultTimeProperties(0.0, 1200.0, 1200.0, 3, 0.8); 
+	
+	Fault f11 = new Fault("SPEEDFAULT-LINDA", fi11, Optional.empty(), ft11);
+	mission.addFault(f11);
+	 
+	
+	
+	FaultImpact fi12;
+	try {	
+		fi12 = new MotionFault(srbrian_3, "heading", "180.0");
+	} catch (InvalidComponentType e) {
+		throw new DSLLoadFailed("MotionFault 12 is not using a MotionSource as its affected component");
+	}
+	
+	
+	
+	FaultTimeProperties ft12 = new FaultTimeProperties(0.0, 1200.0, 1200.0, 1, 0.8); 
+	
+	Fault f12 = new Fault("HEADINGFAULT-BRIAN", fi12, Optional.empty(), ft12);
+	mission.addFault(f12);
+	 
+	
+	
+	FaultImpact fi13;
+	try {	
+		fi13 = new MotionFault(srlinda_3, "heading", "180.0");
+	} catch (InvalidComponentType e) {
+		throw new DSLLoadFailed("MotionFault 13 is not using a MotionSource as its affected component");
+	}
+	
+	
+	
+	FaultTimeProperties ft13 = new FaultTimeProperties(0.0, 1200.0, 1200.0, 1, 0.8); 
+	
+	Fault f13 = new Fault("HEADINGFAULT-LINDA", fi13, Optional.empty(), ft13);
+	mission.addFault(f13);
 	
 	return mission;
 	}

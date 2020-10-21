@@ -5,8 +5,8 @@
       <value xmi:id="_Bnz1IHQREeqc6cv9mBHIKw" x="200.0" y="-85.0"/>
     </componentProperties>
     <componentProperties xsi:type="atlas_1:DoubleProperty" xmi:id="_QVLBcHQREeqc6cv9mBHIKw" name="maxSpeed" value="5.0"/>
-    <componentProperties xsi:type="atlas_1:DoubleProperty" xmi:id="_SNd_0HQREeqc6cv9mBHIKw" name="startSpeed" value="1.6"/>
     <componentProperties xsi:type="atlas_1:DoubleProperty" xmi:id="_olp0UKl7EeqQLbqZOrinhg" name="maxDepth" value="20.0"/>
+    <componentProperties xsi:type="atlas_1:DoubleProperty" xmi:id="_RaXVYA6EEeu93N8WRF-jIw" name="startSpeed" value="1.6"/>
     <subcomponents xsi:type="atlas_1:Sensor" xmi:id="_l8itIHP-Eeqc6cv9mBHIKw">
       <componentProperties xsi:type="atlas_1:DoubleProperty" xmi:id="_pBGIoHQREeqc6cv9mBHIKw" name="swathWidth" value="10.0"/>
       <componentProperties xsi:type="atlas_1:DoubleProperty" xmi:id="_4QN-kHRbEeqNXdfjikxLMQ" name="detectionProb" value="0.99"/>
@@ -249,5 +249,21 @@
       </newValue>
       <subfieldSpec xmi:id="_eBOjAJp3Eeqgh-vrPhaKXw" fieldRangeLength="1"/>
     </impact>
+  </faults>
+  <faults xmi:id="_w56XYA6CEeu93N8WRF-jIw" name="SPEEDFAULT-BRIAN">
+    <affectedTime xmi:id="_w56XYQ6CEeu93N8WRF-jIw" latestFaultEnd="1200.0" maxFaultLength="1200.0" maxFaultRepeatCount="3" faultProb="0.8"/>
+    <impact xsi:type="atlas_2:MotionFault" xmi:id="_w56XYg6CEeu93N8WRF-jIw" affectedComponent="_Y_ymmqyYEeqTYY1ormOQgg" affectedProperty="speed" newValue="5.0"/>
+  </faults>
+  <faults xmi:id="_xtVYYA6CEeu93N8WRF-jIw" name="SPEEDFAULT-LINDA">
+    <affectedTime xmi:id="_xtVYYQ6CEeu93N8WRF-jIw" latestFaultEnd="1200.0" maxFaultLength="1200.0" maxFaultRepeatCount="3" faultProb="0.8"/>
+    <impact xsi:type="atlas_2:MotionFault" xmi:id="_xtVYYg6CEeu93N8WRF-jIw" affectedComponent="_a3uYmqyYEeqTYY1ormOQgg" affectedProperty="speed" newValue="5.0"/>
+  </faults>
+  <faults xmi:id="_-oDiYA6CEeu93N8WRF-jIw" name="HEADINGFAULT-BRIAN">
+    <affectedTime xmi:id="_-oDiYQ6CEeu93N8WRF-jIw" latestFaultEnd="1200.0" maxFaultLength="1200.0" maxFaultRepeatCount="1" faultProb="0.8"/>
+    <impact xsi:type="atlas_2:MotionFault" xmi:id="_-oDiYg6CEeu93N8WRF-jIw" affectedComponent="_Y_ymmqyYEeqTYY1ormOQgg" affectedProperty="heading" newValue="180.0"/>
+  </faults>
+  <faults xmi:id="__NSWYA6CEeu93N8WRF-jIw" name="HEADINGFAULT-LINDA">
+    <affectedTime xmi:id="__NSWYQ6CEeu93N8WRF-jIw" latestFaultEnd="1200.0" maxFaultLength="1200.0" maxFaultRepeatCount="1" faultProb="0.8"/>
+    <impact xsi:type="atlas_2:MotionFault" xmi:id="__NSWYg6CEeu93N8WRF-jIw" affectedComponent="_a3uYmqyYEeqTYY1ormOQgg" affectedProperty="heading" newValue="180.0"/>
   </faults>
 </atlas:Mission>

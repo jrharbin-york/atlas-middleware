@@ -4,9 +4,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,8 +63,9 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 		this.goalsToCount = goalsToCount;
 		this.variableFixedSize = mission.getFaultsAsList().size();
 		this.metrics = metrics;
-
-		tempLog = new FileWriter("tempLog.res");
+		System.out.println(metrics.toString());
+		String fileName = new SimpleDateFormat("yyyyMMddHHmm").format(new Date());
+		tempLog = new FileWriter("tempLog-" + fileName + ".res");
 	}
 
 	public void setFakeExperimentNum(int n) {
@@ -195,6 +198,9 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 				foundTotal += detectionInfo.get(i).size();
 				foundTotal = Math.min(foundTotal, DETECTIONS_PER_OBJECT_EXPECTED);
 				missedTotal += DETECTIONS_PER_OBJECT_EXPECTED - foundTotal;
+			} else {
+				// If no result for this object, add the number of detections intended
+				missedTotal += DETECTIONS_PER_OBJECT_EXPECTED;
 			}
 		}
 		return missedTotal;
@@ -239,6 +245,7 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 		int missedDetections = 0;
 		int avoidanceViolations = 0;
 		int maxObjectNum = 0;
+		int checkDetectionCount = 0;
 		
 		double firstFaultTime = Double.MAX_VALUE;
 
@@ -256,6 +263,7 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 					double time = Double.parseDouble(fields[1]);
 					String robot = fields[2];
 					int num = Integer.parseInt(fields[3]);
+					checkDetectionCount++;
 					
 					if (num > maxObjectNum) {
 						maxObjectNum = num;
@@ -273,7 +281,12 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 				}
 			}
 
-			missedDetections = missedDetections(detectionInfo, maxObjectNum);
+			//missedDetections = missedDetections(detectionInfo, maxObjectNum);
+			// TODO: for now, just compute missedDetections directly from the file
+			missedDetections = Math.max(0, ((mission.getEnvironmentalObjects().size() * DETECTIONS_PER_OBJECT_EXPECTED) - checkDetectionCount));
+			//if (missedDetections !=  checkMissedCount) {
+			//	System.out.println("WARNING: missedDetections != checkMissedCount - this may be OK if there are extras recorded, otherwise a bug");
+			//}
 			reader.close();
 
 		} catch (FileNotFoundException e1) {
@@ -285,7 +298,8 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 		// TODO: better way, get max_dist this from a region?
 		double MAX_DIST = 1000.0;
 		
-		double distFactor = 10.0;
+		double missedDetectionFactor = 10.0;
+		double avoidanceFactor = 10.0;
 		int objectCount = mission.getEnvironmentalObjects().size();
 		
 		double combinedDistMetric = missedDetections;
@@ -300,10 +314,14 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 				String label = fields[0];
 				double dist = Double.valueOf(fields[1]);
 				double sensorWorkingDist = Double.valueOf(fields[2]);
-				
-				combinedDistMetric += missedDetections + (distFactor * dist);
-				//avoidanceMetric += avoidanceViolations + (distFactor * dist);
+				System.out.println("Robot dist to label " + label + "=" + dist + "\n");
+				combinedDistMetric += dist;
 			}
+			
+			System.out.println("Total distance: " + combinedDistMetric + ",missedDetections = " + missedDetections + "\n");
+			combinedDistMetric += (missedDetections * missedDetectionFactor);
+			System.out.println("Output metric: " + combinedDistMetric);
+			
 			reader.close();
 			
 			reader = new Scanner(robotDistFile);
@@ -312,8 +330,10 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 				String[] fields = line.split(",");
 				String label = fields[0];
 				double dist = Double.valueOf(fields[1]);
-				avoidanceMetric += avoidanceViolations + (distFactor * dist);
+				avoidanceMetric += dist;
 			}
+			
+			avoidanceMetric += (avoidanceViolations * avoidanceFactor);
 			reader.close();
 			
 			double detectionCompletionTime = detectionCompletionTime(detectionInfo, objectCount);
@@ -358,13 +378,11 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 			        .mapToObj(Double::toString)
 			        .collect(Collectors.joining(","));
 
-			System.out.println(solution);
-			System.out.println(info);
-			System.out.println(logRes);
-			tempLog.write(logRes);
+			System.out.println(solution.hashCode() + ":" + solution + "\n");
+			System.out.println(info + "\n");
+			System.out.println(logRes + "\n");
+			tempLog.write(logRes + "\n");
 			tempLog.flush();
-			System.out.println(logRes);
-			
 		} catch (FileNotFoundException e1) {
 				e1.printStackTrace();
 		} catch (IOException e) {

@@ -21,7 +21,7 @@ public class JMetalMutationDummyTest_MinimalFaults {
 		try {
 			mission = dslloader.loadMission();
 			for (int i = 0; i < runCount; i++) {
-				JMetalMutationRunner.jMetalRun(mission, 
+				JMetalMutationRunner.jMetalRun("", mission, 
 						Optional.of(EvaluationProblemDummyChoices.MINIMAL_FAULT_INSTANCE_COUNT),
 						Optional.empty());
 			}

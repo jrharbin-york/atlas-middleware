@@ -38,7 +38,9 @@ import exptrunner.jmetal.test.ATLASEvaluationProblemDummy.EvaluationProblemDummy
 
 public class JMetalMutationRunner extends AbstractAlgorithmRunner {
 
-	static private int populationSize = 50;
+	static private int populationSize = 10;
+	static private int offspringPopulationSize = 10;
+	
 	static private int matingPoolSize = populationSize;
 	static private boolean actuallyRun = true;
 	static private double exptRunTime = 1200.0;
@@ -48,14 +50,14 @@ public class JMetalMutationRunner extends AbstractAlgorithmRunner {
 
 	static double crossoverProb = 0.2;
 	static double mutationProb = 0.6;
-	static int offspringPopulationSize = 50;
+	
 
 	// TODO: move this back to RunExperiment?
 	static private String LOG_FILE_DIR = RunExperiment.ABS_MIDDLEWARE_PATH + "logs/";
 
 	static private String referenceParetoFront = "";
 
-	public static void jMetalRun(Mission mission, Optional<EvaluationProblemDummyChoices> testChoice_o, Optional<List<Metrics>> metrics_o) throws ExptError {
+	public static void jMetalRun(String tag, Mission mission, Optional<EvaluationProblemDummyChoices> testChoice_o, Optional<List<Metrics>> metrics_o) throws ExptError {
 
 		Random problemRNG = new Random();
 		Random crossoverRNG = new Random();
@@ -113,7 +115,7 @@ public class JMetalMutationRunner extends AbstractAlgorithmRunner {
 			evaluator = new SequentialSolutionListEvaluator<FaultInstanceSetSolution>();
 			
 
-			algorithm = new NSGAIIMeasures(problem, maxIterations, maxGenerations, populationSize, matingPoolSize,
+			algorithm = new NSGAIIMeasures(tag, problem, maxIterations, maxGenerations, populationSize, matingPoolSize,
 					offspringPopulationSize, crossover, mutation, selection, dominanceComparator, evaluator);
 
 			AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm).execute();
@@ -124,9 +126,9 @@ public class JMetalMutationRunner extends AbstractAlgorithmRunner {
 			JMetalLogger.logger.info("Total execution time: " + computingTime + "ms");
 
 			printFinalSolutionSet(population);
-			if (!referenceParetoFront.equals("")) {
+			//if (!referenceParetoFront.equals("")) {
 				printQualityIndicators(population, referenceParetoFront);
-			}
+			//}
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -139,10 +141,11 @@ public class JMetalMutationRunner extends AbstractAlgorithmRunner {
 		try {
 			mission = dslloader.loadMission();
 			List<Metrics> metrics = new ArrayList<Metrics>();
+			// Read experiment number
 			metrics.add(Metrics.COMBINED_DIST_METRIC);
 			metrics.add(Metrics.TIME_PROP);
 			
-			jMetalRun(mission, Optional.empty(), Optional.of(metrics));
+			jMetalRun("expt1", mission, Optional.empty(), Optional.of(metrics));
 		} catch (DSLLoadFailed e) {
 			System.out.println("DSL loading failed - configuration problems");
 			e.printStackTrace();

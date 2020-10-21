@@ -17,7 +17,7 @@ public class JMetalMutationDummyTest_MaximalFaults {
 		Mission mission;
 		try {
 			mission = dslloader.loadMission();
-			JMetalMutationRunner.jMetalRun(mission, 
+			JMetalMutationRunner.jMetalRun("", mission, 
 					Optional.of(EvaluationProblemDummyChoices.MAXIMAL_FAULT_INSTANCE_COUNT),
 					Optional.empty());
 		} catch (DSLLoadFailed e) {
