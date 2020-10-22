@@ -50,7 +50,7 @@ public class TrackDistances extends GoalAction {
 	}
 	
 	private void checkPointIntersection(Point p) throws ParseException {
-		// TODO: convert ATLAS point to JTS point
+		// TODO: check the bounding box first to reduce computation
 		Geometry jtsP = jtsReader.read("POINT (" + p.getX() + "," + p.getY() + ")");
 		
 		for (Entry<String, Geometry> eo_e : obstacleGeometry.entrySet()) {
@@ -167,14 +167,14 @@ public class TrackDistances extends GoalAction {
 			double y = gps.getY();
 			double speed = gps.getSpeed();
 			String name = gps.getRobotName();
-			
 			positions.put(name, new Point(x,y));
+			
 			checkDistanceToObjects(name, x, y, speed);
-			try {
-				checkPointIntersection(new Point(x,y));
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
+			//try {
+				//checkPointIntersection(new Point(x,y));
+			//} catch (ParseException e) {
+//				e.printStackTrace();
+			//}
 		});
 	}
 }

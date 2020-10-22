@@ -305,6 +305,7 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 		double combinedDistMetric = missedDetections;
 		double avoidanceMetric = avoidanceViolations;
 		double timeProp = solution.faultCostProportion();
+		double timeTotal = solution.faultTimeTotal();
 
 		try {
 			reader = new Scanner(pf);
@@ -356,6 +357,11 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 			if (metrics.contains(Metrics.TIME_PROP)) {
 				solution.setObjective(metricID++, timeProp);
 				names.add("timeProp");
+			}
+			
+			if (metrics.contains(Metrics.TIME_TOTAL_ABSOLUTE)) {
+				solution.setObjective(metricID++, timeTotal);
+				names.add("timeTotal");
 			}
 			
 			if (metrics.contains(Metrics.NUM_FAULTS)) {

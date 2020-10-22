@@ -177,7 +177,7 @@ public abstract class ATLASCore {
 		positionWatchers.add(l);
 	}
 	
-	protected void notifyPositionUpdate(GPSPositionReading gps) {
+	public void notifyPositionUpdate(GPSPositionReading gps) {
 		for (PositionUpdateLambda watcher : positionWatchers) { 
 			watcher.op(gps);
 		}

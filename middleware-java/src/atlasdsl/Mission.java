@@ -154,4 +154,8 @@ public class Mission {
 	public Map<String,EnvironmentalObstacle> getObstacles() {
 		return obstacles;
 	}
+
+	public boolean hasObstacles() {
+		return (obstacles.size() > 0);
+	}
 }

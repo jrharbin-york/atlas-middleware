@@ -1,4 +1,4 @@
-package atlascollectiveint.custom;
+package atlascollectiveint.custom.backup;
 
 import atlascollectiveint.api.*;
 import atlascollectiveint.logging.CollectiveIntLog;
@@ -12,7 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-class ComputerCIshoreside {
+class ComputerCIshoreside_obstacle_casestudy {
 	// The shoreside CI's copy of the robot information
 	private static List<String> sweepRobots = new ArrayList<String>();
 	//private static List<String> cameraRobots = new ArrayList<String>();

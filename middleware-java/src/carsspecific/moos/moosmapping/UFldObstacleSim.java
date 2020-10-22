@@ -23,8 +23,8 @@ public class UFldObstacleSim extends MOOSProcess {
 		setProperty("obstacle_file", "obstacle.txt");
 		setProperty("poly_fill_color", "invisible");
 		// TODO: is this needed?
-		setProperty("reset_interval", 250);
-		setProperty("reset_range", 10);
+		//setProperty("reset_interval", 250);
+		//setProperty("reset_range", 10);
 		this.enclosingRegion = enclosingRegion;
 	}
 	

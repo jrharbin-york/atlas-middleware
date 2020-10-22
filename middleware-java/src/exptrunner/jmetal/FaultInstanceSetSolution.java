@@ -185,4 +185,8 @@ public class FaultInstanceSetSolution implements Solution<FaultInstance> {
 		
 		return res;
 	}
+
+	public double faultTimeTotal() {
+		return totalActiveFaultTimeLengthScaledByIntensity();
+	}
 }

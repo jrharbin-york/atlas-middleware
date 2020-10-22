@@ -24,7 +24,7 @@ public class JMetalMutationRunner_Expt2 {
 			mission = dslloader.loadMission();
 			for (int i = 0; i < runCount; i++) {
 				JMetalMutationRunner.jMetalRun(tag, mission, 
-						Optional.of(EvaluationProblemDummyChoices.EXPT_RUNNER_FAKE_FAULTS), 
+						Optional.empty(), 
 						Optional.of(metrics));
 			}
 		} catch (DSLLoadFailed e) {
@@ -57,6 +57,7 @@ public class JMetalMutationRunner_Expt2 {
 	}
 	
 	public static void main(String[] args) throws JMetalException, FileNotFoundException {
+		expt1();
 		expt2();
 		expt3();
 	}

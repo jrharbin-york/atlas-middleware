@@ -38,15 +38,15 @@ import exptrunner.jmetal.test.ATLASEvaluationProblemDummy.EvaluationProblemDummy
 
 public class JMetalMutationRunner extends AbstractAlgorithmRunner {
 
-	static private int populationSize = 10;
-	static private int offspringPopulationSize = 10;
+	static private int populationSize = 12;
+	static private int offspringPopulationSize = 12;
 	
 	static private int matingPoolSize = populationSize;
 	static private boolean actuallyRun = true;
 	static private double exptRunTime = 1200.0;
 
 	static private int maxIterations = 2000000;
-	static private int maxGenerations = 10;
+	static private int maxGenerations = 15;
 
 	static double crossoverProb = 0.2;
 	static double mutationProb = 0.6;
@@ -143,7 +143,7 @@ public class JMetalMutationRunner extends AbstractAlgorithmRunner {
 			List<Metrics> metrics = new ArrayList<Metrics>();
 			// Read experiment number
 			metrics.add(Metrics.COMBINED_DIST_METRIC);
-			metrics.add(Metrics.TIME_PROP);
+			metrics.add(Metrics.TIME_TOTAL_ABSOLUTE);
 			
 			jMetalRun("expt1", mission, Optional.empty(), Optional.of(metrics));
 		} catch (DSLLoadFailed e) {
