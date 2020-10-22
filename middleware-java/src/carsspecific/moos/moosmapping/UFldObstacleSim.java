@@ -23,8 +23,8 @@ public class UFldObstacleSim extends MOOSProcess {
 		setProperty("obstacle_file", "obstacle.txt");
 		setProperty("poly_fill_color", "invisible");
 		// TODO: is this needed?
-		//setProperty("reset_interval", 250);
-		//setProperty("reset_range", 10);
+		setProperty("reset_interval", 250);
+		setProperty("reset_range", 10);
 		this.enclosingRegion = enclosingRegion;
 	}
 	
@@ -46,15 +46,15 @@ public class UFldObstacleSim extends MOOSProcess {
 	}
 	
 	public void generateCustomCode(MOOSFiles mf) throws IOException {
-		FileWriter fw = mf.getOpenFile("obstacles.txt");
-		// TODO: need method here to generate region as 4 points as in standard obstacles.txt
+		FileWriter fw = mf.getOpenFile("obstacle.txt");
 		
+		fw.write("region = pts={" + enclosingRegion.pointsListForObstacleFile() + "}\n");
 		for (EnvironmentalObstacle eo : obstacles) {
 			fw.write("min_range=" + minRange + "\n");
 			fw.write("min_size =" + minSize + "\n");
 			fw.write("max_size =" + maxSize + "\n");
-			String pointsList = eo.pointsList();
-			fw.write("poly = pts={" + pointsList + "}\n");
+			String pointsList = eo.pointsListForObstacleFile();
+			fw.write("poly = pts={" + pointsList + "},label=" + eo.getLabel() + "\n");
 		}
 	}
 }
