@@ -1,0 +1,308 @@
+//-------------------------------------------------
+// NAME: M. Benjamin, MIT CSAIL
+// FILE: henry.moos
+//-------------------------------------------------
+
+ServerHost = localhost
+ServerPort = 9001
+Community  = henry
+
+MOOSTimeWarp = 2
+LatOrigin  = 43.825300 
+LongOrigin = -70.330400 
+
+
+
+//------------------------------------------------------------
+Processconfig = ANTLER
+{
+  MSBetweenLaunches = 50
+   
+  Run = MOOSDB           @ NewConsole = false
+  Run = uProcessWatch    @ NewConsole = false
+  Run = pShare           @ NewConsole = false
+  Run = uSimMarine       @ NewConsole = false
+  Run = pLogger          @ NewConsole = false
+  Run = pNodeReporter    @ NewConsole = false
+  Run = pMarinePID       @ NewConsole = false
+  Run = pHelmIvP         @ NewConsole = false
+  Run = pBasicContactMgr @ NewConsole = false
+  Run = pHostInfo        @ NewConsole = false
+  Run = uFldNodeBroker   @ NewConsole = false
+  Run = uLoadWatch       @ NewConsole = false
+  Run = pObstacleMgr     @ NewConsole = false
+  Run = ATLASDBInterface @ NewConsole = false
+}
+
+//--------------------------------------------------
+// uFldNodeBroker configuration block from plugin
+
+ProcessConfig = uFldNodeBroker
+{
+  AppTick   = 1
+  CommsTick = 1
+
+  try_shore_host = pshare_route=localhost:9200
+
+  bridge = src=VIEW_POLYGON
+  bridge = src=VIEW_CIRCLE
+  bridge = src=VIEW_POINT
+  bridge = src=VIEW_SEGLIST
+  bridge = src=VEHICLE_CONNECT
+  bridge = src=APPCAST
+  bridge = src=NODE_REPORT_LOCAL,  alias=NODE_REPORT
+  bridge = src=NODE_MESSAGE_LOCAL, alias=NODE_MESSAGE
+}
+
+//---------------------------------------------------------
+// pShare Config Block  (Created from Plugin)
+
+ProcessConfig = pShare
+{
+  AppTick    = 2
+  CommsTick  = 2
+
+  input = route =  localhost:9201
+}
+
+
+//--------------------------------------------------
+// pHostInfo configuration block from plugin
+
+ProcessConfig = pHostInfo
+{
+  AppTick 	= 1
+  CommsTick 	= 1
+
+  DEFAULT_HOSTIP_FORCE = localhost
+}
+
+
+//------------------------------------------------------
+// uSimMarine Configuration Block  (Created from plugin)
+
+ProcessConfig = uSimMarine
+{
+  AppTick   = 10
+  CommsTick = 10
+
+  START_POS = 0,0, 180, 0
+  PREFIX    = NAV
+
+  //rotate_speed = 0.012
+  //drift_x      = 0.0045
+
+  //thrust_map = -100:-2, 0:0, 20:1, 40:2, 60:3, 80:5, 100:5
+  //thrust_map = -100:-2, 0:0, 20:1, 40:2, 60:3, 80:5, 100:5
+}
+
+
+//----------------------------------------------------
+// pHelmIvP Configuration Block  (Created from Plugin)
+
+ProcessConfig = pHelmIvP
+{
+  AppTick    = 4
+  CommsTick  = 4
+  
+  Behaviors    = targ_henry.bhv  
+  Verbose      = false
+  Domain       = course:0:359:360
+  Domain       = speed:0:5:26
+}
+
+//-----------------------------------------------------
+// pMarinePID Configuration Block (created from plugin)
+
+ProcessConfig = pMarinePID
+{
+  AppTick    = 10
+  CommsTick  = 10
+  
+  VERBOSE       = true
+  DEPTH_CONTROL = false
+  ACTIVE_START  = true
+  
+  // Yaw PID controller
+  YAW_PID_KP             = 0.4
+  YAW_PID_KD             = 0.1
+  YAW_PID_KI             = 0.0
+  YAW_PID_INTEGRAL_LIMIT = 0.07
+  
+  // Speed PID controller
+  SPEED_PID_KP           = 1.0
+  SPEED_PID_KD           = 0.0
+  SPEED_PID_KI           = 0.0
+  SPEED_PID_INTEGRAL_LIMIT = 0.07
+  
+  // Maximums
+  MAXRUDDER  = 100
+  MAXTHRUST  = 100
+  
+  // A non-zero SPEED_FACTOR overrides use of SPEED_PID
+  // Will set DESIRED_THRUST = DESIRED_SPEED * SPEED_FACTOR
+  SPEED_FACTOR = 20
+}
+
+//--------------------------------------------------
+// pLogger Configuration Block (Created from Plugin)
+
+ProcessConfig = pLogger
+{
+  AppTick 	= 5
+  CommsTick = 5
+  
+  File          = LOG_HENRY
+  PATH	        = ./
+  AsyncLog 	    = true
+  FileTimeStamp = true
+
+
+  Log = IVPHELM_LIFE_EVENT @ 0 nosync
+
+  LogAuxSrc = true
+
+  // Log it all!!!!!
+  WildCardLogging = true 
+  //WildCardOmitPattern = *_STATUS
+	WildCardOmitPattern = *_STATUS
+  WildCardOmitPattern = APPCAST
+  WildCardOmitPattern = DB_VARSUMMARY
+  WildCardOmitPattern = DB_RWSUMMARY
+	WildCardOmitPattern = *_ITER_GAP
+	WildCardOmitPattern = *_ITER_LEN
+	WildCardOmitPattern = SIMULATION_MODE
+	WildCardOmitPattern = NAV_YAW
+	WildCardOmitPattern = NAV_Z
+	WildCardOmitPattern = TRUE_X
+	WildCardOmitPattern = TRUE_Y
+	WildCardOmitPattern = NAV_SPEED_OVER_GROUND
+	WildCardOmitPattern = NAV_HEADING_OVER_GROUND
+	WildCardOmitPattern = NAV_PITCH
+	WildCardOmitPattern = NAV_DEPTH
+
+	WildCardOmitPattern = PID_REPORT
+	
+}
+	
+
+//--------------------------------------------------------
+// pNodeReporter Configuration Block (Created from Plugin)
+
+ProcessConfig = pNodeReporter
+{
+  AppTick     = 2
+  CommsTick   = 2
+  
+  vessel_type = KAYAK
+	terse_reports = true
+
+	platform_color = light_green
+}
+
+//--------------------------------------------------------
+// uProcessWatch Configuration Block (Created from Plugin)
+
+ProcessConfig = uProcessWatch
+{
+  AppTick   = 1
+  CommsTick = 1
+
+  ALLOW_RETRACTIONS = true
+  
+  WATCH_ALL = true      // default is true
+
+  WATCH  = uSimMarine
+  WATCH  = pMOOSBridge*
+  WATCH  = pNodeReporter
+  WATCH  = pMarinePID
+  WATCH  = pHelmIvP
+
+  NOWATCH = uXMS*
+  NOWATCH = uPokeDB*
+  NOWATCH = uMAC*
+
+  SUMMARY_WAIT = 12
+}
+
+
+
+//--------------------------------------------------
+// uLoadWatch configuration block from plugin
+
+ProcessConfig = uLoadWatch
+{
+  AppTick   = 1
+  CommsTick = 1
+
+  thresh = app=pHelmIvP,  gapthresh=3
+  thresh = app=pHostInfo, gapthresh=5
+  thresh = app=any,       gapthresh=2.0
+
+  breach_trigger = 5
+}
+
+//--------------------------------------------------------
+// pBasicContactMgr Configuration Block (Created from Plugin)
+
+ProcessConfig = pBasicContactMgr
+{
+  AppTick   = 2
+  CommsTick = 2
+
+  decay = 30,60
+
+  alert_verbose = true
+
+  contact_max_age = 3600
+  display_radii   = false
+  //default_alert_region    = pts={60,10:60,-100:170,-100:170,10}
+
+  default_alert_range = 50
+  default_cpa_range   = 75
+  default_alert_range_color = gray70
+  default_cpa_range_color   = gray30
+
+  //alert = id=avd, var=CONTACT_INFO, val="name=$[VNAME] # contact=$[VNAME]"
+  //alert = id=avd, alert_range=80
+  //alert = id=avd, cpa_range=100
+  //alert = id=avd, alert_range_color=green
+  //alert = id=avd, cpa_range_color=white
+}
+
+//-------------------------------------------------------
+// pObstacleMgr Configuration Block (created from plugin)
+
+ProcessConfig = pObstacleMgr
+{
+  AppTick   = 4 
+  CommsTick = 4 
+
+  point_var = TRACKED_FEATURE 
+
+	//obstacles_color = light_green
+	//obstacles_color = invisible
+} 
+
+
+
+ProcessConfig = ATLASDBInterface
+{
+AppTick = 2
+CommsTick = 2
+ACTIVEMQ_PORT = 61616
+ACTIVEMQ_TOPIC_PROD = MIDDLEWARE-watch-henry
+ACTIVEMQ_TOPIC_CONS = FAULTS-SIM-TO-ATLAS-targ_henry.moos
+WATCH_VAR = VAR_X
+WATCH_VAR = VAR_Y
+WATCH_VAR = DB_UPTIME
+WATCH_VAR = NODE_REPORT_ELLA
+WATCH_VAR = NODE_REPORT_FRANK
+WATCH_VAR = NODE_REPORT_GILDA
+WATCH_VAR = NODE_REPORT_HENRY
+WATCH_VAR = NODE_REPORT_BRIAN
+WATCH_VAR = NODE_REPORT_LINDA
+WATCH_VAR = UHZ_DETECTION_REPORT
+WATCH_VAR = UHZ_HAZARD_REPORT
+}
+
