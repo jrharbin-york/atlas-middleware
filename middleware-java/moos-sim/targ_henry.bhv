@@ -42,7 +42,7 @@ speed = 1.5
 clockwise = false
 radius = 5.0
 nm_radius = 10.0
-polygon = radial:: x=-85.0,y=-45.0, radius=20, pts=8, snap=1, label=henry_LOITER
+polygon = radial:: x=-85.0,y=-150.0, radius=20, pts=8, snap=1, label=henry_LOITER
 visual_hints = nextpt_color=white, nextpt_lcolor=khaki, edge_color=orange, vertex_color=white, edge_size=1, vertex_size=2
 }
 
@@ -77,7 +77,7 @@ endflag = STATION_KEEP = true
 speed = 1.5
 radius = 3.0
 nm_radius = 15.0
-points = -85.0,-45.0
+points = -85.0,-150.0
 repeat = 10
 lead = 8
 }
@@ -113,5 +113,17 @@ duration = no-time-limit
 peakwidth = 3
 basewidth = 2
 summitdelta = 20
+}
+
+Behavior = BHV_AvoidObstacle 
+{
+name = avd_obstacles_
+pwt = 500
+condition = DEPLOY = true
+templating = spawn
+updates = OBSTACLE_ALERT
+pwt_outer_dist = 20
+pwt_inner_dist = 10
+completed_dist = 25
 }
 

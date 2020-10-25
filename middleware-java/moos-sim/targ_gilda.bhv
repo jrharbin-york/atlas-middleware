@@ -38,11 +38,11 @@ updates = UP_LOITER
 runflag = VEHICLE_UNDERWAY = TRUE
 endflag = VEHICLE_UNDERWAY = FALSE
 post_suffix = A
-speed = 1.5
+speed = 1.6
 clockwise = false
 radius = 5.0
 nm_radius = 10.0
-polygon = radial:: x=190.0,y=-150.0, radius=20, pts=8, snap=1, label=gilda_LOITER
+polygon = radial:: x=200.0,y=-85.0, radius=20, pts=8, snap=1, label=gilda_LOITER
 visual_hints = nextpt_color=white, nextpt_lcolor=khaki, edge_color=orange, vertex_color=white, edge_size=1, vertex_size=2
 }
 
@@ -74,10 +74,10 @@ pwt = 100
 condition = MODE==RETURNING
 updates = RETURN_UPDATES
 endflag = STATION_KEEP = true
-speed = 1.5
+speed = 1.6
 radius = 3.0
 nm_radius = 15.0
-points = 190.0,-150.0
+points = 200.0,-85.0
 repeat = 10
 lead = 8
 }
@@ -113,5 +113,17 @@ duration = no-time-limit
 peakwidth = 3
 basewidth = 2
 summitdelta = 20
+}
+
+Behavior = BHV_AvoidObstacle 
+{
+name = avd_obstacles_
+pwt = 500
+condition = DEPLOY = true
+templating = spawn
+updates = OBSTACLE_ALERT
+pwt_outer_dist = 20
+pwt_inner_dist = 10
+completed_dist = 25
 }
 

@@ -15,60 +15,60 @@ public class GeneratedDSLLoader implements DSLLoader {
 	Computer c1 = new Computer("shoreside");
 	mission.addComputer(c1);
 	
-		Robot rella = new Robot("ella");
-		rella.setPointComponentProperty("startLocation", new Point(200.0,-85.0,0.0));
-		rella.setDoubleComponentProperty("maxSpeed", 5.0);
-		rella.setDoubleComponentProperty("maxDepth", 20.0);
-		rella.setDoubleComponentProperty("startSpeed", 1.6);
+		Robot rgilda = new Robot("gilda");
+		rgilda.setPointComponentProperty("startLocation", new Point(200.0,-85.0,0.0));
+		rgilda.setDoubleComponentProperty("maxSpeed", 5.0);
+		rgilda.setDoubleComponentProperty("maxDepth", 20.0);
+		rgilda.setDoubleComponentProperty("startSpeed", 1.6);
 		
  
-		Sensor srella_1 = new Sensor(SensorType.SONAR);
-		srella_1.setParent(rella);
-		srella_1.setDoubleComponentProperty("swathWidth", 10.0);
-		srella_1.setDoubleComponentProperty("detectionProb", 0.99);
-		rella.addSubcomponent(srella_1);
+		Sensor srgilda_1 = new Sensor(SensorType.SONAR);
+		srgilda_1.setParent(rgilda);
+		srgilda_1.setDoubleComponentProperty("swathWidth", 10.0);
+		srgilda_1.setDoubleComponentProperty("detectionProb", 0.99);
+		rgilda.addSubcomponent(srgilda_1);
 			
 			
  
 			
-			MotionSource srella_2 = new MotionSource();
-			rella.addSubcomponent(srella_2);
+			MotionSource srgilda_2 = new MotionSource();
+			rgilda.addSubcomponent(srgilda_2);
 			
  
-		Sensor srella_3 = new Sensor(SensorType.GPS_POSITION);
-		srella_3.setParent(rella);
-		rella.addSubcomponent(srella_3);
+		Sensor srgilda_3 = new Sensor(SensorType.GPS_POSITION);
+		srgilda_3.setParent(rgilda);
+		rgilda.addSubcomponent(srgilda_3);
 			
 			
 			
-		mission.addRobot(rella);
-		Robot rfrank = new Robot("frank");
-		rfrank.setPointComponentProperty("startLocation", new Point(-85.0,-150.0,0.0));
-		rfrank.setDoubleComponentProperty("maxSpeed", 5.0);
-		rfrank.setDoubleComponentProperty("startSpeed", 1.5);
-		rfrank.setDoubleComponentProperty("maxDepth", 20.0);
+		mission.addRobot(rgilda);
+		Robot rhenry = new Robot("henry");
+		rhenry.setPointComponentProperty("startLocation", new Point(-85.0,-150.0,0.0));
+		rhenry.setDoubleComponentProperty("maxSpeed", 5.0);
+		rhenry.setDoubleComponentProperty("startSpeed", 1.5);
+		rhenry.setDoubleComponentProperty("maxDepth", 20.0);
 		
  
-		Sensor srfrank_1 = new Sensor(SensorType.SONAR);
-		srfrank_1.setParent(rfrank);
-		srfrank_1.setDoubleComponentProperty("swathWidth", 20.0);
-		srfrank_1.setDoubleComponentProperty("detectionProb", 0.99);
-		rfrank.addSubcomponent(srfrank_1);
+		Sensor srhenry_1 = new Sensor(SensorType.SONAR);
+		srhenry_1.setParent(rhenry);
+		srhenry_1.setDoubleComponentProperty("swathWidth", 20.0);
+		srhenry_1.setDoubleComponentProperty("detectionProb", 0.99);
+		rhenry.addSubcomponent(srhenry_1);
 			
 			
  
-		Sensor srfrank_2 = new Sensor(SensorType.GPS_POSITION);
-		srfrank_2.setParent(rfrank);
-		rfrank.addSubcomponent(srfrank_2);
+		Sensor srhenry_2 = new Sensor(SensorType.GPS_POSITION);
+		srhenry_2.setParent(rhenry);
+		rhenry.addSubcomponent(srhenry_2);
 			
 			
  
 			
-			MotionSource srfrank_3 = new MotionSource();
-			rfrank.addSubcomponent(srfrank_3);
+			MotionSource srhenry_3 = new MotionSource();
+			rhenry.addSubcomponent(srhenry_3);
 			
 			
-		mission.addRobot(rfrank);
+		mission.addRobot(rhenry);
 	
 	
 	
@@ -83,7 +83,7 @@ public class GeneratedDSLLoader implements DSLLoader {
  
  
 		
-		Robot [] grp1 = {rella,rfrank}; 
+		Robot [] grp1 = {rgilda,rhenry}; 
 		GoalParticipants gpmutualAvoidance = new StaticParticipants(grp1, mission);
 		
 		
@@ -107,40 +107,16 @@ public class GeneratedDSLLoader implements DSLLoader {
  
  
 		
-		Robot [] grp2 = {rella,rfrank}; 
-		GoalParticipants gpprimarySensorSweep = new StaticParticipants(grp2, mission);
+		Robot [] grp2 = {rgilda,rhenry}; 
+		GoalParticipants gptrackDistances = new StaticParticipants(grp2, mission);
 		
 		
 		
-		GoalTemporalConstraints gt2 = new GoalTemporalConstraints(0.0, 1200.0);
-		
-		GoalAction ga2 = new SensorCover(10.0, 1, SensorType.SONAR);
+		GoalTemporalConstraints gt2 = new GoalTemporalConstraints(0.0, 1201.0);
 		
 		
 		
-		
-		GoalRegion grprimarySensorSweep = new StaticGoalRegion(
-			new Region(new Point(0.0, 0.0, 0.0),
-			           new Point(1000.0, 1000.0, 0.0)));
-		
-		
-		Goal primarySensorSweep = new Goal("primarySensorSweep", mission, gt2, gpprimarySensorSweep, Optional.of(grprimarySensorSweep), ga2);
-		
-		
-		mission.addGoal("primarySensorSweep", primarySensorSweep);
- 
- 
-		
-		Robot [] grp3 = {rella,rfrank}; 
-		GoalParticipants gptrackDistances = new StaticParticipants(grp3, mission);
-		
-		
-		
-		GoalTemporalConstraints gt3 = new GoalTemporalConstraints(0.0, 1201.0);
-		
-		
-		
-		GoalAction ga3 = new TrackDistances();
+		GoalAction ga2 = new TrackDistances();
 		
 		
 		GoalRegion grtrackDistances = new StaticGoalRegion(
@@ -148,7 +124,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 			           new Point(0.0, 0.0, 0.0)));
 		
 		
-		Goal trackDistances = new Goal("trackDistances", mission, gt3, gptrackDistances, Optional.of(grtrackDistances), ga3);
+		Goal trackDistances = new Goal("trackDistances", mission, gt2, gptrackDistances, Optional.of(grtrackDistances), ga2);
 		
 		
 		mission.addGoal("trackDistances", trackDistances);
@@ -161,7 +137,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 	
 	FaultImpact fi1;
 	try {	
-		fi1 = new MotionFault(srella_2, "speed", "5.0");
+		fi1 = new MotionFault(srgilda_2, "speed", "5.0");
 	} catch (InvalidComponentType e) {
 		throw new DSLLoadFailed("MotionFault 1 is not using a MotionSource as its affected component");
 	}
@@ -170,14 +146,14 @@ public class GeneratedDSLLoader implements DSLLoader {
 	
 	FaultTimeProperties ft1 = new FaultTimeProperties(0.0, 1200.0, 1200.0, 3, 0.8); 
 	
-	Fault f1 = new Fault("SPEEDFAULT-ELLA", fi1, Optional.empty(), ft1);
+	Fault f1 = new Fault("SPEEDFAULT-GILDA", fi1, Optional.empty(), ft1);
 	mission.addFault(f1);
 	 
 	
 	
 	FaultImpact fi2;
 	try {	
-		fi2 = new MotionFault(srella_2, "heading", "180.0");
+		fi2 = new MotionFault(srgilda_2, "heading", "180.0");
 	} catch (InvalidComponentType e) {
 		throw new DSLLoadFailed("MotionFault 2 is not using a MotionSource as its affected component");
 	}
@@ -186,14 +162,14 @@ public class GeneratedDSLLoader implements DSLLoader {
 	
 	FaultTimeProperties ft2 = new FaultTimeProperties(0.0, 1200.0, 1200.0, 1, 0.8); 
 	
-	Fault f2 = new Fault("HEADINGFAULT-ELLA", fi2, Optional.empty(), ft2);
+	Fault f2 = new Fault("HEADINGFAULT-GILDA", fi2, Optional.empty(), ft2);
 	mission.addFault(f2);
 	 
 	
 	
 	FaultImpact fi3;
 	try {	
-		fi3 = new MotionFault(srfrank_3, "speed", "5.0");
+		fi3 = new MotionFault(srhenry_3, "speed", "5.0");
 	} catch (InvalidComponentType e) {
 		throw new DSLLoadFailed("MotionFault 3 is not using a MotionSource as its affected component");
 	}
@@ -202,14 +178,14 @@ public class GeneratedDSLLoader implements DSLLoader {
 	
 	FaultTimeProperties ft3 = new FaultTimeProperties(0.0, 1200.0, 1200.0, 3, 0.8); 
 	
-	Fault f3 = new Fault("SPEEDFAULT-FRANK", fi3, Optional.empty(), ft3);
+	Fault f3 = new Fault("SPEEDFAULT-HENRY", fi3, Optional.empty(), ft3);
 	mission.addFault(f3);
 	 
 	
 	
 	FaultImpact fi4;
 	try {	
-		fi4 = new MotionFault(srfrank_3, "heading", "153.0");
+		fi4 = new MotionFault(srhenry_3, "heading", "153.0");
 	} catch (InvalidComponentType e) {
 		throw new DSLLoadFailed("MotionFault 4 is not using a MotionSource as its affected component");
 	}
@@ -218,7 +194,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 	
 	FaultTimeProperties ft4 = new FaultTimeProperties(0.0, 1200.0, 1200.0, 1, 0.8); 
 	
-	Fault f4 = new Fault("HEADINGFAULT-FRANK", fi4, Optional.empty(), ft4);
+	Fault f4 = new Fault("HEADINGFAULT-HENRY", fi4, Optional.empty(), ft4);
 	mission.addFault(f4);
 	
 	return mission;

@@ -21,6 +21,7 @@ Run = pBasicContactMgr @ NewConsole = false
 Run = pHostInfo @ NewConsole = false
 Run = uFldNodeBroker @ NewConsole = false
 Run = uFldHazardMgr @ NewConsole = false
+Run = pObstacleMgr @ NewConsole = false
 Run = ATLASDBInterface @ NewConsole = false
 }
 
@@ -166,6 +167,13 @@ sensor_pd = 0.99
 report_name = frank
 }
 
+ProcessConfig = pObstacleMgr
+{
+AppTick = 2
+CommsTick = 2
+point_var = TRACKED_FEATURE
+}
+
 ProcessConfig = ATLASDBInterface
 {
 AppTick = 2
@@ -178,10 +186,6 @@ WATCH_VAR = VAR_Y
 WATCH_VAR = DB_UPTIME
 WATCH_VAR = NODE_REPORT_ELLA
 WATCH_VAR = NODE_REPORT_FRANK
-WATCH_VAR = NODE_REPORT_GILDA
-WATCH_VAR = NODE_REPORT_HENRY
-WATCH_VAR = NODE_REPORT_BRIAN
-WATCH_VAR = NODE_REPORT_LINDA
 WATCH_VAR = UHZ_DETECTION_REPORT
 WATCH_VAR = UHZ_HAZARD_REPORT
 }

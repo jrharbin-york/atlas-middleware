@@ -1,5 +1,5 @@
 ServerHost = localhost
-ServerPort = 9003
+ServerPort = 9001
 Simulator = true
 community = gilda
 MOOSTimeWarp = 10
@@ -21,6 +21,7 @@ Run = pBasicContactMgr @ NewConsole = false
 Run = pHostInfo @ NewConsole = false
 Run = uFldNodeBroker @ NewConsole = false
 Run = uFldHazardMgr @ NewConsole = false
+Run = pObstacleMgr @ NewConsole = false
 Run = ATLASDBInterface @ NewConsole = false
 }
 
@@ -46,7 +47,7 @@ ProcessConfig = pShare
 {
 AppTick = 2
 CommsTick = 2
-input = route =  localhost:9303
+input = route =  localhost:9301
 output = src_name=Y, dest_name=B, route=localhost:9300
 }
 
@@ -54,7 +55,7 @@ ProcessConfig = uSimMarine
 {
 AppTick = 2
 CommsTick = 2
-START_POS = x=190.0,y=-150.0,speed = 0, heading=0, depth=0
+START_POS = x=200.0,y=-85.0,speed = 0, heading=0, depth=0
 PREFIX = NAV
 }
 
@@ -161,9 +162,16 @@ ProcessConfig = uFldHazardMgr
 {
 AppTick = 2
 CommsTick = 2
-swath_width = 30.0
+swath_width = 10.0
 sensor_pd = 0.99
 report_name = gilda
+}
+
+ProcessConfig = pObstacleMgr
+{
+AppTick = 2
+CommsTick = 2
+point_var = TRACKED_FEATURE
 }
 
 ProcessConfig = ATLASDBInterface
@@ -176,12 +184,8 @@ ACTIVEMQ_TOPIC_CONS = FAULTS-SIM-TO-ATLAS-targ_gilda.moos
 WATCH_VAR = VAR_X
 WATCH_VAR = VAR_Y
 WATCH_VAR = DB_UPTIME
-WATCH_VAR = NODE_REPORT_ELLA
-WATCH_VAR = NODE_REPORT_FRANK
 WATCH_VAR = NODE_REPORT_GILDA
 WATCH_VAR = NODE_REPORT_HENRY
-WATCH_VAR = NODE_REPORT_BRIAN
-WATCH_VAR = NODE_REPORT_LINDA
 WATCH_VAR = UHZ_DETECTION_REPORT
 WATCH_VAR = UHZ_HAZARD_REPORT
 }

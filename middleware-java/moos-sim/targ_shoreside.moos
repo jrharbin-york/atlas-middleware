@@ -16,6 +16,7 @@ Run = pHostInfo @ NewConsole = false
 Run = uFldShoreBroker @ NewConsole = false
 Run = pShare @ NewConsole = false
 Run = uFldNodeComms @ NewConsole = false
+Run = uFldObstacleSim @ NewConsole = false
 Run = uFldHazardSensor @ NewConsole = false
 Run = ATLASDBInterface @ NewConsole = false
 }
@@ -81,6 +82,8 @@ BRIDGE = src=APPCAST_REQ
 bridge = src=UHZ_CONFIG_ACK_$V,       alias=UHZ_CONFIG_ACK
 bridge = src=UHZ_DETECTION_REPORT_$V, alias=UHZ_DETECTION_REPORT
 bridge = src=HAZARDSET_REQUEST_$V,    alias=HAZARDSET_REQUEST
+bridge = src=GIVEN_OBSTACLE
+qbridge = TRACKED_FEATURE
 }
 
 ProcessConfig = pShare
@@ -104,6 +107,18 @@ GROUPS = true
 VIEW_NODE_RPT_PULSES = false
 }
 
+ProcessConfig = uFldObstacleSim
+{
+AppTick = 2
+AppTick = 1
+CommsTick = 2
+CommsTick = 1
+obstacle_file = obstacle.txt
+poly_fill_color = invisible
+reset_interval = 250
+reset_range = 10
+}
+
 ProcessConfig = uFldHazardSensor
 {
 AppTick = 2
@@ -125,12 +140,8 @@ ACTIVEMQ_TOPIC_CONS = FAULTS-SIM-TO-ATLAS-targ_shoreside.moos
 WATCH_VAR = VAR_X
 WATCH_VAR = VAR_Y
 WATCH_VAR = DB_UPTIME
-WATCH_VAR = NODE_REPORT_ELLA
-WATCH_VAR = NODE_REPORT_FRANK
 WATCH_VAR = NODE_REPORT_GILDA
 WATCH_VAR = NODE_REPORT_HENRY
-WATCH_VAR = NODE_REPORT_BRIAN
-WATCH_VAR = NODE_REPORT_LINDA
 WATCH_VAR = UHZ_DETECTION_REPORT
 WATCH_VAR = UHZ_HAZARD_REPORT
 }
