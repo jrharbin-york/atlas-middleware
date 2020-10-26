@@ -27,6 +27,10 @@ public class EnvironmentalObstacle {
 				.collect(Collectors.joining(":"));
 	}
 	
+	public List<Point> getPoints() {
+		return polygon;
+	}
+	
 	public String getLabel() {
 		return label;
 	}

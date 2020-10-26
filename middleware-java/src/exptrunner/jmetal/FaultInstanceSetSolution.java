@@ -182,11 +182,11 @@ public class FaultInstanceSetSolution implements Solution<FaultInstance> {
 				res.add(fi);
 			}
 		}
-		
 		return res;
 	}
 
 	public double faultTimeTotal() {
+		
 		return totalActiveFaultTimeLengthScaledByIntensity();
 	}
 }

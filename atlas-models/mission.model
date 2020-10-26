@@ -67,12 +67,64 @@
       </staticRegion>
     </region>
   </goals>
-  <obstacles xmi:id="_H4VtYPdKEeqBFM0D9wIRaA" label="bigrock">
+  <obstacles xmi:id="_H4VtYPdKEeqBFM0D9wIRaA" label="ob_0">
     <poly xmi:id="_JNsWwPdKEeqBFM0D9wIRaA">
-      <points xmi:id="_KNtCQPdKEeqBFM0D9wIRaA" x="20.0" y="-90.0"/>
-      <points xmi:id="_LpBwwPdKEeqBFM0D9wIRaA" x="52.0" y="-110.0"/>
-      <points xmi:id="_NDrJ0PdKEeqBFM0D9wIRaA" x="34.0" y="-135.0"/>
-      <points xmi:id="_PrI7UPdKEeqBFM0D9wIRaA" x="10.0" y="-105.0"/>
+      <points xmi:id="_KNtCQPdKEeqBFM0D9wIRaA" x="107.0" y="-101.0"/>
+      <points xmi:id="_LpBwwPdKEeqBFM0D9wIRaA" x="112.0" y="-106.0"/>
+      <points xmi:id="_NDrJ0PdKEeqBFM0D9wIRaA" x="112.0" y="-113.0"/>
+      <points xmi:id="_PrI7UPdKEeqBFM0D9wIRaA" x="107.0" y="-118.0"/>
+      <points xmi:id="_zYCMcBeSEeuAQ6XAB6J9bg" x="100.0" y="-118.0"/>
+      <points xmi:id="_nBFBYBeTEeuAQ6XAB6J9bg" x="95.0" y="-113.0"/>
+      <points xmi:id="_nZ80YBeTEeuAQ6XAB6J9bg" x="95.0" y="-106.0"/>
+      <points xmi:id="_nvUAYBeTEeuAQ6XAB6J9bg" x="100.0" y="-101.0"/>
+    </poly>
+  </obstacles>
+  <obstacles xmi:id="_w9ws8BeTEeuAQ6XAB6J9bg" label="ob_1">
+    <poly xmi:id="_w9ws8ReTEeuAQ6XAB6J9bg">
+      <points xmi:id="_w9ws8heTEeuAQ6XAB6J9bg" x="50.0" y="-30.0"/>
+      <points xmi:id="_w9ws8xeTEeuAQ6XAB6J9bg" x="53.0" y="-33.0"/>
+      <points xmi:id="_w9ws9BeTEeuAQ6XAB6J9bg" x="53.0" y="-38.0"/>
+      <points xmi:id="_w9ws9ReTEeuAQ6XAB6J9bg" x="50.0" y="-42.0"/>
+      <points xmi:id="_w9ws9heTEeuAQ6XAB6J9bg" x="45.0" y="-42.0"/>
+      <points xmi:id="_w9ws9xeTEeuAQ6XAB6J9bg" x="41.0" y="-38.0"/>
+      <points xmi:id="_w9ws-BeTEeuAQ6XAB6J9bg" x="41.0" y="-33.0"/>
+      <points xmi:id="_w9ws-ReTEeuAQ6XAB6J9bg" x="45.0" y="-30.0"/>
+    </poly>
+  </obstacles>
+  <obstacles xmi:id="_x_kIMBeTEeuAQ6XAB6J9bg" label="ob_2">
+    <poly xmi:id="_x_kvQBeTEeuAQ6XAB6J9bg">
+      <points xmi:id="_x_kvQReTEeuAQ6XAB6J9bg" x="82.0" y="-65.0"/>
+      <points xmi:id="_x_kvQheTEeuAQ6XAB6J9bg" x="87.0" y="-70.0"/>
+      <points xmi:id="_x_kvQxeTEeuAQ6XAB6J9bg" x="87.0" y="-76.0"/>
+      <points xmi:id="_x_kvRBeTEeuAQ6XAB6J9bg" x="82.0" y="-81.0"/>
+      <points xmi:id="_x_kvRReTEeuAQ6XAB6J9bg" x="76.0" y="-81.0"/>
+      <points xmi:id="_x_kvRheTEeuAQ6XAB6J9bg" x="71.0" y="-76.0"/>
+      <points xmi:id="_x_kvRxeTEeuAQ6XAB6J9bg" x="71.0" y="-70.0"/>
+      <points xmi:id="_x_kvSBeTEeuAQ6XAB6J9bg" x="76.0" y="-65.0"/>
+    </poly>
+  </obstacles>
+  <obstacles xmi:id="_zeF7sBeTEeuAQ6XAB6J9bg" label="ob_3">
+    <poly xmi:id="_zeF7sReTEeuAQ6XAB6J9bg">
+      <points xmi:id="_zeF7sheTEeuAQ6XAB6J9bg" x="59.0" y="-101.0"/>
+      <points xmi:id="_zeF7sxeTEeuAQ6XAB6J9bg" x="64.0" y="-105.0"/>
+      <points xmi:id="_zeF7tBeTEeuAQ6XAB6J9bg" x="64.0" y="-112.0"/>
+      <points xmi:id="_zeF7tReTEeuAQ6XAB6J9bg" x="59.0" y="-116.0"/>
+      <points xmi:id="_zeF7theTEeuAQ6XAB6J9bg" x="53.0" y="-116.0"/>
+      <points xmi:id="_zeF7txeTEeuAQ6XAB6J9bg" x="48.0" y="-112.0"/>
+      <points xmi:id="_zeF7uBeTEeuAQ6XAB6J9bg" x="48.0" y="-105.0"/>
+      <points xmi:id="_zeF7uReTEeuAQ6XAB6J9bg" x="53.0" y="-101.0"/>
+    </poly>
+  </obstacles>
+  <obstacles xmi:id="_0OihMBeTEeuAQ6XAB6J9bg" label="ob_4">
+    <poly xmi:id="_0OihMReTEeuAQ6XAB6J9bg">
+      <points xmi:id="_0OihMheTEeuAQ6XAB6J9bg" x="107.0" y="-38.0"/>
+      <points xmi:id="_0OihMxeTEeuAQ6XAB6J9bg" x="112.0" y="-43.0"/>
+      <points xmi:id="_0OihNBeTEeuAQ6XAB6J9bg" x="112.0" y="-49.0"/>
+      <points xmi:id="_0OihNReTEeuAQ6XAB6J9bg" x="107.0" y="-54.0"/>
+      <points xmi:id="_0OihNheTEeuAQ6XAB6J9bg" x="100.0" y="-54.0"/>
+      <points xmi:id="_0OihNxeTEeuAQ6XAB6J9bg" x="96.0" y="-49.0"/>
+      <points xmi:id="_0OihOBeTEeuAQ6XAB6J9bg" x="96.0" y="-43.0"/>
+      <points xmi:id="_0OihOReTEeuAQ6XAB6J9bg" x="100.0" y="-38.0"/>
     </poly>
   </obstacles>
   <faults xmi:id="_Rz8j4HfzEeq8sKdfSq6qug" name="SPEEDFAULT-GILDA">

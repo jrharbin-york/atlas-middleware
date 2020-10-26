@@ -3,6 +3,7 @@ package atlasdsl;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
@@ -10,6 +11,7 @@ import java.util.Optional;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.PrecisionModel;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.WKTReader;
 
@@ -20,6 +22,8 @@ public class TrackDistances extends GoalAction {
 	private ATLASCore core;
 	private Mission mission;
 	private double completionTime;
+	private PrecisionModel jtsPrecisionModel = new PrecisionModel(); 
+	private GeometryFactory jtsGeoFactory = new GeometryFactory();
 
 	// TODO: track the robot distances from each other too!
 	protected Map<EnvironmentalObject, Double> objectDistances = new HashMap<EnvironmentalObject, Double>();
@@ -33,34 +37,55 @@ public class TrackDistances extends GoalAction {
 	
 	private boolean writtenYet = false;
 	
-	private WKTReader jtsReader = new WKTReader();
+	//private WKTReader jtsReader = new WKTReader();
 	//protected Map<EnvironmentalObstacle,Boolean> obstacleInside = new HashMap<EnvironmentalObstacle,Double>();
 
 	private double maxSpeedThreshold;
 	
 	private void setupObstacleGeometry() {
-		GeometryFactory gf = new GeometryFactory();
+		
 		for (Entry<String, EnvironmentalObstacle> eo_e : mission.getObstacles().entrySet()) {
 			String label = eo_e.getKey();
 			EnvironmentalObstacle eo = eo_e.getValue();
-			Coordinate [] coords = new Coordinate[5];
-			Geometry p = gf.createLineString(coords); 
+			List<Point> eoPoints = eo.getPoints();
+			Coordinate [] coords = new Coordinate[eoPoints.size()+1];
+			int i = 0;
+			for (Point p : eoPoints) {
+				coords[i] = new Coordinate(p.getX(), p.getY(), 0.0);
+				i++;	
+			}
+			coords[eoPoints.size()] = new Coordinate(coords[0].x, coords[0].y);
+			
+			System.out.println(coords);
+			
+			Geometry p = jtsGeoFactory.createPolygon(coords); 
+			System.out.println("Created geometry: " + p);
 			obstacleGeometry.put(label, p);
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	private void checkPointIntersection(Point p) throws ParseException {
 		// TODO: check the bounding box first to reduce computation
-		Geometry jtsP = jtsReader.read("POINT (" + p.getX() + "," + p.getY() + ")");
+		Coordinate c = new Coordinate(47,-37,0);
+		//Geometry jtsP = (Geometry)new org.locationtech.jts.geom.Point(c,
+		//		jtsPrecisionModel, 0);
+		
+		Geometry jtsP = jtsGeoFactory.createPoint(c);
 		
 		for (Entry<String, Geometry> eo_e : obstacleGeometry.entrySet()) {
 			
 			Geometry g = eo_e.getValue();
 			String name = eo_e.getKey();
-			if (g.contains(jtsP)) {
+			System.out.println(g);
+			System.out.println(jtsP);
+			if (!g.contains(jtsP)) {
+				System.out.println("NO intersection");
+			} else {
 				Double time = core.getTime();
 				// TODO: also put the label there
 				collisions.put(name, time);
+				System.out.println("COLLISION");
 			}
 		}
 	}
@@ -170,11 +195,11 @@ public class TrackDistances extends GoalAction {
 			positions.put(name, new Point(x,y));
 			
 			checkDistanceToObjects(name, x, y, speed);
-			//try {
-				//checkPointIntersection(new Point(x,y));
-			//} catch (ParseException e) {
-//				e.printStackTrace();
-			//}
+			try {
+				checkPointIntersection(new Point(x,y));
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
 		});
 	}
 }
