@@ -66,24 +66,20 @@ public class TrackDistances extends GoalAction {
 	
 	@SuppressWarnings("deprecation")
 	private void checkPointIntersection(Point p) throws ParseException {
-		// TODO: check the bounding box first to reduce computation
-		Coordinate c = new Coordinate(47,-37,0);
-		//Geometry jtsP = (Geometry)new org.locationtech.jts.geom.Point(c,
-		//		jtsPrecisionModel, 0);
-		
+		// TODO: check the bounding box first to reduce computation?
+		Coordinate c = new Coordinate(p.getX(),p.getY());
 		Geometry jtsP = jtsGeoFactory.createPoint(c);
 		
 		for (Entry<String, Geometry> eo_e : obstacleGeometry.entrySet()) {
 			
 			Geometry g = eo_e.getValue();
 			String name = eo_e.getKey();
-			System.out.println(g);
-			System.out.println(jtsP);
+//			System.out.println(g);
+//			System.out.println(jtsP);
 			if (!g.contains(jtsP)) {
-				System.out.println("NO intersection");
 			} else {
 				Double time = core.getTime();
-				// TODO: also put the label there
+				// TODO: also put the label there?
 				collisions.put(name, time);
 				System.out.println("COLLISION");
 			}
