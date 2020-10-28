@@ -31,9 +31,9 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 	private static final double INITIAL_MIN_SPEED_VALUE = 1.0;
 	private static final double INITIAL_MAX_SPEED_VALUE = 5.0;
 	private static final int DETECTIONS_PER_OBJECT_EXPECTED = 2;
-	
+
 	private String fakeLogFileName = "/home/atlas/atlas/atlas-middleware/middleware-java/tempres/customLog.res";
-	
+
 	private int runCount = 0;
 	private Random rng;
 
@@ -83,7 +83,7 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 	}
 
 	public int getNumberOfObjectives() {
-		return 3;
+		return metrics.size();
 	}
 
 	public int getNumberOfConstraints() {
@@ -107,35 +107,38 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 	public void fakeExperiment(FaultInstanceSetSolution solution) {
 		int missedDetections = 0;
 		int avoidanceViolations = 0;
-		
+
 		double k = 1.0;
 		double timeProp = solution.faultCostProportion();
 
 		solution.setObjective(2, timeProp);
-		
+
 		List<FaultInstance> res1 = solution.testAllFaultInstances((FaultInstance fi) -> {
 			return (fi.getStartTime() > 300.0) && (fi.getEndTime() < 400.0) && (fi.getLength() < 100.0);
 		});
 		for (FaultInstance fi : res1) {
-			//missedDetections += 1;
-			missedDetections += Math.pow(fi.getLength(),k);
-		};
-		
+			// missedDetections += 1;
+			missedDetections += Math.pow(fi.getLength(), k);
+		}
+		;
+
 		List<FaultInstance> res2 = solution.testAllFaultInstances((FaultInstance fi) -> {
 			return (fi.getStartTime() > 1000.0) && (fi.getEndTime() < 1100.0) && (fi.getLength() < 100.0);
 		});
 		for (FaultInstance fi : res2) {
-			//missedDetections += 1;
-			missedDetections += Math.pow(fi.getLength(),k);
-		};
+			// missedDetections += 1;
+			missedDetections += Math.pow(fi.getLength(), k);
+		}
+		;
 
 		List<FaultInstance> res3 = solution.testAllFaultInstances((FaultInstance fi) -> {
 			return (fi.getStartTime() > 100.0) && (fi.getEndTime() < 200.0)
 					&& (fi.getFault().getName().contains("SPEEDFAULT-ELLA"));
 		});
 		for (FaultInstance fi : res3) {
-			avoidanceViolations += Math.pow(fi.getLength(),k);
-		};
+			avoidanceViolations += Math.pow(fi.getLength(), k);
+		}
+		;
 
 		solution.setObjective(0, -missedDetections);
 		solution.setObjective(1, -avoidanceViolations);
@@ -165,11 +168,12 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 					int detections = Integer.valueOf(fields[0]);
 					int collisions = Integer.valueOf(fields[1]);
 					int missedDetections = Integer.valueOf(fields[2]);
-					
+
 					solution.setObjective(0, -missedDetections);
 					solution.setObjective(1, -collisions);
 					String solutionHash = "<HASH:" + Integer.toString(solution.hashCode()) + ">";
-					System.out.println(detections + "," + collisions + "," + missedDetections + "=" + solutionHash + solution);
+					System.out.println(
+							detections + "," + collisions + "," + missedDetections + "=" + solutionHash + solution);
 				}
 				lineNum++;
 			}
@@ -181,15 +185,15 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 
 		evaluationNumber++;
 	}
-	
-	public void registerDetectionAtTime(Map<Integer,List<Double>> detectionInfo, double time, int label) {
+
+	public void registerDetectionAtTime(Map<Integer, List<Double>> detectionInfo, double time, int label) {
 		if (!detectionInfo.containsKey(label)) {
 			detectionInfo.put(label, new ArrayList<Double>());
 		}
 		detectionInfo.get(label).add(time);
 	}
-	
-	public int missedDetections(Map<Integer,List<Double>> detectionInfo, int objectCount) {
+
+	public int missedDetections(Map<Integer, List<Double>> detectionInfo, int objectCount) {
 		int missedTotal = 0;
 		int foundTotal = 0;
 		for (int i = 0; i < objectCount; i++) {
@@ -205,21 +209,21 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 		}
 		return missedTotal;
 	}
-	
-	public double detectionCompletionTime(Map<Integer,List<Double>> detectionInfo, int objectCount) {
+
+	public double detectionCompletionTime(Map<Integer, List<Double>> detectionInfo, int objectCount) {
 		double missionCompletionTime = 0;
 		// Find latest of the first 2 for all these
 		for (int i = 0; i < objectCount; i++) {
 			List<Double> res = detectionInfo.get(i);
 			if (res != null) {
 				Collections.sort(res);
-				
+
 				if (res.size() < 2) {
 					// If less than 1 detection/verification per object, the mission
 					// was never completed
-					
+
 					// TODO: mission end time (defined) instead of MAX_VALUE here?
-					
+
 					return Double.MAX_VALUE;
 				} else {
 					missionCompletionTime = Math.max(missionCompletionTime, res.get(0));
@@ -230,8 +234,29 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 				return Double.MAX_VALUE;
 			}
 		}
-		
+
 		return missionCompletionTime;
+	}
+
+	public int readObstacleFileObsCount(File obstacleFile) {
+		Scanner reader;
+		int count = 0;
+		try {
+			reader = new Scanner(obstacleFile);
+			// Find the result from the line num
+			while (reader.hasNextLine()) {
+				String line = reader.nextLine();
+				String[] fields = line.split(",");
+				String robotName = fields[0];
+				Integer collisionCount = Integer.valueOf(fields[1]);
+				count += collisionCount;
+			}
+			reader.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return count;
 	}
 
 	public void readLogFiles(String logFileDir, FaultInstanceSetSolution solution) {
@@ -239,19 +264,20 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 		// Write it out to a common result file - with the fault info
 		File f = new File(logFileDir + "/goalLog.log");
 		// TODO: fix path
-		File pf = new            File("/home/atlas/atlas/atlas-middleware/expt-working/logs/objectPositions.log");
+		File pf = new File("/home/atlas/atlas/atlas-middleware/expt-working/logs/objectPositions.log");
 		File robotDistFile = new File("/home/atlas/atlas/atlas-middleware/expt-working/logs/robotDistances.log");
+		File obstacleFile = new File("/home/atlas/atlas/atlas-middleware/expt-working/logs/obstacleCollisions.log");
 		int detections = 0;
 		int missedDetections = 0;
 		int avoidanceViolations = 0;
 		int maxObjectNum = 0;
 		int checkDetectionCount = 0;
-		
+
 		double firstFaultTime = Double.MAX_VALUE;
 
 		// The map entry stores as a pair the number of detections and the latest time
-		Map<Integer,List<Double>> detectionInfo = new HashMap<Integer,List<Double>>();
-		
+		Map<Integer, List<Double>> detectionInfo = new HashMap<Integer, List<Double>>();
+
 		Scanner reader;
 		try {
 			reader = new Scanner(f);
@@ -264,11 +290,11 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 					String robot = fields[2];
 					int num = Integer.parseInt(fields[3]);
 					checkDetectionCount++;
-					
+
 					if (num > maxObjectNum) {
 						maxObjectNum = num;
 					}
-					
+
 					registerDetectionAtTime(detectionInfo, time, num);
 				}
 
@@ -281,12 +307,14 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 				}
 			}
 
-			//missedDetections = missedDetections(detectionInfo, maxObjectNum);
+			// missedDetections = missedDetections(detectionInfo, maxObjectNum);
 			// TODO: for now, just compute missedDetections directly from the file
-			missedDetections = Math.max(0, ((mission.getEnvironmentalObjects().size() * DETECTIONS_PER_OBJECT_EXPECTED) - checkDetectionCount));
-			//if (missedDetections !=  checkMissedCount) {
-			//	System.out.println("WARNING: missedDetections != checkMissedCount - this may be OK if there are extras recorded, otherwise a bug");
-			//}
+			missedDetections = Math.max(0, ((mission.getEnvironmentalObjects().size() * DETECTIONS_PER_OBJECT_EXPECTED)
+					- checkDetectionCount));
+			// if (missedDetections != checkMissedCount) {
+			// System.out.println("WARNING: missedDetections != checkMissedCount - this may
+			// be OK if there are extras recorded, otherwise a bug");
+			// }
 			reader.close();
 
 		} catch (FileNotFoundException e1) {
@@ -297,11 +325,11 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 
 		// TODO: better way, get max_dist this from a region?
 		double MAX_DIST = 1000.0;
-		
+
 		double missedDetectionFactor = 10.0;
 		double avoidanceFactor = 10.0;
 		int objectCount = mission.getEnvironmentalObjects().size();
-		
+
 		double combinedDistMetric = missedDetections;
 		double avoidanceMetric = avoidanceViolations;
 		double timeProp = solution.faultCostProportion();
@@ -318,13 +346,14 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 				System.out.println("Robot dist to label " + label + "=" + dist + "\n");
 				combinedDistMetric += dist;
 			}
-			
-			System.out.println("Total distance: " + combinedDistMetric + ",missedDetections = " + missedDetections + "\n");
+
+			System.out.println(
+					"Total distance: " + combinedDistMetric + ",missedDetections = " + missedDetections + "\n");
 			combinedDistMetric += (missedDetections * missedDetectionFactor);
 			System.out.println("Output metric: " + combinedDistMetric);
-			
+
 			reader.close();
-			
+
 			reader = new Scanner(robotDistFile);
 			while (reader.hasNextLine()) {
 				String line = reader.nextLine();
@@ -333,56 +362,66 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 				double dist = Double.valueOf(fields[1]);
 				avoidanceMetric += dist;
 			}
-			
+
 			avoidanceMetric += (avoidanceViolations * avoidanceFactor);
 			reader.close();
-			
+
 			double detectionCompletionTime = detectionCompletionTime(detectionInfo, objectCount);
 			int numFaults = solution.numberOfFaults();
-			
+
 			// Set the output metrics
 			int metricID = 0;
 			List<String> names = new ArrayList<String>();
-			
+
 			if (metrics.contains(Metrics.COMBINED_DIST_METRIC)) {
 				solution.setObjective(metricID++, -combinedDistMetric);
 				names.add("combinedDistMetric");
 			}
-			
+
 			if (metrics.contains(Metrics.AVOIDANCE_METRIC)) {
 				solution.setObjective(metricID++, -avoidanceMetric);
 				names.add("avoidanceMetric");
 			}
-			
+
 			if (metrics.contains(Metrics.TIME_PROP)) {
 				solution.setObjective(metricID++, timeProp);
 				names.add("timeProp");
 			}
-			
+
 			if (metrics.contains(Metrics.TIME_TOTAL_ABSOLUTE)) {
 				solution.setObjective(metricID++, timeTotal);
 				names.add("timeTotal");
 			}
-			
+
 			if (metrics.contains(Metrics.NUM_FAULTS)) {
 				solution.setObjective(metricID++, numFaults);
 				names.add("numFaults");
 			}
-			
+
 			if (metrics.contains(Metrics.FIRST_FAULT_TIME)) {
 				solution.setObjective(metricID++, firstFaultTime);
 				names.add("firstFaultTime");
 			}
-			
+
 			if (metrics.contains(Metrics.DETECTION_COMPLETION_TIME)) {
 				solution.setObjective(metricID++, detectionCompletionTime);
 				names.add("detectionCompletionTime");
 			}
-			
+
+			if (metrics.contains(Metrics.OBSTACLE_AVOIDANCE_METRIC)) {
+				if (mission.getAllRobots().size() == 2) {
+					// Check we're using the right case study!
+					int obstacleAvoidanceCount = readObstacleFileObsCount(obstacleFile);
+					solution.setObjective(metricID++, obstacleAvoidanceCount);
+					names.add("obstacleAvoidance");
+				} else {
+
+				}
+			}
+
 			String info = String.join(",", names);
-			String logRes = Arrays.stream(solution.getObjectives())
-			        .mapToObj(Double::toString)
-			        .collect(Collectors.joining(","));
+			String logRes = Arrays.stream(solution.getObjectives()).mapToObj(Double::toString)
+					.collect(Collectors.joining(","));
 
 			System.out.println(solution.hashCode() + ":" + solution + "\n");
 			System.out.println(info + "\n");
@@ -390,7 +429,7 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 			tempLog.write(logRes + "\n");
 			tempLog.flush();
 		} catch (FileNotFoundException e1) {
-				e1.printStackTrace();
+			e1.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -454,7 +493,8 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 
 	public FaultInstanceSetSolution createSolution() {
 		int objectivesCount = metrics.size();
-		FaultInstanceSetSolution fiss = new FaultInstanceSetSolution(mission, "TAGTEST", actuallyRun, exptRunTime, objectivesCount);
+		FaultInstanceSetSolution fiss = new FaultInstanceSetSolution(mission, "TAGTEST", actuallyRun, exptRunTime,
+				objectivesCount);
 		setupInitialPopulation(fiss);
 		return fiss;
 	}

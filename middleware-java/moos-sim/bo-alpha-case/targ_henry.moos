@@ -7,7 +7,7 @@ ServerHost = localhost
 ServerPort = 9001
 Community  = henry
 
-MOOSTimeWarp = 2
+MOOSTimeWarp = 10
 LatOrigin  = 43.825300 
 LongOrigin = -70.330400 
 

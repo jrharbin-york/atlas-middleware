@@ -32,6 +32,7 @@ public class GUITest {
 	JPanel faultPanel = new JPanel();
 	
 	JTextField faultLen;
+	JTextField additionalData;
 	
     HashMap<Robot,JLabel> robotLabels = new LinkedHashMap<Robot, JLabel>();
     HashMap<Goal,JLabel> goalLabels = new LinkedHashMap<Goal, JLabel>();
@@ -60,14 +61,15 @@ public class GUITest {
 	}
 	
 	private class FaultButtonListener implements ActionListener {
-		
-
+	
 		public void actionPerformed(ActionEvent e) {
 			// TODO: get the time length from the GUI
 			double faultTimeLength = DEFAULT_FAULT_TIME_LENGTH;
+			String additionalData_s = "";
 			
 			try {
 				String faultTimeLength_s = faultLen.getText();
+				additionalData_s = additionalData.getText();
 				faultTimeLength = Double.valueOf(faultTimeLength_s);
 			} catch (NumberFormatException ex) {
 				System.out.println("Fault time length not set - assuming default");
@@ -76,8 +78,11 @@ public class GUITest {
 			Optional<Fault> f_o = mission.lookupFaultByName(chosenFault);
 			if (f_o.isPresent()) {
 				Fault f = f_o.get();
-				faultGen.injectDynamicFault(f, faultTimeLength, Optional.empty());
-				// TODO: log the dynamic fault GUI action
+				if (additionalData_s.length() == 0 || additionalData_s.equals("(none)")) {
+					faultGen.injectDynamicFault(f, faultTimeLength, Optional.empty());
+				} else {
+					faultGen.injectDynamicFault(f, faultTimeLength, Optional.of(additionalData_s));
+				}
 				System.out.println("Injecting new fault from GUI");
 			} else {
 				System.out.println("Could not find fault " + chosenFault + " in model");
@@ -171,6 +176,7 @@ public class GUITest {
     	JButton injectButton=new JButton("Inject Fault");
     	
     	faultLen = new JTextField("Fault Length");
+    	additionalData = new JTextField("(none)");
     	injectButton.setBounds(130,100,100, 40);
 
     	List<String> robotNames = mission.getAllRobots().stream().map(r -> r.getName()).collect(Collectors.toList());
@@ -186,6 +192,7 @@ public class GUITest {
         faultPanel.add(faultChoice);
     	faultPanel.add(injectButton);
     	faultPanel.add(faultLen);
+    	faultPanel.add(additionalData);
     	//f.getContentPane().add(ptPanel, BorderLayout.CENTER);
     	f.getContentPane().add(ptPanel);
     	

@@ -2,6 +2,7 @@ package atlasdsl;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,6 @@ public class TrackDistances extends GoalAction {
 	private ATLASCore core;
 	private Mission mission;
 	private double completionTime;
-	private PrecisionModel jtsPrecisionModel = new PrecisionModel(); 
 	private GeometryFactory jtsGeoFactory = new GeometryFactory();
 
 	// TODO: track the robot distances from each other too!
@@ -30,7 +30,7 @@ public class TrackDistances extends GoalAction {
 	protected Map<EnvironmentalObject, Double> sensorWorkingDistances = new HashMap<EnvironmentalObject, Double>();
 	
 	protected Map<String, Geometry> obstacleGeometry = new HashMap<String, Geometry>();
-	protected Map<String, Double> collisions  = new HashMap<String,Double>();
+	protected Map<String, HashMap<String,Double>> collisions  = new HashMap<String,HashMap<String,Double>>();
 	
 	protected Map<String, Double> interRobotDistances = new HashMap<String, Double>();
 	protected Map<String, Point> positions = new HashMap<String, Point>();
@@ -64,8 +64,22 @@ public class TrackDistances extends GoalAction {
 		}
 	}
 	
+	private void registerCollision(String obstacleName, String robotName, double time) {
+		if (!collisions.containsKey(robotName)) {
+			collisions.put(robotName, new HashMap<String,Double>());
+		}
+				
+		HashMap<String,Double> hm = collisions.get(robotName);
+		if (!hm.containsKey(obstacleName)) {
+			System.out.println("Collision registered upon " + obstacleName + " with robot " + robotName + " at time " + time);
+			System.out.println("check: collisions length = " + hm.size());
+			hm.put(obstacleName, time);
+			System.out.println("check: collisions length = " + collisions.get(robotName).size());
+		}
+	}
+	
 	@SuppressWarnings("deprecation")
-	private void checkPointIntersection(Point p) throws ParseException {
+	private void checkPointIntersection(String robotName, Point p) throws ParseException {
 		// TODO: check the bounding box first to reduce computation?
 		Coordinate c = new Coordinate(p.getX(),p.getY());
 		Geometry jtsP = jtsGeoFactory.createPoint(c);
@@ -73,15 +87,11 @@ public class TrackDistances extends GoalAction {
 		for (Entry<String, Geometry> eo_e : obstacleGeometry.entrySet()) {
 			
 			Geometry g = eo_e.getValue();
-			String name = eo_e.getKey();
-//			System.out.println(g);
-//			System.out.println(jtsP);
+			String geometryName = eo_e.getKey();
 			if (!g.contains(jtsP)) {
 			} else {
 				Double time = core.getTime();
-				// TODO: also put the label there?
-				collisions.put(name, time);
-				System.out.println("COLLISION");
+				registerCollision(geometryName, robotName, time);
 			}
 		}
 	}
@@ -89,7 +99,6 @@ public class TrackDistances extends GoalAction {
 	public TrackDistances() {
 		// TODO: setting maxSpeedThreshold to a default
 		this.maxSpeedThreshold = 2.0;
-
 	}
 
 	private void writeResultsOut() {
@@ -118,6 +127,22 @@ public class TrackDistances extends GoalAction {
 				String name = eo_d.getKey();
 				double minDist = eo_d.getValue();
 				output.write(name + "," + minDist + "\n");
+			}
+			output.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			FileWriter output = new FileWriter("logs/obstacleCollisions.log");
+			for (Map.Entry<String, HashMap<String,Double>> eo_d : collisions.entrySet()) {
+				String robotName = eo_d.getKey();
+				int countForRobots = 0;
+				HashMap<String,Double> hm = eo_d.getValue();
+				for (Map.Entry<String, Double> entry_d : hm.entrySet()) {
+					countForRobots++;
+				}
+				output.write(robotName + "," + countForRobots + "\n");
 			}
 			output.close();
 		} catch (IOException e) {
@@ -187,12 +212,13 @@ public class TrackDistances extends GoalAction {
 			double x = gps.getX();
 			double y = gps.getY();
 			double speed = gps.getSpeed();
-			String name = gps.getRobotName();
-			positions.put(name, new Point(x,y));
+			String rname = gps.getRobotName();
+			Point p = new Point(x,y);
+			positions.put(rname, p);
 			
-			checkDistanceToObjects(name, x, y, speed);
+			checkDistanceToObjects(rname, x, y, speed);
 			try {
-				checkPointIntersection(new Point(x,y));
+				checkPointIntersection(rname, p);
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}

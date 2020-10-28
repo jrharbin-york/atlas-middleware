@@ -7,7 +7,7 @@ ServerHost = localhost
 ServerPort = 9002
 Community  = gilda
 
-MOOSTimeWarp = 2
+MOOSTimeWarp = 10
 LatOrigin  = 43.825300 
 LongOrigin = -70.330400 
 
