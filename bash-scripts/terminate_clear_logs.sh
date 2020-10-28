@@ -22,3 +22,4 @@ killall -9 uFldShoreBroker
 killall -9 uFldHazardSensor
 pkill -f "atlas.jar"
 cd /home/jharbin/academic/atlas/atlas-middleware/middleware-java/moos-sim && ./clean_logs.sh
+cd /home/jharbin/academic/atlas/atlas-middleware/middleware-java/moos-sim/bo-alpha-case && ./clean_logs.sh

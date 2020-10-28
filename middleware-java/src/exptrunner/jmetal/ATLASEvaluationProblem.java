@@ -94,7 +94,7 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 		return "ATLASEvaluationProblem";
 	}
 
-	public void performATLASExperiment(FaultInstanceSetSolution solution) {
+	public void performATLASExperiment(FaultInstanceSetSolution solution) throws InvalidMetrics {
 		String exptTag = "exptGA-" + (runCount++);
 		try {
 			RunExperiment.doExperiment(mission, exptTag, solution.getFaultInstances(), actuallyRun, exptRunTime);
@@ -259,7 +259,7 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 		return count;
 	}
 
-	public void readLogFiles(String logFileDir, FaultInstanceSetSolution solution) {
+	public void readLogFiles(String logFileDir, FaultInstanceSetSolution solution) throws InvalidMetrics {
 		// Read the goal result file here - process the given goals
 		// Write it out to a common result file - with the fault info
 		File f = new File(logFileDir + "/goalLog.log");
@@ -377,6 +377,17 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 				solution.setObjective(metricID++, -combinedDistMetric);
 				names.add("combinedDistMetric");
 			}
+			
+			if (metrics.contains(Metrics.OBSTACLE_AVOIDANCE_METRIC)) {
+				if (mission.getAllRobots().size() == 2) {
+					// Check we're using the right case study!
+					int obstacleAvoidanceCount = readObstacleFileObsCount(obstacleFile);
+					solution.setObjective(metricID++, -obstacleAvoidanceCount);
+					names.add("obstacleAvoidance");
+				} else {
+					throw new InvalidMetrics(Metrics.OBSTACLE_AVOIDANCE_METRIC, "Cannot be used on this case study");
+				}
+			}
 
 			if (metrics.contains(Metrics.AVOIDANCE_METRIC)) {
 				solution.setObjective(metricID++, -avoidanceMetric);
@@ -408,16 +419,7 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 				names.add("detectionCompletionTime");
 			}
 
-			if (metrics.contains(Metrics.OBSTACLE_AVOIDANCE_METRIC)) {
-				if (mission.getAllRobots().size() == 2) {
-					// Check we're using the right case study!
-					int obstacleAvoidanceCount = readObstacleFileObsCount(obstacleFile);
-					solution.setObjective(metricID++, obstacleAvoidanceCount);
-					names.add("obstacleAvoidance");
-				} else {
 
-				}
-			}
 
 			String info = String.join(",", names);
 			String logRes = Arrays.stream(solution.getObjectives()).mapToObj(Double::toString)
@@ -437,7 +439,11 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 
 	public void evaluate(FaultInstanceSetSolution solution) {
 		if (realExperiment == 0)
-			performATLASExperiment(solution);
+			try {
+				performATLASExperiment(solution);
+			} catch (InvalidMetrics e) {
+				e.printStackTrace();
+			}
 
 		if (realExperiment == 1)
 			fakeExperiment(solution);
