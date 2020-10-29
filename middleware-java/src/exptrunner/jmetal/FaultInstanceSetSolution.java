@@ -12,7 +12,6 @@ import atlasdsl.*;
 import atlasdsl.faults.Fault;
 import atlassharedclasses.FaultInstance;
 
-
 public class FaultInstanceSetSolution implements Solution<FaultInstance> {
 	private static final long serialVersionUID = 1L;
 
@@ -23,10 +22,11 @@ public class FaultInstanceSetSolution implements Solution<FaultInstance> {
 	private boolean actuallyRun;
 	private double exptRunTime;
 	
-	private int objectiveCount;
+	//private int objectiveCount;
 	
 	private Map<Object,Object> attributes = new HashMap<Object,Object>();
 	private Map<Integer,Double> objectives = new HashMap<Integer,Double>();
+	private Map<Integer,Double> constraints = new HashMap<Integer,Double>();
 	private List<FaultInstance> contents = new ArrayList<FaultInstance>();
 	
 	FaultInstanceSetSolution(Mission mission, String exptTag, boolean actuallyRun, double exptRunTime, int objectiveCount) {
@@ -78,8 +78,11 @@ public class FaultInstanceSetSolution implements Solution<FaultInstance> {
 	}
 
 	public double[] getConstraints() {
-		double [] res =  new double [1];
-		res[0] = getConstraint(0);
+		int size = constraints.size();
+		double [] res = new double [size];
+		for (int i = 0; i < size; i++) {
+			res[i] = getConstraint(i);
+		}
 		return res;
 	}
 	
@@ -118,7 +121,7 @@ public class FaultInstanceSetSolution implements Solution<FaultInstance> {
 	}
 
 	public void setConstraint(int index, double value) {
-		
+		constraints.put(index, value);
 	}
 
 	public int getNumberOfVariables() {
@@ -126,12 +129,11 @@ public class FaultInstanceSetSolution implements Solution<FaultInstance> {
 	}
 
 	public int getNumberOfObjectives() {
-		return 3;
+		return objectives.size();
 	}
 
 	public int getNumberOfConstraints() {
-		// TODO Auto-generated method stub
-		return 0;
+		return constraints.size();
 	}
 
 	public Solution<FaultInstance> copy() {

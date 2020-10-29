@@ -371,6 +371,7 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 
 			// Set the output metrics
 			int metricID = 0;
+			int constraintID = 0;
 			List<String> names = new ArrayList<String>();
 
 			if (metrics.contains(Metrics.COMBINED_DIST_METRIC)) {
@@ -381,9 +382,15 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 			if (metrics.contains(Metrics.OBSTACLE_AVOIDANCE_METRIC)) {
 				if (mission.getAllRobots().size() == 2) {
 					// Check we're using the right case study!
-					int obstacleAvoidanceCount = readObstacleFileObsCount(obstacleFile);
-					solution.setObjective(metricID++, -obstacleAvoidanceCount);
-					names.add("obstacleAvoidance");
+					int obstacleCollisionCount = readObstacleFileObsCount(obstacleFile);
+					if (obstacleCollisionCount == 0) {
+						solution.setConstraint(constraintID++, -100);
+					} else {
+						solution.setConstraint(constraintID++, 0);
+					}
+					
+					solution.setObjective(metricID++, -obstacleCollisionCount);
+					names.add("obstacleCollisions");
 				} else {
 					throw new InvalidMetrics(Metrics.OBSTACLE_AVOIDANCE_METRIC, "Cannot be used on this case study");
 				}

@@ -19,7 +19,7 @@ Processconfig = ANTLER
   Run = MOOSDB          @ NewConsole = false
   Run = uTimerScript    @ NewConsole = false
   Run = pMarineViewer   @ NewConsole = false
-  Run = pLogger         @ NewConsole = false
+//  Run = pLogger         @ NewConsole = false
   Run = uXMS            @ NewConsole = false
   Run = uProcessWatch   @ NewConsole = false
 
