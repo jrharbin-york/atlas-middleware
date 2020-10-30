@@ -21,19 +21,29 @@ public class RunExperiment {
 	private final static String ABS_MOOS_PATH_BASE = "/home/jharbin//academic/atlas/atlas-middleware/middleware-java/moos-sim/";
 
 	private final static boolean CLEAR_MOOS_LOGS_EACH_TIME = true;
+	
+	// This is an emergency time cutout if the failsafe is not operating normally
+	private static double failsafeTimeLimit = 400;
 
 	private static void exptLog(String s) {
 		System.out.println(s);
 	}
 
-	private static void waitUntilMiddlewareTime(double time) throws FileNotFoundException {
+	private static void waitUntilMiddlewareTime(double time, double wallClockTimeOutSeconds) throws FileNotFoundException {
 		String pathToFile = ABS_MIDDLEWARE_PATH + "/logs/atlasTime.log";
 		String target = Double.toString(time);
 		boolean finished = false;
+		long timeStart = System.currentTimeMillis();
+		
 		BufferedReader reader = new BufferedReader(new FileReader(pathToFile));
 		try {
 			while (!finished) {
 				TimeUnit.MILLISECONDS.sleep(100);
+				if (((System.currentTimeMillis() - timeStart)/1000) > wallClockTimeOutSeconds) {
+					finished = true;
+				}
+				
+								
 				while (reader.ready()) {
 					String line = reader.readLine();
 					Double lineVal = Double.valueOf(line);
@@ -113,10 +123,12 @@ public class RunExperiment {
 
 				// CI not starting properly as a process, so call it via a script
 				exptLog("Starting CI");
+				
 				ExptHelper.startScript(ABS_MIDDLEWARE_PATH, ciRunner);
 
+
 				// Wait until the end condition for the middleware
-				waitUntilMiddlewareTime(timeLimit);
+				waitUntilMiddlewareTime(timeLimit, failsafeTimeLimit );
 				exptLog("Middleware end time reached");
 				exptLog("Destroying middleware processes");
 				middleware.destroy();

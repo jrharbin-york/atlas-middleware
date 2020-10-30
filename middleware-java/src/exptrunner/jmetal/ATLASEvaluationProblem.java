@@ -485,6 +485,10 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 		FaultInstance fi = new FaultInstance(timeStart, timeEnd, f, Optional.empty());
 		return setupAdditionalInfo(fi);
 	}
+	
+	private boolean faultShouldBeUsed(Fault f) {
+		return f.getName().contains("HEADINGFAULT");
+	}
 
 	private void setupInitialPopulation(FaultInstanceSetSolution fiss) {
 		System.out.println("Setting up initial population...");
@@ -493,12 +497,15 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 		Collections.shuffle(allFaults, rng);
 
 		int i = 0;
-		int limit = rng.nextInt(allFaults.size() - 1) + 1;
-
-		for (Fault f : allFaults) {
-			if (i < limit) {
-				FaultInstance fi = newFaultInstance(f);
-				fiss.addContents(i++, fi);
+		int FAULTS_COUNT_UNIQUE = 3;
+		int limit = rng.nextInt(allFaults.size() * FAULTS_COUNT_UNIQUE - 1) + 1;
+		
+		if (i < limit) {
+			for (Fault f : allFaults) {
+				if (faultShouldBeUsed(f)) {
+					FaultInstance fi = newFaultInstance(f);
+					fiss.addContents(i++, fi);
+				}
 			}
 		}
 		System.out.println("Initial chromosome = " + fiss.toString());

@@ -25,12 +25,34 @@ public class TrackDistances extends GoalAction {
 	private double completionTime;
 	private GeometryFactory jtsGeoFactory = new GeometryFactory();
 
+	public class CollisionRecord {
+		private long lastCollisionTime;
+		private long timeStepMillis = 100;
+		private int count = 0;
+		
+		public CollisionRecord() {
+			this.lastCollisionTime = System.currentTimeMillis();
+		}
+		
+		public void registerPotentialCollision() {
+			long time = System.currentTimeMillis();
+			if ((time - lastCollisionTime) > timeStepMillis) {
+				count++;
+				lastCollisionTime = time;
+			}
+		}
+		
+		public int getCount() {
+			return count;
+		}
+	}
+	
 	// TODO: track the robot distances from each other too!
 	protected Map<EnvironmentalObject, Double> objectDistances = new HashMap<EnvironmentalObject, Double>();
 	protected Map<EnvironmentalObject, Double> sensorWorkingDistances = new HashMap<EnvironmentalObject, Double>();
 	
 	protected Map<String, Geometry> obstacleGeometry = new HashMap<String, Geometry>();
-	protected Map<String, HashMap<String,Double>> collisions  = new HashMap<String,HashMap<String,Double>>();
+	protected Map<String, HashMap<String,CollisionRecord>> collisions  = new HashMap<String,HashMap<String,CollisionRecord>>();
 	
 	protected Map<String, Double> interRobotDistances = new HashMap<String, Double>();
 	protected Map<String, Point> positions = new HashMap<String, Point>();
@@ -66,16 +88,15 @@ public class TrackDistances extends GoalAction {
 	
 	private void registerCollision(String obstacleName, String robotName, double time) {
 		if (!collisions.containsKey(robotName)) {
-			collisions.put(robotName, new HashMap<String,Double>());
+			collisions.put(robotName, new HashMap<String,CollisionRecord>());
 		}
 				
-		HashMap<String,Double> hm = collisions.get(robotName);
+		HashMap<String,CollisionRecord> hm = collisions.get(robotName);
 		if (!hm.containsKey(obstacleName)) {
-			System.out.println("Collision registered upon " + obstacleName + " with robot " + robotName + " at time " + time);
-			System.out.println("check: collisions length = " + hm.size());
-			hm.put(obstacleName, time);
-			System.out.println("check: collisions length = " + collisions.get(robotName).size());
+			hm.put(obstacleName, new CollisionRecord());
 		}
+		
+		hm.get(obstacleName).registerPotentialCollision();
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -135,12 +156,12 @@ public class TrackDistances extends GoalAction {
 		
 		try {
 			FileWriter output = new FileWriter("logs/obstacleCollisions.log");
-			for (Map.Entry<String, HashMap<String,Double>> eo_d : collisions.entrySet()) {
+			for (Map.Entry<String, HashMap<String,CollisionRecord>> eo_d : collisions.entrySet()) {
 				String robotName = eo_d.getKey();
 				int countForRobots = 0;
-				HashMap<String,Double> hm = eo_d.getValue();
-				for (Map.Entry<String, Double> entry_d : hm.entrySet()) {
-					countForRobots++;
+				HashMap<String,CollisionRecord> hm = eo_d.getValue();
+				for (Map.Entry<String, CollisionRecord> entry_d : hm.entrySet()) {
+					countForRobots += entry_d.getValue().getCount();
 				}
 				output.write(robotName + "," + countForRobots + "\n");
 			}
