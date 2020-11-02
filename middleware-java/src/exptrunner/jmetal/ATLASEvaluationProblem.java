@@ -52,6 +52,7 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 	private FileWriter tempLog;
 	private int variableFixedSize;
 	private List<Metrics> metrics;
+	private int constraintCount = 0;
 
 	public ATLASEvaluationProblem(Random rng, Mission mission, boolean actuallyRun, double exptRunTime,
 			String logFileDir, Map<GoalsToCount, Integer> goalsToCount, List<Metrics> metrics) throws IOException {
@@ -87,7 +88,7 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 	}
 
 	public int getNumberOfConstraints() {
-		return 0;
+		return constraintCount;
 	}
 
 	public String getName() {
@@ -109,9 +110,9 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 		int avoidanceViolations = 0;
 
 		double k = 1.0;
-		double timeProp = solution.faultCostProportion();
+		double time = solution.faultTimeTotal();
 
-		solution.setObjective(2, timeProp);
+		solution.setObjective(2, time);
 
 		List<FaultInstance> res1 = solution.testAllFaultInstances((FaultInstance fi) -> {
 			return (fi.getStartTime() > 300.0) && (fi.getEndTime() < 400.0) && (fi.getLength() < 100.0);
@@ -143,7 +144,7 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 		solution.setObjective(0, -missedDetections);
 		solution.setObjective(1, -avoidanceViolations);
 
-		String logRes = missedDetections + "," + avoidanceViolations + "," + timeProp;
+		String logRes = missedDetections + "," + avoidanceViolations + "," + time;
 		System.out.println(logRes + ":<" + solution.hashCode() + ">|" + solution);
 		try {
 			tempLog.write(logRes + "\n");
@@ -426,7 +427,7 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 				names.add("detectionCompletionTime");
 			}
 
-
+			constraintCount  = constraintID;
 
 			String info = String.join(",", names);
 			String logRes = Arrays.stream(solution.getObjectives()).mapToObj(Double::toString)
@@ -500,7 +501,7 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 		int FAULTS_COUNT_UNIQUE = 3;
 		int limit = rng.nextInt(allFaults.size() * FAULTS_COUNT_UNIQUE - 1) + 1;
 		
-		if (i < limit) {
+		while (i < limit) {
 			for (Fault f : allFaults) {
 				if (faultShouldBeUsed(f)) {
 					FaultInstance fi = newFaultInstance(f);

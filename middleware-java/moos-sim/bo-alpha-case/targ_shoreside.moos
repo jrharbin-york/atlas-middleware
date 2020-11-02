@@ -5,7 +5,7 @@ ServerHost = localhost
 ServerPort = 9000
 Community  = shoreside
 
-MOOSTimeWarp = 10
+MOOSTimeWarp = 20
 LatOrigin  = 43.825300 
 LongOrigin = -70.330400 
 
@@ -242,17 +242,25 @@ ProcessConfig = uTimerScript
   reset_max  = unlimited
   reset_time = end
 
-  randvar = varname=X1, min=-45,  max=5,   key=at_reset
-  randvar = varname=Y1, min=-135, max=-35, key=at_reset
+//  randvar = varname=X1, min=-45,  max=5,   key=at_reset
+//  randvar = varname=Y1, min=-135, max=-35, key=at_reset
 
-  randvar = varname=X2, min=150,  max=180, key=at_reset
-  randvar = varname=Y2, min=-125, max=-35, key=at_reset
+//  randvar = varname=X2, min=150,  max=180, key=at_reset
+//  randvar = varname=Y2, min=-125, max=-35, key=at_reset
 
-  event = var=UP_LOITER_2, val="center_assign=$[X1],$[Y1]", time=180 
-  event = var=UP_LOITER_1, val="center_assign=$[X2],$[Y2]", time=180
+// X1 = 0
+// Y1 = -91
 
-  event = var=UP_LOITER_1, val="center_assign=$[X1],$[Y1]", time=360
-  event = var=UP_LOITER_2, val="center_assign=$[X2],$[Y2]", time=360
+// X2 = 153
+// Y2 = -75
+
+
+
+  event = var=UP_LOITER_2, val="center_assign=0,-91", time=180 
+  event = var=UP_LOITER_1, val="center_assign=153,-75", time=180
+
+  event = var=UP_LOITER_1, val="center_assign=0,-91", time=360
+  event = var=UP_LOITER_2, val="center_assign=153,-75", time=360
 }
 
 

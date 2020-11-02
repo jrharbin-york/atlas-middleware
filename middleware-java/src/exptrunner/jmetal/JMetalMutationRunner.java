@@ -38,8 +38,8 @@ import exptrunner.jmetal.test.ATLASEvaluationProblemDummy.EvaluationProblemDummy
 
 public class JMetalMutationRunner extends AbstractAlgorithmRunner {
 
-	static private int populationSize = 12;
-	static private int offspringPopulationSize = 12;
+	static private int populationSize = 120;
+	static private int offspringPopulationSize = 120;
 	
 	static private int matingPoolSize = populationSize;
 	static private boolean actuallyRun = true;

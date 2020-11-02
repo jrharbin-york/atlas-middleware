@@ -23,7 +23,7 @@ public class RunExperiment {
 	private final static boolean CLEAR_MOOS_LOGS_EACH_TIME = true;
 	
 	// This is an emergency time cutout if the failsafe is not operating normally
-	private static double failsafeTimeLimit = 400;
+	private static double failsafeTimeLimit = 300;
 
 	private static void exptLog(String s) {
 		System.out.println(s);
@@ -41,10 +41,8 @@ public class RunExperiment {
 				TimeUnit.MILLISECONDS.sleep(100);
 				if (((System.currentTimeMillis() - timeStart)/1000) > wallClockTimeOutSeconds) {
 					finished = true;
-				}
-				
-								
-				while (reader.ready()) {
+				}				
+				while (reader.ready()) {				
 					String line = reader.readLine();
 					Double lineVal = Double.valueOf(line);
 					exptLog(line + "-" + target);
@@ -94,8 +92,10 @@ public class RunExperiment {
 		// Generate a fault instance file for the experiment according to the experiment
 		// parameters
 		FaultFileCreator ffc = new FaultFileCreator(mission, ABS_WORKING_PATH);
-
-			ffc.writeFaultDefinitionFile(ABS_WORKING_PATH + faultInstanceFileName, testFaultInstances);
+		for (FaultInstance fi : testFaultInstances) {
+			exptLog(fi.toString());
+		}
+		ffc.writeFaultDefinitionFile(ABS_WORKING_PATH + faultInstanceFileName, testFaultInstances);
 
 			if (actuallyRun) {
 				// Launch the MOOS code, middleware and CI as separate subprocesses
@@ -113,7 +113,7 @@ public class RunExperiment {
 
 				exptLog("Started MOOS launch scripts");
 				// Sleep until MOOS is ready
-				TimeUnit.MILLISECONDS.sleep(400);
+				TimeUnit.MILLISECONDS.sleep(800);
 
 				String[] middlewareOpts = { faultInstanceFileName, "nogui" };
 				middleware = ExptHelper.startNewJavaProcess("-jar", absATLASJAR, middlewareOpts, ABS_WORKING_PATH);
