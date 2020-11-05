@@ -488,7 +488,8 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 	}
 	
 	private boolean faultShouldBeUsed(Fault f) {
-		return f.getName().contains("HEADINGFAULT");
+		//return f.getName().contains("HEADINGFAULT");
+		return true;
 	}
 
 	private void setupInitialPopulation(FaultInstanceSetSolution fiss) {
