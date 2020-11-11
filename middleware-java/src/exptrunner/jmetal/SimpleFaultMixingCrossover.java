@@ -55,6 +55,7 @@ public class SimpleFaultMixingCrossover implements CrossoverOperator<FaultInstan
 
 			for (int x = 0; x < xlimit; x++) {
 				if (x <= xcut) {
+					// TODO: create a new fault instance object here!
 					new1.addContents(new1_index++, cx.getVariable(x));
 				} else {
 					new2.addContents(new2_index++, cx.getVariable(x));

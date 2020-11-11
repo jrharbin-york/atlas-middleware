@@ -18,7 +18,8 @@ public class ATLASEvaluationProblemDummy extends ATLASEvaluationProblem {
 		MAXIMAL_FAULT_INSTANCE_COUNT,
 		MINIMAL_FAULT_TOTAL_TIME,
 		EXPT_RUNNER_FAKE_FAULTS,
-		EXPT_RUNNER_LOG_FAULTS
+		EXPT_RUNNER_LOG_FAULTS,
+		EXPT_RUNNER_INCREASING_CUSTOM_FAULTS
 	}
 	
 	private static final long serialVersionUID = 1L;
@@ -26,10 +27,10 @@ public class ATLASEvaluationProblemDummy extends ATLASEvaluationProblem {
 	private int evalCount = 0;	
 	private EvaluationProblemDummyChoices testChoice;
 	
-	public ATLASEvaluationProblemDummy(Random rng, Mission mission, boolean actuallyRun,
+	public ATLASEvaluationProblemDummy(int popSize, Random rng, Mission mission, boolean actuallyRun,
 			double exptRunTime, String logFileDir, EvaluationProblemDummyChoices testChoice) throws IOException {
 		
-		super(rng, mission, actuallyRun, exptRunTime, logFileDir, new HashMap<GoalsToCount,Integer>(), new ArrayList<Metrics>());
+		super(popSize, rng, mission, actuallyRun, exptRunTime, logFileDir, new HashMap<GoalsToCount,Integer>(), new ArrayList<Metrics>());
 		try {	
 			fcpValues = new FileWriter("fcp.test");
 			this.testChoice = testChoice;

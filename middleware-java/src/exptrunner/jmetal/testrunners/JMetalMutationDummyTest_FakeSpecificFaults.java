@@ -1,6 +1,8 @@
-package exptrunner.jmetal;
+package exptrunner.jmetal.testrunners;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.uma.jmetal.util.JMetalException;
@@ -9,9 +11,11 @@ import atlasdsl.Mission;
 import atlasdsl.loader.DSLLoadFailed;
 import atlasdsl.loader.DSLLoader;
 import atlasdsl.loader.GeneratedDSLLoader;
+import exptrunner.jmetal.ExptError;
+import exptrunner.jmetal.JMetalMutationRunner;
 import exptrunner.jmetal.test.ATLASEvaluationProblemDummy.*;
 
-public class JMetalMutationDummyTest_LogCustomFaults {
+public class JMetalMutationDummyTest_FakeSpecificFaults {
 	
 	static int runCount = 1;
 	
@@ -22,7 +26,7 @@ public class JMetalMutationDummyTest_LogCustomFaults {
 			mission = dslloader.loadMission();
 			for (int i = 0; i < runCount; i++) {
 				JMetalMutationRunner.jMetalRun("", mission, 
-						Optional.of(EvaluationProblemDummyChoices.EXPT_RUNNER_LOG_FAULTS),
+						Optional.of(EvaluationProblemDummyChoices.EXPT_RUNNER_FAKE_FAULTS), 
 						Optional.empty());
 			}
 		} catch (DSLLoadFailed e) {

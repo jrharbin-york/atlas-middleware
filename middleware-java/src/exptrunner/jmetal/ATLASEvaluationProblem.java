@@ -24,6 +24,7 @@ import org.uma.jmetal.solution.Solution;
 import atlasdsl.Mission;
 import atlasdsl.faults.Fault;
 import atlassharedclasses.FaultInstance;
+import utils.Pair;
 
 public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution> {
 
@@ -47,16 +48,22 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 
 	// This gives the weights for these different goals
 	private Map<GoalsToCount, Integer> goalsToCount = new HashMap<GoalsToCount, Integer>();
-	private Object algorithm;
+	private Algorithm<List<FaultInstance>> algorithm;
 
 	private FileWriter tempLog;
 	private int variableFixedSize;
 	private List<Metrics> metrics;
 	private int constraintCount = 0;
+	private int fakeCustomEvalNum;
+	private int popSize;
+	
+	// Only used in the fake test experiment
+	private HashMap<Integer, Pair<Double, Double>> fakeExptHashes = new HashMap<Integer, Pair<Double, Double>>();
 
-	public ATLASEvaluationProblem(Random rng, Mission mission, boolean actuallyRun, double exptRunTime,
+	public ATLASEvaluationProblem(int popSize, Random rng, Mission mission, boolean actuallyRun, double exptRunTime,
 			String logFileDir, Map<GoalsToCount, Integer> goalsToCount, List<Metrics> metrics) throws IOException {
 		this.rng = rng;
+		this.popSize = popSize;
 		this.mission = mission;
 		this.exptRunTime = exptRunTime;
 		this.logFileDir = logFileDir;
@@ -108,8 +115,8 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 	public void fakeExperiment(FaultInstanceSetSolution solution) {
 		int missedDetections = 0;
 		int avoidanceViolations = 0;
-
 		double k = 1.0;
+
 		double time = solution.faultTimeTotal();
 
 		solution.setObjective(2, time);
@@ -379,7 +386,7 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 				solution.setObjective(metricID++, -combinedDistMetric);
 				names.add("combinedDistMetric");
 			}
-			
+
 			if (metrics.contains(Metrics.OBSTACLE_AVOIDANCE_METRIC)) {
 				if (mission.getAllRobots().size() == 2) {
 					// Check we're using the right case study!
@@ -389,7 +396,7 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 					} else {
 						solution.setConstraint(constraintID++, 0);
 					}
-					
+
 					solution.setObjective(metricID++, -obstacleCollisionCount);
 					names.add("obstacleCollisions");
 				} else {
@@ -427,7 +434,7 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 				names.add("detectionCompletionTime");
 			}
 
-			constraintCount  = constraintID;
+			constraintCount = constraintID;
 
 			String info = String.join(",", names);
 			String logRes = Arrays.stream(solution.getObjectives()).mapToObj(Double::toString)
@@ -444,20 +451,57 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 			e.printStackTrace();
 		}
 	}
+	
+	public void fakeExperimentCustomValues(FaultInstanceSetSolution solution) {
+		
+		
+		System.out.println("fakeExperimentCustomValues");
+		int numInPop = fakeCustomEvalNum % popSize;
+		int gen = fakeCustomEvalNum / popSize;
+		
+		System.out.println("numInPop = " + numInPop + ",gen = " + gen);
+
+		Pair<Double, Double> res = fakeExptHashes.get(solution.hashCode());
+		if (res == null) {
+			if (numInPop == 0 && gen < 3) {
+				System.out.println("Overriding the metrics for numInPop = " + numInPop + ",gen=" + gen);
+				solution.setObjective(0, -500 - gen);
+				solution.setObjective(1, 10 + gen);
+				fakeExptHashes.put(solution.hashCode(), new Pair<Double,Double>(solution.getObjective(0), solution.getObjective(1)));
+			} else {
+				int random1 = rng.nextInt(100);
+				int random2 = rng.nextInt(100);
+				solution.setObjective(0, random1);
+				solution.setObjective(1, random2);	
+			}
+			
+		} else {
+			solution.setObjective(0, res.getElement0());
+			solution.setObjective(1, res.getElement1());
+		}
+		
+		System.out.println("HASH: " + solution.hashCode() + ":o1 = " + solution.getObjective(0) + ",o2 = " + solution.getObjective(1));
+		fakeCustomEvalNum++;
+	}
 
 	public void evaluate(FaultInstanceSetSolution solution) {
-		if (realExperiment == 0)
+		if (realExperiment == 0) {
 			try {
 				performATLASExperiment(solution);
 			} catch (InvalidMetrics e) {
 				e.printStackTrace();
 			}
+		}
 
 		if (realExperiment == 1)
 			fakeExperiment(solution);
 
 		if (realExperiment == 2)
 			fakeExperimentLogTrace(solution);
+		
+		if (realExperiment == 3) {
+			fakeExperimentCustomValues(solution);
+		}
 	}
 
 	private FaultInstance setupAdditionalInfo(FaultInstance input) {
@@ -486,9 +530,9 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 		FaultInstance fi = new FaultInstance(timeStart, timeEnd, f, Optional.empty());
 		return setupAdditionalInfo(fi);
 	}
-	
+
 	private boolean faultShouldBeUsed(Fault f) {
-		//return f.getName().contains("HEADINGFAULT");
+		// return f.getName().contains("HEADINGFAULT");
 		return true;
 	}
 
@@ -501,7 +545,7 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 		int i = 0;
 		int FAULTS_COUNT_UNIQUE = 3;
 		int limit = rng.nextInt(allFaults.size() * FAULTS_COUNT_UNIQUE - 1) + 1;
-		
+
 		while (i < limit) {
 			for (Fault f : allFaults) {
 				if (faultShouldBeUsed(f)) {
@@ -515,8 +559,7 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 
 	public FaultInstanceSetSolution createSolution() {
 		int objectivesCount = metrics.size();
-		FaultInstanceSetSolution fiss = new FaultInstanceSetSolution(mission, "TAGTEST", actuallyRun, exptRunTime,
-				objectivesCount);
+		FaultInstanceSetSolution fiss = new FaultInstanceSetSolution(mission, "TAGTEST", actuallyRun, exptRunTime);
 		setupInitialPopulation(fiss);
 		return fiss;
 	}

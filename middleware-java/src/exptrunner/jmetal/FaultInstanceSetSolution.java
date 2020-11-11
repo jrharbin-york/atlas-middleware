@@ -22,14 +22,12 @@ public class FaultInstanceSetSolution implements Solution<FaultInstance> {
 	private boolean actuallyRun;
 	private double exptRunTime;
 	
-	//private int objectiveCount;
-	
 	private Map<Object,Object> attributes = new HashMap<Object,Object>();
 	private Map<Integer,Double> objectives = new HashMap<Integer,Double>();
 	private Map<Integer,Double> constraints = new HashMap<Integer,Double>();
 	private List<FaultInstance> contents = new ArrayList<FaultInstance>();
 	
-	FaultInstanceSetSolution(Mission mission, String exptTag, boolean actuallyRun, double exptRunTime, int objectiveCount) {
+	public FaultInstanceSetSolution(Mission mission, String exptTag, boolean actuallyRun, double exptRunTime) {
 		this.mission = mission;
 		this.actuallyRun = actuallyRun;
 		this.exptRunTime = exptRunTime;

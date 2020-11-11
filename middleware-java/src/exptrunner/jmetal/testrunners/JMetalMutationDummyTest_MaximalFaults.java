@@ -1,4 +1,4 @@
-package exptrunner.jmetal;
+package exptrunner.jmetal.testrunners;
 
 import java.io.FileNotFoundException;
 import java.util.Optional;
@@ -9,22 +9,19 @@ import atlasdsl.Mission;
 import atlasdsl.loader.DSLLoadFailed;
 import atlasdsl.loader.DSLLoader;
 import atlasdsl.loader.GeneratedDSLLoader;
+import exptrunner.jmetal.ExptError;
+import exptrunner.jmetal.JMetalMutationRunner;
 import exptrunner.jmetal.test.ATLASEvaluationProblemDummy.*;
 
-public class JMetalMutationDummyTest_MinimalFaults {
-	
-	static int runCount = 100;
-	
+public class JMetalMutationDummyTest_MaximalFaults {
 	public static void main(String[] args) throws JMetalException, FileNotFoundException {
 		DSLLoader dslloader = new GeneratedDSLLoader();
 		Mission mission;
 		try {
 			mission = dslloader.loadMission();
-			for (int i = 0; i < runCount; i++) {
-				JMetalMutationRunner.jMetalRun("", mission, 
-						Optional.of(EvaluationProblemDummyChoices.MINIMAL_FAULT_INSTANCE_COUNT),
-						Optional.empty());
-			}
+			JMetalMutationRunner.jMetalRun("", mission, 
+					Optional.of(EvaluationProblemDummyChoices.MAXIMAL_FAULT_INSTANCE_COUNT),
+					Optional.empty());
 		} catch (DSLLoadFailed e) {
 			System.out.println("DSL loading failed - configuration problems");
 			e.printStackTrace();

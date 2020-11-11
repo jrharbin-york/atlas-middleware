@@ -75,7 +75,7 @@ public class JMetalMutationRunner extends AbstractAlgorithmRunner {
 					throw new ExptError("No metrics selected");
 				}
 				List<Metrics> metrics = metrics_o.get();
-				problem = new ATLASEvaluationProblem(problemRNG, mission, actuallyRun, exptRunTime,
+				problem = new ATLASEvaluationProblem(populationSize, problemRNG, mission, actuallyRun, exptRunTime,
 						LOG_FILE_DIR, goals, metrics);
 				
 			} else {
@@ -83,16 +83,21 @@ public class JMetalMutationRunner extends AbstractAlgorithmRunner {
 				// Just use dummy metrics
 				List<Metrics> metrics = new ArrayList<Metrics>();
 				if (testChoice == EvaluationProblemDummyChoices.EXPT_RUNNER_FAKE_FAULTS) {
-					problem = new ATLASEvaluationProblem(problemRNG, mission, actuallyRun, exptRunTime,
+					problem = new ATLASEvaluationProblem(populationSize, problemRNG, mission, actuallyRun, exptRunTime,
 							LOG_FILE_DIR, goals, metrics);
 					((ATLASEvaluationProblem) problem).setFakeExperimentNum(1);
 				} else {
 					if (testChoice == EvaluationProblemDummyChoices.EXPT_RUNNER_LOG_FAULTS) {
-						problem = new ATLASEvaluationProblem(problemRNG, mission, actuallyRun, exptRunTime,
+						problem = new ATLASEvaluationProblem(populationSize, problemRNG, mission, actuallyRun, exptRunTime,
 								LOG_FILE_DIR, goals, metrics);
 						((ATLASEvaluationProblem) problem).setFakeExperimentNum(2);
 					} else {
-						problem = new ATLASEvaluationProblemDummy(problemRNG, mission, actuallyRun,
+						if (testChoice == EvaluationProblemDummyChoices.EXPT_RUNNER_INCREASING_CUSTOM_FAULTS) {
+							problem = new ATLASEvaluationProblem(populationSize, problemRNG, mission, actuallyRun, exptRunTime,
+									LOG_FILE_DIR, goals, metrics);
+							((ATLASEvaluationProblem) problem).setFakeExperimentNum(3);
+						} else 
+						problem = new ATLASEvaluationProblemDummy(populationSize, problemRNG, mission, actuallyRun,
 								exptRunTime, LOG_FILE_DIR, testChoice);
 					}
 				}
