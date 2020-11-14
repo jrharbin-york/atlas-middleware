@@ -11,38 +11,41 @@ public class FaultInstance implements Comparable<FaultInstance> {
 	private boolean isActive = true;
 	private Fault fault;
 	private Optional<String> extraData;
-	
+	private int _counter;
+
+	private static int _fIDcounter = 0;
+
+	private void setupExtraData(Optional<String> newExtraData) {
+		// Ensure the extra data uses a unique optional
+		if (newExtraData.isPresent()) {
+			this.extraData = Optional.of(newExtraData.get());
+		} else {
+			this.extraData = Optional.empty();
+		}
+	}
+
 	public FaultInstance(Double startTime, Double endTime, Fault f, Optional<String> extraData) {
-		//System.out.println("startTime = " + startTime + ",endTime = " + endTime);
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.fault = f;
-		this.extraData = extraData;		
-		//System.out.println("FaultInstance extraData = " + extraData);
-		
-		// hack to change the speed for MotionFault - for paper experiments only
-		//if (f.getImpact() instanceof MotionFault && extraData.isPresent()) {
-//			double speedOverride = Double.valueOf(extraData.get());
-			//MotionFault mfi = (MotionFault)f.getImpact();
-			//System.out.println("Experiment overriding speed to " + speedOverride);
-			//mfi._overrideSpeed(speedOverride);
-			// test
-			//MotionFault mfi2 = (MotionFault)f.getImpact();
-			//System.out.println("test newValue changed = " + mfi2.getNewValue());
-		//}
+		setupExtraData(extraData);
+		this._counter = _fIDcounter++;
 	}
-	
-	public void setActiveFlag(boolean flag) {
-		this.isActive = flag;
-	}
-	
+
 	public FaultInstance(FaultInstance orig) {
 		this.endTime = orig.endTime;
 		this.startTime = orig.startTime;
 		this.fault = orig.fault;
 		this.extraData = orig.extraData;
+		setupExtraData(extraData);
+		this.isActive = orig.isActive;
+		this._counter = _fIDcounter++;
 	}
-	
+
+	public void setActiveFlag(boolean flag) {
+		this.isActive = flag;
+	}
+
 	public int compareTo(FaultInstance other) {
 		int timeCompare = Double.compare(this.startTime, other.startTime);
 		if (timeCompare != 0) {
@@ -52,23 +55,23 @@ public class FaultInstance implements Comparable<FaultInstance> {
 			return idCompare;
 		}
 	}
-	
+
 	public String toString() {
 		String isActiveStr = "";
 		if (!isActive) {
 			isActiveStr = ",[INACTIVE]";
 		}
-		return fault.getName() + "," + startTime + "," + endTime + "," + extraData + isActiveStr; 
+		return _counter + "," + fault.getName() + "," + startTime + "," + endTime + "," + extraData + isActiveStr + ":";
 	}
 
 	public boolean isReady(double time) {
 		return (time >= startTime) && (time <= endTime);
 	}
-	
+
 	public Fault getFault() {
 		return fault;
 	}
-	
+
 	public boolean isValid() {
 		FaultTimeProperties ftp = fault.getTimeProperties();
 		return ftp.isInRange(startTime, endTime);
@@ -85,41 +88,35 @@ public class FaultInstance implements Comparable<FaultInstance> {
 	public double getStartTime() {
 		return startTime;
 	}
-	
-	public double getLength() { 
+
+	public double getLength() {
 		return endTime - startTime;
 	}
-	
-	
+
 	public String getExtraData() {
 		if (extraData.isPresent()) {
 			return extraData.get();
-		}	else { 
+		} else {
 			return "";
 		}
 	}
-	
+
 	public Optional<String> getExtraDataOpt() {
 		return extraData;
 	}
-	
+
 	private void constrainTimeValid() {
 		Fault f = this.getFault();
-		// Check if corresponding to the length of the fault in the model
-		if (this.endTime > f.getLatestEndTime()) {
-			this.endTime = f.getLatestEndTime();
+		double duration = this.endTime - this.startTime;
+
+		if (startTime < f.getEarliestStartTime()) {
+			startTime = f.getEarliestStartTime();
+			endTime = startTime + duration;
 		}
-		
-		if (this.endTime < f.getEarliestStartTime()) {
-			this.endTime = f.getEarliestStartTime();
-		}
-		
-		if (this.startTime < f.getEarliestStartTime()) {
-			this.startTime = f.getEarliestStartTime();
-		}
-		
-		if (this.startTime > f.getLatestEndTime()) {
-			this.startTime = f.getLatestEndTime();
+
+		if (endTime < f.getLatestEndTime()) {
+			endTime = f.getLatestEndTime();
+			startTime = endTime - duration;
 		}
 	}
 
@@ -127,7 +124,7 @@ public class FaultInstance implements Comparable<FaultInstance> {
 		double origLen = endTime - startTime;
 		System.out.println("origLen = " + origLen);
 		endTime = startTime + (origLen * factor);
-		
+
 		System.out.println("endTime=" + endTime);
 		constrainTimeValid();
 	}

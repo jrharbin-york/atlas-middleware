@@ -484,7 +484,10 @@ public class ATLASEvaluationProblem implements Problem<FaultInstanceSetSolution>
 		fakeCustomEvalNum++;
 	}
 
+
+	
 	public void evaluate(FaultInstanceSetSolution solution) {
+	
 		if (realExperiment == 0) {
 			try {
 				performATLASExperiment(solution);

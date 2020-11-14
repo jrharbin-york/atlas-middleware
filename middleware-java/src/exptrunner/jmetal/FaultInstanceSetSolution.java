@@ -20,6 +20,7 @@ public class FaultInstanceSetSolution implements Solution<FaultInstance> {
 	
 	private Mission mission;
 	private boolean actuallyRun;
+	private String exptTag;
 	private double exptRunTime;
 	
 	private Map<Object,Object> attributes = new HashMap<Object,Object>();
@@ -29,6 +30,7 @@ public class FaultInstanceSetSolution implements Solution<FaultInstance> {
 	
 	public FaultInstanceSetSolution(Mission mission, String exptTag, boolean actuallyRun, double exptRunTime) {
 		this.mission = mission;
+		this.exptTag = exptTag;
 		this.actuallyRun = actuallyRun;
 		this.exptRunTime = exptRunTime;
 	}
@@ -37,11 +39,17 @@ public class FaultInstanceSetSolution implements Solution<FaultInstance> {
 		this.mission = other.mission;
 		this.actuallyRun = other.actuallyRun;
 		this.exptRunTime = other.exptRunTime;
-		this.contents = new ArrayList<FaultInstance>(other.contents.size());;
+		this.contents = new ArrayList<FaultInstance>(other.contents.size());
 		
 		for (FaultInstance fi : contents) {
 			this.contents.add(new FaultInstance(fi));
 		}
+	}
+	
+	public static FaultInstanceSetSolution empty(FaultInstanceSetSolution other) {
+		FaultInstanceSetSolution fi = new FaultInstanceSetSolution(other.mission, other.exptTag, other.actuallyRun, other.exptRunTime);
+		fi.contents = new ArrayList<FaultInstance>();
+		return fi;
 	}
 		
 	public void setObjective(int index, double value) {

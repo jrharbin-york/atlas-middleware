@@ -10,7 +10,7 @@ import atlassharedclasses.FaultInstance;
 
 public class FaultDataAdjustMutation implements MutationOperator<FaultInstanceSetSolution> {
 	private enum MutationType {
-		EXPAND_TIME_LENGTH, CONTRACT_TIME_LENGTH, CHANGE_ADDITIONAL_INFO, MOVE_TIME_START,
+		EXPAND_TIME_LENGTH, CONTRACT_TIME_LENGTH, CHANGE_ADDITIONAL_INFO, MOVE_TIME_START, NONE
 	}
 
 	private static final long serialVersionUID = 1L;
@@ -19,107 +19,114 @@ public class FaultDataAdjustMutation implements MutationOperator<FaultInstanceSe
 	private FileWriter mutationLog;
 	private double mutationProb;
 
-	FaultDataAdjustMutation(Random rng, String mutationLogFileName, double mutationProb)
-			throws IOException {
+	FaultDataAdjustMutation(Random rng, String mutationLogFileName, double mutationProb) throws IOException {
 		this.rng = rng;
 		this.mutationProb = mutationProb;
 		this.mutationLog = new FileWriter(mutationLogFileName);
 	}
 
-	private FaultInstance mutateFaultInstanceRandomly(FaultInstance input) {
-		FaultInstance output = new FaultInstance(input);
-		double maxTimeShift = input.getFault().getMaxTimeRange();
+	// Fixed to work in-place on the given fault instance
+	private void mutateFaultInstanceRandomly(FaultInstance fi) {
+		double maxTimeShift = fi.getFault().getMaxTimeRange();
 		MutationType mutationType = chooseMutationOption();
-		System.out.println("Performing mutation on fault instance " + input.toString());
+		System.out.println("Performing mutation on fault instance " + fi.toString());
 		try {
-			mutationLog.write("Performing mutation on fault instance " + input.toString() + "\n");
+			mutationLog.write("Performing mutation on fault instance " + fi.toString() + "\n");
 			switch (mutationType) {
 			case CONTRACT_TIME_LENGTH:
-				// Type of mutation: contracting an FI - reducing its length
+				// Type of mutation: contracting a FI - reducing its length
 				double expandFactor = rng.nextDouble();
 				System.out.println("Contracting length: factor = " + expandFactor);
-				mutationLog.write("Performing mutation on fault instance " + input.toString() + "\n");
-				output.multLengthFactor(expandFactor);
+				mutationLog.write("Performing mutation on fault instance " + fi.toString() + "\n");
+				fi.multLengthFactor(expandFactor);
 				break;
 			case EXPAND_TIME_LENGTH:
-				// Type of mutation: expanding an FI temporally - extending its length
+				// Type of mutation: expanding a FI temporally - extending its length
 				double contractFactor = rng.nextDouble();
 				expandFactor = 1.0 / contractFactor;
 				System.out.println("Expanding length: factor = " + expandFactor);
 				mutationLog.write("Expanding length: factor = " + expandFactor + "\n");
-				output.multLengthFactor(expandFactor);
+				fi.multLengthFactor(expandFactor);
 				break;
 			case MOVE_TIME_START:
+				// Add a maximum proportion of the mission to timeshift by
+				// Possible TODO: MOVE_TIME_START
 				double absTimeShift = (rng.nextDouble() - 0.5) * maxTimeShift * 2;
 				System.out.println("Moving fault: absTimeShift = " + absTimeShift);
 				mutationLog.write("Moving fault: absTimeShift = " + absTimeShift + "\n");
-				output.absShiftTimes(absTimeShift);
+				fi.absShiftTimes(absTimeShift);
 				break;
 			case CHANGE_ADDITIONAL_INFO:
 				mutationLog.write("Change additional info\n");
-				output = changeAdditionalInfo(input);
+				changeAdditionalInfo(fi);
+			case NONE:
+				mutationLog.write("No mutation (mutation prob not met)\n");
+				System.out.println("No mutation (mutation prob not met)\n");
+				break;
 			}
-			System.out.println("Mutated fault = " + output.toString());
-			mutationLog.write("Mutated fault = " + output.toString() + "\n");
+			System.out.println("Mutated fault = " + fi.toString());
+			mutationLog.write("Mutated fault = " + fi.toString() + "\n");
 			mutationLog.flush();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return output;
 	}
 
-	private FaultInstance changeAdditionalInfo(FaultInstance input) {
+	// Fixed to work in-place on the given fault instance
+	private void changeAdditionalInfo(FaultInstance fi) {
 		final double MIN_SPEED_VALUE = 1.0;
 		final double MAX_SPEED_VALUE = 5.0;
 
-		Fault f = input.getFault();
-		FaultInstance output = input;
+		Fault f = fi.getFault();
 		if (f.getName().contains("SPEEDFAULT")) {
 			double newSpeed = MIN_SPEED_VALUE + rng.nextDouble() * (MAX_SPEED_VALUE - MIN_SPEED_VALUE);
-			output.setExtraData(Double.toString(newSpeed));
+			fi.setExtraData(Double.toString(newSpeed));
 		}
 
 		if (f.getName().contains("HEADINGFAULT")) {
 			double newHeading = rng.nextDouble() * 360.0;
-			output.setExtraData(Double.toString(newHeading));
+			fi.setExtraData(Double.toString(newHeading));
 		}
-		return output;
 	}
 
 	private MutationType chooseMutationOption() {
-		double v = rng.nextDouble();
-		if (v < 0.15) {
-			return MutationType.CONTRACT_TIME_LENGTH;
-		} else if (v < 0.3) {
-			return MutationType.EXPAND_TIME_LENGTH;
-		} else if (v < 0.45) {
-			return MutationType.MOVE_TIME_START;
-		} else
-			return MutationType.CHANGE_ADDITIONAL_INFO;
+		// Need to choose whether mutation is done based on the mutationProb - it is
+		// currently not done at all
+		double shouldDoMutation = rng.nextDouble();
+		if (shouldDoMutation < mutationProb) {
+			// After deciding to perform mutation, pick a type
+			// Each type is currently equiprobable
+			double v = rng.nextDouble();
+			if (v < 0.25) {
+				return MutationType.CONTRACT_TIME_LENGTH;
+			} else if (v < 0.5) {
+				return MutationType.EXPAND_TIME_LENGTH;
+			} else if (v < 0.75) {
+				return MutationType.MOVE_TIME_START;
+			} else
+				return MutationType.CHANGE_ADDITIONAL_INFO;
+		} else {
+			return MutationType.NONE;
+		}
 	}
 
-	private FaultInstance mutatePossiblyMultipleTimes(FaultInstance input, int maxTimes) {
-		FaultInstance mutated = mutateFaultInstanceRandomly(input);
+	private void mutatePossiblyMultipleTimes(FaultInstance input, int maxTimes) {
+		mutateFaultInstanceRandomly(input);
 		int extraMutations = rng.nextInt(maxTimes);
 		for (int i = 0; i < extraMutations; i++) {
-			mutated = mutateFaultInstanceRandomly(mutated);
+			mutateFaultInstanceRandomly(input);
 		}
-		return mutated;
 	}
 
 	public FaultInstanceSetSolution execute(FaultInstanceSetSolution source) {
-		// TODO: pick one or more to alter
 		final int MAX_INDIVIDUAL_MUTATIONS = 2;
-		FaultInstanceSetSolution output = (FaultInstanceSetSolution)source.copy();
-		
+
 		for (int i = 0; i < source.getNumberOfVariables(); i++) {
 			FaultInstance faultInstance = source.getVariable(i);
-		    FaultInstance fiOut = mutatePossiblyMultipleTimes(faultInstance, MAX_INDIVIDUAL_MUTATIONS);
-		    System.out.println("contents length = " + output.getNumberOfVariables());
-			output.addContents(i, fiOut);
+			mutatePossiblyMultipleTimes(faultInstance, MAX_INDIVIDUAL_MUTATIONS);
+			System.out.println("contents length = " + source.getNumberOfVariables());
 		}
-		return output;
+		return source;
 	}
 
 	public double getMutationProbability() {

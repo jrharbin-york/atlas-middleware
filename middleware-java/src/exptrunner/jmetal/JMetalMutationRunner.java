@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.Random;
 
 import org.uma.jmetal.algorithm.Algorithm;
+import org.uma.jmetal.algorithm.multiobjective.nsgaii.NSGAII;
 import org.uma.jmetal.algorithm.multiobjective.nsgaii.NSGAIIMeasures;
 import org.uma.jmetal.example.AlgorithmRunner;
 import org.uma.jmetal.operator.crossover.CrossoverOperator;
@@ -33,6 +34,7 @@ import atlasdsl.Mission;
 import atlasdsl.loader.DSLLoadFailed;
 import atlasdsl.loader.DSLLoader;
 import atlasdsl.loader.GeneratedDSLLoader;
+import atlassharedclasses.FaultInstance;
 import exptrunner.jmetal.test.ATLASEvaluationProblemDummy;
 import exptrunner.jmetal.test.ATLASEvaluationProblemDummy.EvaluationProblemDummyChoices;
 
@@ -57,6 +59,24 @@ public class JMetalMutationRunner extends AbstractAlgorithmRunner {
 
 	static private String referenceParetoFront = "";
 
+	private static void checkFaultInstanceCount(List<FaultInstanceSetSolution> pop) throws DuplicateFaultInstance {
+		// The unique fault instance ID count in the population should be equal to the sum 
+		// of the chromosome size
+		
+		System.out.println("checkFaultInstanceCount");
+		
+		HashMap<FaultInstance,Boolean> tracker = new HashMap<FaultInstance,Boolean>();
+		for (FaultInstanceSetSolution fs : pop) {
+			for (int i = 0; i < fs.getNumberOfVariables(); i++) {
+				FaultInstance fi = fs.getVariable(i);
+				if (tracker.containsKey(fi)) {
+					throw new DuplicateFaultInstance(fi);
+				}
+				tracker.put(fi,true);
+			}
+		}
+	}
+	
 	public static void jMetalRun(String tag, Mission mission, Optional<EvaluationProblemDummyChoices> testChoice_o, Optional<List<Metrics>> metrics_o) throws ExptError {
 
 		Random problemRNG = new Random();
@@ -114,15 +134,21 @@ public class JMetalMutationRunner extends AbstractAlgorithmRunner {
 			mutation = new FaultDataAdjustMutation(mutationRNG, "mutation.log", mutationProb);
 			selection = new TournamentSelection<FaultInstanceSetSolution>(5);
 			dominanceComparator = new DominanceComparator<>();
-			//selection = new RankingAndCrowdingSelection<FaultInstanceSetSolution>(solutionsSelectCount, dominanceComparator);
-			//selection = new BestSolutionSelection<FaultInstanceSetSolution>(dominanceComparator);
-
 			evaluator = new SequentialSolutionListEvaluator<FaultInstanceSetSolution>();
 			
 
 			algorithm = new NSGAIIMeasures(tag, problem, maxIterations, maxGenerations, populationSize, matingPoolSize,
 					offspringPopulationSize, crossover, mutation, selection, dominanceComparator, evaluator);
 
+			((NSGAII<FaultInstanceSetSolution>)algorithm).addHook(pop -> { 
+				try {
+					checkFaultInstanceCount(pop);
+				} catch (DuplicateFaultInstance e) {
+					System.out.println("Duplicated fault instance object:" + e.getDuplicateFaultInstance());
+					e.printStackTrace();
+					System.exit(1);
+				} });
+			
 			AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm).execute();
 			List<FaultInstanceSetSolution> population = algorithm.getResult();
 			long computingTime = algorithmRunner.getComputingTime();
@@ -147,8 +173,8 @@ public class JMetalMutationRunner extends AbstractAlgorithmRunner {
 			mission = dslloader.loadMission();
 			List<Metrics> metrics = new ArrayList<Metrics>();
 			// Read experiment number
-			//metrics.add(Metrics.OBSTACLE_AVOIDANCE_METRIC);
-			metrics.add(Metrics.AVOIDANCE_METRIC);
+			metrics.add(Metrics.OBSTACLE_AVOIDANCE_METRIC);
+			//metrics.add(Metrics.AVOIDANCE_METRIC);
 			metrics.add(Metrics.TIME_TOTAL_ABSOLUTE);
 			
 			jMetalRun("expt1", mission, Optional.empty(), Optional.of(metrics));

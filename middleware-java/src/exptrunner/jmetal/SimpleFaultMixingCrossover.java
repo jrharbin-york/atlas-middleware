@@ -12,6 +12,8 @@ import org.uma.jmetal.util.JMetalException;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 import org.uma.jmetal.util.pseudorandom.RandomGenerator;
 
+import atlassharedclasses.FaultInstance;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -34,17 +36,14 @@ public class SimpleFaultMixingCrossover implements CrossoverOperator<FaultInstan
 	public List<FaultInstanceSetSolution> doCrossover(FaultInstanceSetSolution cx, FaultInstanceSetSolution cy) {
 		List<FaultInstanceSetSolution> output = new ArrayList<FaultInstanceSetSolution>();
 
-		FaultInstanceSetSolution new1 = new FaultInstanceSetSolution(cx);
-		FaultInstanceSetSolution new2 = new FaultInstanceSetSolution(cy);
+		// We are creating a new empty chromosome here, using the existing one simply to set the parameters
+		FaultInstanceSetSolution new1 = FaultInstanceSetSolution.empty(cx);
+		FaultInstanceSetSolution new2 = FaultInstanceSetSolution.empty(cy);
 		int new1_index = 0;
 		int new2_index = 0;
 
 		int xlimit = cx.getNumberOfVariables();
 		int ylimit = cy.getNumberOfVariables();
-
-		// TODO: check if we need to add the originals here?
-		output.add(cx);
-		output.add(cy);
 
 		if (xlimit > 0 && ylimit > 0) {
 			System.out.println("crossover input cx = " + cx.toString());
@@ -55,18 +54,18 @@ public class SimpleFaultMixingCrossover implements CrossoverOperator<FaultInstan
 
 			for (int x = 0; x < xlimit; x++) {
 				if (x <= xcut) {
-					// TODO: create a new fault instance object here!
-					new1.addContents(new1_index++, cx.getVariable(x));
+					// Create a new fault instance object in every case here
+					new1.addContents(new1_index++, new FaultInstance(cx.getVariable(x)));
 				} else {
-					new2.addContents(new2_index++, cx.getVariable(x));
+					new2.addContents(new2_index++, new FaultInstance(cx.getVariable(x)));
 				}
 			}
 
 			for (int y = 0; y < ylimit; y++) {
 				if (y <= ycut) {
-					new2.addContents(new2_index++, cy.getVariable(y));
+					new2.addContents(new2_index++, new FaultInstance(cy.getVariable(y)));
 				} else {
-					new1.addContents(new1_index++, cy.getVariable(y));
+					new1.addContents(new1_index++, new FaultInstance(cy.getVariable(y)));
 				}
 			}
 
