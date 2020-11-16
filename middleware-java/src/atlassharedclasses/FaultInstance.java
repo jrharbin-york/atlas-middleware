@@ -114,7 +114,7 @@ public class FaultInstance implements Comparable<FaultInstance> {
 			endTime = startTime + duration;
 		}
 
-		if (endTime < f.getLatestEndTime()) {
+		if (endTime > f.getLatestEndTime()) {
 			endTime = f.getLatestEndTime();
 			startTime = endTime - duration;
 		}

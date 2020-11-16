@@ -73,11 +73,15 @@ public abstract class ATLASCore {
 	}
 	
 	public synchronized void registerFault(FaultInstance fi) {
-		activeFaults.add(fi);
-		System.out.println("Fault instance added");
-		Fault f = fi.getFault();
-		Optional<String> additionalData = fi.getExtraDataOpt();
-		f.immediateEffects(this, additionalData);
+		if (fi.getLength() <= 0.0) {
+			activeFaults.add(fi);
+			System.out.println("Fault instance added");
+			Fault f = fi.getFault();
+			Optional<String> additionalData = fi.getExtraDataOpt();
+			f.immediateEffects(this, additionalData);
+		} else {
+			System.out.println("Invalid fault of zero length rejected");
+		}
 	}
 	
 	public synchronized void completeFault(FaultInstance fi) {

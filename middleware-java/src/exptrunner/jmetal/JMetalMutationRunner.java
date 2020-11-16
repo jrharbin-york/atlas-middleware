@@ -40,15 +40,15 @@ import exptrunner.jmetal.test.ATLASEvaluationProblemDummy.EvaluationProblemDummy
 
 public class JMetalMutationRunner extends AbstractAlgorithmRunner {
 
-	static private int populationSize = 30;
-	static private int offspringPopulationSize = 30;
+	static private int populationSize = 60;
+	static private int offspringPopulationSize = 60;
 	
 	static private int matingPoolSize = populationSize;
 	static private boolean actuallyRun = true;
 	static private double exptRunTime = 1200.0;
 
 	static private int maxIterations = 2000000;
-	static private int maxGenerations = 15;
+	static private int maxGenerations = 16;
 
 	static double crossoverProb = 0.2;
 	static double mutationProb = 0.6;
