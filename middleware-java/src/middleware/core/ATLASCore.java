@@ -73,7 +73,7 @@ public abstract class ATLASCore {
 	}
 	
 	public synchronized void registerFault(FaultInstance fi) {
-		if (fi.getLength() <= 0.0) {
+		if (fi.getLength() > 0.0) {
 			activeFaults.add(fi);
 			System.out.println("Fault instance added");
 			Fault f = fi.getFault();
