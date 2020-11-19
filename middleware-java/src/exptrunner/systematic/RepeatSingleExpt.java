@@ -26,7 +26,6 @@ public class RepeatSingleExpt extends ExptParams {
 		this.fixedFaultInstances = io.loadFaultsFromFile(faultFileName);
 	}
 
-
 	public boolean completed() {
 		return (runCount > runCountLimit);
 	}

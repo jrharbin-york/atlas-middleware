@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 import atlasdsl.faults.*;
 import atlassharedclasses.FaultInstance;
 
-
 public class SingleFaultCoverageExpt extends ExptParams {
 	private double minLength;
 	private double maxLength;
