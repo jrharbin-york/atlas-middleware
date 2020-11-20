@@ -192,6 +192,14 @@ public class FaultInstanceSetSolution implements Solution<FaultInstance> {
 		}
 		return res;
 	}
+	
+	public void setAllContents(List<FaultInstance> fis) {
+		int i = 0;
+		for (FaultInstance fi : fis) {
+			addContents(i, fi);
+			i++;
+		}
+	}
 
 	public double faultTimeTotal() {
 		

@@ -1,29 +1,52 @@
 package exptrunner.systematic;
 
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 
 import atlasdsl.Mission;
 import atlassharedclasses.FaultInstance;
+import exptrunner.jmetal.FaultInstanceSetSolution;
+import exptrunner.jmetal.InvalidMetrics;
+import exptrunner.metrics.MetricsProcessing;
 import faultgen.FaultFileIO;
 
 public class RepeatSingleExpt extends ExptParams {
-	int runCountLimit;
-	int runCount = 0;
-	List<FaultInstance> fixedFaultInstances;
+	private int runCountLimit;
+	private int runCount = 0;
+	private List<FaultInstance> fixedFaultInstances;
+	private MetricsProcessing metricsProcessing;
+	private Mission mission;
 	
-	public RepeatSingleExpt(double runtime, int runCountLimit, List<FaultInstance> fixedFaultInstances) {
-		super(runtime);
-		this.runCountLimit = runCountLimit;
-		this.runCount = 0;
+	private FileWriter resFile;
+	
+	private void setupResFile() {
+		try {
+			this.resFile = new FileWriter("repeatedLog.res");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
-	public RepeatSingleExpt(double runtime, int runCountLimit, Mission mission, String faultFileName) throws FileNotFoundException {
+	public RepeatSingleExpt(MetricsProcessing mp, double runtime, int runCountLimit, Mission mission, List<FaultInstance> fixedFaultInstances) {
 		super(runtime);
 		this.runCountLimit = runCountLimit;
 		this.runCount = 0;
+		this.metricsProcessing = mp;
+		this.mission = mission;
+		setupResFile();
+	}
+	
+	public RepeatSingleExpt(MetricsProcessing mp, double runtime, int runCountLimit, Mission mission, String faultFileName) throws FileNotFoundException {
+		super(runtime);
+		this.runCountLimit = runCountLimit;
+		this.runCount = 0;
+		this.metricsProcessing = mp;
+		this.mission = mission;
 		FaultFileIO io = new FaultFileIO(mission);
 		this.fixedFaultInstances = io.loadFaultsFromFile(faultFileName);
+		setupResFile();
 	}
 
 	public boolean completed() {
@@ -39,8 +62,23 @@ public class RepeatSingleExpt extends ExptParams {
 	}
 
 	public void logResults(String string) {
-		// TODO: how to read the metrics in a standardised way? 
-		// Factor out the metric reading code into a common package?
+		// The FaultInstanceSetSolution parameters
+		FaultInstanceSetSolution s = new FaultInstanceSetSolution(mission, "", true, 0.0);
+		s.setAllContents(fixedFaultInstances);
+		try {
+			metricsProcessing.readLogFiles(string, s);
+			for (int i = 0; i < s.getNumberOfObjectives(); i++) {
+				double m = s.getObjective(i);	
+				resFile.write(m + ",");
+				System.out.println(metricsProcessing.getMetricByID(i) + "=" + m);
+			}
+			resFile.write("\n");
+			resFile.flush();
+		} catch (InvalidMetrics e1) {
+			e1.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public List<FaultInstance> specificFaults() {

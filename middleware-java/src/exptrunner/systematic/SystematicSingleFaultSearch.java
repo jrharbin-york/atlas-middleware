@@ -1,81 +1,114 @@
 package exptrunner.systematic;
 
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import org.uma.jmetal.util.JMetalException;
-
 import atlasdsl.Mission;
 import atlasdsl.faults.Fault;
-import atlasdsl.loader.DSLLoadFailed;
-import atlasdsl.loader.DSLLoader;
-import atlasdsl.loader.GeneratedDSLLoader;
 import atlassharedclasses.FaultInstance;
+import exptrunner.jmetal.FaultInstanceSetSolution;
+import exptrunner.jmetal.InvalidMetrics;
 
-import exptrunner.jmetal.RunExperiment;
+import exptrunner.metrics.MetricsProcessing;
 
-public class SystematicSingleFaultSearch {
+public class SystematicSingleFaultSearch extends ExptParams {
+	private double minLength;
+	private double maxLength;
 	
-	private static double runTime = 1200.0;
+	private MetricsProcessing metricsProcessing;
+	private FileWriter combinedResults;
 	
-	private static void runGeneralExpt(Mission mission, ExptParams eparams, String exptTag, boolean actuallyRun, double timeLimit) throws InterruptedException, IOException {
-		while (!eparams.completed()) {
-			eparams.printState();
-			List<FaultInstance> fis = eparams.specificFaults();
-			RunExperiment.doExperiment(mission, exptTag, fis, actuallyRun, timeLimit);
-			eparams.advance();
-		}
+	// The time range to be swept 
+	private double timeStart;
+	private double timeEnd;
+	
+	private double time;
+	private double len;
+	
+	// The fault number to use
+	private Fault fault;
+	
+	// The current fault ID
+	private int currentFault;
+	
+	private Optional<String> extraFaultInstanceData;
+	
+	private boolean completed = false;
+	private double stepFactor;
+	private Mission mission;
+	
+	public SystematicSingleFaultSearch(MetricsProcessing mp, Mission mission, String resFileName, double runTime, double timeStart, double timeEnd, double maxLength, double minLength, double stepFactor, Fault fault, Optional<String> extraFaultInstanceData) throws IOException {
+		super(runTime);
+		this.metricsProcessing = mp;
+		this.timeStart = timeStart;
+		this.time = timeStart;
+		this.timeEnd = timeEnd;
+		this.maxLength = maxLength;
+		this.len = maxLength;
+		this.minLength = minLength;
+		this.completed = false;
+		this.fault = fault;
+		this.stepFactor = stepFactor;
+		this.combinedResults = new FileWriter(resFileName);
+		this.currentFault = 0;
+		this.extraFaultInstanceData = extraFaultInstanceData;
+		this.mission = mission;
+	}
+
+
+	public boolean completed() {
+		return completed;
+	}
+
+	public void printState() {
+		System.out.println("time = " + time + ",len = " + len);
 	}
 	
-	public static void runRepeatedFaultSet(String faultFileName, int runCount) {
-		DSLLoader loader = new GeneratedDSLLoader();
-		Mission mission;		
-
-		try {
-			mission = loader.loadMission();
-			String resFileName = "repeatedfaults.res";
-			ExptParams ep = new RepeatSingleExpt(runTime, runCount, mission, faultFileName);
-			runGeneralExpt(mission, ep, "repeatedfaults", true, runTime);
-			System.out.println("Done");
-		} catch (DSLLoadFailed e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+	public void advance() {
+		time += len;
+		if (time >= timeEnd) {
+			time = timeStart;
+			len = len * stepFactor;
+		}
+		currentFault++;
+		
+		if (len < minLength) {
+			completed = false;
 		}
 	}
-	
-	public static void runCoverage(String faultName) {
-		DSLLoader loader = new GeneratedDSLLoader();
-		Mission mission;
-		try {
-			mission = loader.loadMission();
-			Optional<Fault> f_o = mission.lookupFaultByName(faultName);
-			if (f_o.isPresent()) {
-				String resFileName = faultName;
-				Fault f = f_o.get();
-				Optional<String> speedOverride_o = Optional.empty();
-				resFileName = resFileName + "coverage.res";
 
-				ExptParams ep = new SingleFaultCoverageExpt(resFileName, 1200.0, 0.0, 1200.0, 1200.0, 50.0, 0.5, f,
-						speedOverride_o);
-				runGeneralExpt(mission, ep, faultName + "_coverage", true, 1200.0);
-				System.out.println("Done");
+	public List<FaultInstance> specificFaults() {
+		List<FaultInstance> fs = new ArrayList<FaultInstance>();
+		System.out.println("Generating fault instance at " + time + " of length " + len);
+		FaultInstance fi = new FaultInstance(time, time+len, fault, extraFaultInstanceData);
+		fs.add(fi);
+		return fs;
+	}
+
+	public void logResults(String string) {
+		// The FaultInstanceSetSolution parameters
+		FaultInstanceSetSolution s = new FaultInstanceSetSolution(mission, "", true, 0.0);
+		s.setAllContents(specificFaults());
+		try {
+			metricsProcessing.readLogFiles(string, s);
+			for (int i = 0; i < s.getNumberOfObjectives(); i++) {
+				double m = s.getObjective(i);	
+				combinedResults.write(m + ",");
+				System.out.println(metricsProcessing.getMetricByID(i) + "=" + m);
 			}
-		} catch (DSLLoadFailed e) {
-			e.printStackTrace();
+			combinedResults.write("\n");
+			combinedResults.flush();
+		} catch (InvalidMetrics e1) {
+			e1.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
 		}
-	}
-	
-	public static void main(String[] args) throws JMetalException, FileNotFoundException {
-		runRepeatedFaultSet("/tmp/testfile.fif", 10);
 	}
 }
 
