@@ -12,6 +12,7 @@ import java.util.Optional;
 import org.uma.jmetal.util.JMetalException;
 
 import atlasdsl.Mission;
+import atlasdsl.Robot;
 import atlasdsl.faults.Fault;
 import atlasdsl.loader.DSLLoadFailed;
 import atlasdsl.loader.DSLLoader;
@@ -19,14 +20,13 @@ import atlasdsl.loader.GeneratedDSLLoader;
 import atlassharedclasses.FaultInstance;
 import exptrunner.jmetal.Metrics;
 import exptrunner.jmetal.RunExperiment;
+import exptrunner.jmetal.obsolete.SingleFaultCoverageExpt;
 import exptrunner.metrics.MetricsProcessing;
 
 public class SystematicRunner {
-	
 	private static double runTime = 1200.0;
 	
-	
-	private static void runGeneralExpt(Mission mission, ExptParams eparams, String exptTag, boolean actuallyRun, double timeLimit) throws InterruptedException, IOException {
+	public static void runGeneralExpt(Mission mission, ExptParams eparams, String exptTag, boolean actuallyRun, double timeLimit) throws InterruptedException, IOException {
 		while (!eparams.completed()) {
 			eparams.printState();
 			List<FaultInstance> fis = eparams.specificFaults();
@@ -36,48 +36,21 @@ public class SystematicRunner {
 		}
 	}
 	
-	public static void runRepeatedFaultSet(List<Metrics> metricList, String faultFileName, int runCount) {
-		DSLLoader loader = new GeneratedDSLLoader();
-		Mission mission;
-
+	public static void runCoverage(List<Metrics> metricList, Mission mission, String faultName, double additionalDataVal) {
 		try {
-			mission = loader.loadMission();
-			String fileName = new SimpleDateFormat("yyyyMMddHHmm").format(new Date());
-			FileWriter tempLog = new FileWriter("tempLog-" + fileName + ".res");
-			MetricsProcessing mp = new MetricsProcessing(mission, metricList, tempLog);
-			String resFileName = "repeatedfaults.res";
-			ExptParams ep = new RepeatSingleExpt(mp, runTime, runCount, mission, faultFileName);
-			// TODO: check this file name
-			runGeneralExpt(mission, ep, "repeatedfaults", true, runTime);
-			System.out.println("Done");
-		} catch (DSLLoadFailed e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public static void runCoverage(String faultName) {
-		DSLLoader loader = new GeneratedDSLLoader();
-		Mission mission;
-		try {
-			mission = loader.loadMission();
 			Optional<Fault> f_o = mission.lookupFaultByName(faultName);
 			if (f_o.isPresent()) {
 				String resFileName = faultName;
 				Fault f = f_o.get();
-				Optional<String> speedOverride_o = Optional.empty();
-				resFileName = resFileName + "_coverage.res";
-
-				ExptParams ep = new SingleFaultCoverageExpt(resFileName, 1200.0, 0.0, 1200.0, 1200.0, 50.0, 0.5, f,
-						speedOverride_o);
-				runGeneralExpt(mission, ep, faultName + "_coverage", true, 1200.0);
+				Optional<String> speedOverride_o = Optional.of(Double.toString(additionalDataVal));
+				resFileName = resFileName + "_coverage_" + additionalDataVal + ".res";
+				FileWriter tempLog = new FileWriter("tempLog-" + faultName + ".res");
+				MetricsProcessing mp = new MetricsProcessing(mission, metricList, tempLog);
+				ExptParams ep = new SystematicSingleFaultSearch(mp, resFileName, runTime, 0.0, runTime, runTime, 50.0, 0.5, f,
+						speedOverride_o, mission);
+				runGeneralExpt(mission, ep, faultName + "_coverage", true, runTime);
 				System.out.println("Done");
 			}
-		} catch (DSLLoadFailed e) {
-			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
@@ -86,11 +59,42 @@ public class SystematicRunner {
 	}
 	
 	public static void main(String[] args) throws JMetalException, FileNotFoundException {
-		List<Metrics> l = new ArrayList<Metrics>();
-		l.add(Metrics.OBSTACLE_AVOIDANCE_METRIC);
-		l.add(Metrics.TIME_TOTAL_ABSOLUTE);
-		//runRepeatedFaultSet(l, "/home/atlas/atlas/atlas-middleware/expt-working/test-repeated-faults.fif", 20);
-		runCoverage("HEADINGFAULT-HENRY");
+		DSLLoader loader = new GeneratedDSLLoader();
+		try {
+			Mission mission = loader.loadMission();
+			List<Metrics> l = new ArrayList<Metrics>();
+			l.add(Metrics.OBSTACLE_AVOIDANCE_METRIC);
+			l.add(Metrics.TIME_TOTAL_ABSOLUTE);
+			// TODO: add the additional metrics here
+		
+			List<Robot> vehicles = mission.getAllRobots();
+		
+			double headingStep=30.0;
+			
+			List<Double> speeds = new ArrayList<Double>();
+			speeds.add(2.0);
+			speeds.add(3.0);
+			speeds.add(4.0);
+			speeds.add(5.0);
+		
+			for (Robot vehicle : vehicles) {
+				for (double heading = 0; heading < 360.0; heading+=headingStep) {
+					String vname = vehicle.getName().toUpperCase();
+					System.out.println("Running heading experiments for " + vname + " - heading=" + heading);
+					runCoverage(l, mission, "HEADINGFAULT-" + vname, heading);
+				}
+			}
+			
+			for (Robot vehicle : vehicles) {
+				for (double speed : speeds) {
+					String vname = vehicle.getName().toUpperCase();
+					System.out.println("Running speed experiments for " + vname + " - speed=" + speed);
+					runCoverage(l, mission, "SPEEDFAULT-" + vname, speed);
+				}
+			}
+			
+		} catch (DSLLoadFailed e) {
+			e.printStackTrace();
+		}
 	}
-
 }

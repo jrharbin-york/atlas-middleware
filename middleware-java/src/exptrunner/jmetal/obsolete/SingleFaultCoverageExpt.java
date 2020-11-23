@@ -1,4 +1,4 @@
-package exptrunner.systematic;
+package exptrunner.jmetal.obsolete;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,8 +10,13 @@ import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
+import atlasdsl.Mission;
 import atlasdsl.faults.*;
 import atlassharedclasses.FaultInstance;
+import exptrunner.jmetal.FaultInstanceSetSolution;
+import exptrunner.jmetal.InvalidMetrics;
+import exptrunner.metrics.MetricsProcessing;
+import exptrunner.systematic.ExptParams;
 
 public class SingleFaultCoverageExpt extends ExptParams {
 	private double minLength;
@@ -37,7 +42,10 @@ public class SingleFaultCoverageExpt extends ExptParams {
 	private boolean completed = false;
 	private double stepFactor;
 	
-	public SingleFaultCoverageExpt(String filename, double runTime, double timeStart, double timeEnd, double maxLength, double minLength, double stepFactor, Fault fault, Optional<String> extraFaultInstanceData) throws IOException {
+	private MetricsProcessing metricsProcessing;
+	private Mission mission;
+	
+	public SingleFaultCoverageExpt(MetricsProcessing mp, String filename, double runTime, double timeStart, double timeEnd, double maxLength, double minLength, double stepFactor, Fault fault, Optional<String> extraFaultInstanceData, Mission mission) throws IOException {
 		super(runTime);
 		this.timeStart = timeStart;
 		this.time = timeStart;
@@ -51,6 +59,8 @@ public class SingleFaultCoverageExpt extends ExptParams {
 		this.combinedResults = new FileWriter(filename);
 		this.currentFault = 0;
 		this.extraFaultInstanceData = extraFaultInstanceData;
+		this.metricsProcessing = mp;
+		this.mission = mission;
 	}
 
 	public void advance() {
@@ -60,6 +70,10 @@ public class SingleFaultCoverageExpt extends ExptParams {
 			len = len * stepFactor;
 		}
 		currentFault++;
+		
+		if (len < minLength) {
+			completed = true;
+		}
 	}
 
 	public List<FaultInstance> specificFaults() {
@@ -77,37 +91,27 @@ public class SingleFaultCoverageExpt extends ExptParams {
 	}
 
 	public boolean completed() {
-		return (len < minLength); 
+		return completed;
 	}
 
-	public void logResults(String logFileDir) {
-		// Read the goal result file here - process the given goals
-		// Write it out to a common result file - with the fault info
-		File f = new File(logFileDir + "/goalLog.log");
-		Scanner reader;
+	public void logResults(String string) {
+		// The FaultInstanceSetSolution parameters
+		FaultInstanceSetSolution s = new FaultInstanceSetSolution(mission, "", true, 0.0);
+		s.setAllContents(specificFaults());
 		try {
-			reader = new Scanner(f);
-			while (reader.hasNextLine()) {
-				String line = reader.nextLine();
-				String[] fields = line.split(",");
-				String goalClass = fields[0];
-				String time = fields[1];
-				String robot = fields[2];
-				String num = fields[3];
-				if (goalClass.equals("atlasdsl.DiscoverObjects")) {
-					combinedResults.write(currentFault + "," + specificFaultsAsString() + "," + time + "," + robot + "," + num + "\n");
-					combinedResults.flush();
-				}
+			metricsProcessing.readLogFiles(string, s);
+			for (int i = 0; i < s.getNumberOfObjectives(); i++) {
+				double m = s.getObjective(i);	
+				combinedResults.write(m + ",");
+				System.out.println(metricsProcessing.getMetricByID(i) + "=" + m);
 			}
-			reader.close();
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
+			combinedResults.write("\n");
+			combinedResults.flush();
+		} catch (InvalidMetrics e1) {
 			e1.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	
 	}
 
 	public void printState() {

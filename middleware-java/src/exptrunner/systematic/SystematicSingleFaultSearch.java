@@ -43,7 +43,7 @@ public class SystematicSingleFaultSearch extends ExptParams {
 	private double stepFactor;
 	private Mission mission;
 	
-	public SystematicSingleFaultSearch(MetricsProcessing mp, Mission mission, String resFileName, double runTime, double timeStart, double timeEnd, double maxLength, double minLength, double stepFactor, Fault fault, Optional<String> extraFaultInstanceData) throws IOException {
+	public SystematicSingleFaultSearch(MetricsProcessing mp, String resFileName, double runTime, double timeStart, double timeEnd, double maxLength, double minLength, double stepFactor, Fault fault, Optional<String> extraFaultInstanceData, Mission mission) throws IOException {
 		super(runTime);
 		this.metricsProcessing = mp;
 		this.timeStart = timeStart;
@@ -79,7 +79,7 @@ public class SystematicSingleFaultSearch extends ExptParams {
 		currentFault++;
 		
 		if (len < minLength) {
-			completed = false;
+			completed = true;
 		}
 	}
 
@@ -97,9 +97,11 @@ public class SystematicSingleFaultSearch extends ExptParams {
 		s.setAllContents(specificFaults());
 		try {
 			metricsProcessing.readLogFiles(string, s);
+			combinedResults.write(time + "," + len + ",");
 			for (int i = 0; i < s.getNumberOfObjectives(); i++) {
 				double m = s.getObjective(i);	
 				combinedResults.write(m + ",");
+				// Need to plot the fault instance additional data here
 				System.out.println(metricsProcessing.getMetricByID(i) + "=" + m);
 			}
 			combinedResults.write("\n");
