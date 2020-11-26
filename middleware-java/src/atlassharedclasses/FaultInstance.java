@@ -12,6 +12,9 @@ public class FaultInstance implements Comparable<FaultInstance> {
 	private Fault fault;
 	private Optional<String> extraData;
 	private int _counter;
+	
+	// TODO: set this minimal length into the model
+	private double minLength = 1.0;
 
 	private static int _fIDcounter = 0;
 
@@ -108,6 +111,11 @@ public class FaultInstance implements Comparable<FaultInstance> {
 	private void constrainTimeValid() {
 		Fault f = this.getFault();
 		double duration = this.endTime - this.startTime;
+		
+		if (duration < minLength) {
+			duration = minLength;
+			endTime = startTime + duration;
+		}
 
 		if (startTime < f.getEarliestStartTime()) {
 			startTime = f.getEarliestStartTime();
@@ -124,9 +132,8 @@ public class FaultInstance implements Comparable<FaultInstance> {
 		double origLen = endTime - startTime;
 		System.out.println("origLen = " + origLen);
 		endTime = startTime + (origLen * factor);
-
-		System.out.println("endTime=" + endTime);
 		constrainTimeValid();
+		System.out.println("endTime=" + endTime);
 	}
 
 	public void absShiftTimes(double absTimeShift) {
