@@ -20,25 +20,28 @@ public class RepeatSingleExpt extends ExptParams {
 	private Mission mission;
 	
 	private FileWriter resFile;
+	private String fileTag;
 	
 	private void setupResFile() {
 		try {
-			this.resFile = new FileWriter("repeatedLog.res");
+			this.resFile = new FileWriter("repeatedLog-fileTag-" + fileTag + ".res");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public RepeatSingleExpt(MetricsProcessing mp, double runtime, int runCountLimit, Mission mission, List<FaultInstance> fixedFaultInstances) {
+	public RepeatSingleExpt(MetricsProcessing mp, double runtime, int runCountLimit, Mission mission, List<FaultInstance> fixedFaultInstances, String fileTag) {
 		super(runtime);
 		this.runCountLimit = runCountLimit;
 		this.runCount = 0;
 		this.metricsProcessing = mp;
 		this.mission = mission;
+		
+		this.fileTag = fileTag;
 		setupResFile();
 	}
 	
-	public RepeatSingleExpt(MetricsProcessing mp, double runtime, int runCountLimit, Mission mission, String faultFileName) throws FileNotFoundException {
+	public RepeatSingleExpt(MetricsProcessing mp, double runtime, int runCountLimit, Mission mission, String faultFileName, String fileTag) throws FileNotFoundException {
 		super(runtime);
 		this.runCountLimit = runCountLimit;
 		this.runCount = 0;
@@ -46,6 +49,7 @@ public class RepeatSingleExpt extends ExptParams {
 		this.mission = mission;
 		FaultFileIO io = new FaultFileIO(mission);
 		this.fixedFaultInstances = io.loadFaultsFromFile(faultFileName);
+		this.fileTag = fileTag;
 		setupResFile();
 	}
 

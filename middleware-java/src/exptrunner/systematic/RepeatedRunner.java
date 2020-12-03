@@ -20,7 +20,7 @@ import exptrunner.metrics.MetricsProcessing;
 public class RepeatedRunner {
 	private static double runTime = 1200.0;
 	
-	public static void runRepeatedFaultSet(List<Metrics> metricList, String faultFileName, int runCount) {
+	public static void runRepeatedFaultSet(List<Metrics> metricList, String faultFileName, String fileTag, int runCount) {
 		DSLLoader loader = new GeneratedDSLLoader();
 		Mission mission;
 
@@ -29,10 +29,10 @@ public class RepeatedRunner {
 			String fileName = new SimpleDateFormat("yyyyMMddHHmm").format(new Date());
 			FileWriter tempLog = new FileWriter("tempLog-" + fileName + ".res");
 			MetricsProcessing mp = new MetricsProcessing(mission, metricList, tempLog);
-			String resFileName = "repeatedfaults.res";
-			ExptParams ep = new RepeatSingleExpt(mp, runTime, runCount, mission, faultFileName);
+			String resFileName = "repeatedfaults-" + fileTag + ".res";
+			ExptParams ep = new RepeatSingleExpt(mp, runTime, runCount, mission, faultFileName, fileTag);
 			// TODO: check this file name
-			SystematicRunner.runGeneralExpt(mission, ep, "repeatedfaults", true, runTime);
+			SystematicRunner.runGeneralExpt(mission, ep, resFileName, true, runTime);
 			System.out.println("Done");
 		} catch (DSLLoadFailed e) {
 			e.printStackTrace();
@@ -47,6 +47,7 @@ public class RepeatedRunner {
 		List<Metrics> l = new ArrayList<Metrics>();
 		l.add(Metrics.OBSTACLE_AVOIDANCE_METRIC);
 		l.add(Metrics.TIME_TOTAL_ABSOLUTE);
-		runRepeatedFaultSet(l, "/home/atlas/atlas/atlas-middleware/expt-working/test-repeated-faults.fif", 20);
+		runRepeatedFaultSet(l, "/home/atlas/atlas/atlas-middleware/bash-scripts/jmetal-expts/res-keep/test-fif/11.fif", "11", 60);
+		runRepeatedFaultSet(l, "/home/atlas/atlas/atlas-middleware/bash-scripts/jmetal-expts/res-keep/test-fif/22.fif", "22", 60);
 	}
 }
