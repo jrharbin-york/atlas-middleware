@@ -115,3 +115,15 @@ basewidth = 2
 summitdelta = 20
 }
 
+Behavior = BHV_AvoidObstacle 
+{
+name = avd_obstacles_
+pwt = 500
+condition = DEPLOY = true
+templating = spawn
+updates = OBSTACLE_ALERT
+pwt_outer_dist = 20
+pwt_inner_dist = 10
+completed_dist = 25
+}
+

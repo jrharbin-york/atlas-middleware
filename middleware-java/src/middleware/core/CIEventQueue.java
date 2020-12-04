@@ -11,7 +11,6 @@ import atlasdsl.*;
 import atlasdsl.faults.*;
 import atlassharedclasses.*;
 
-
 public class CIEventQueue extends ATLASEventQueue<CIEvent> {
 	private static final long serialVersionUID = 1L;
 	private Mission mission;

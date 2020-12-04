@@ -47,6 +47,11 @@ public class DiscoverObjects extends GoalAction {
 		}
 	}
 	
+	public void updateDistanceToObjects() {
+		// TODO: track the robot distance to their respective objects
+		// Maintain the minimal distance of any robot to each object, update it improved
+	}
+	
 	public void testIfComplete() {	
 		// If so, set the GoalResult to represent that they are done
 		boolean complete = true;
@@ -69,7 +74,7 @@ public class DiscoverObjects extends GoalAction {
 		return result;
 	}
 	
-	private void registerRobotDetection(int objectID, String robotName, double time) {
+	private synchronized void registerRobotDetection(int objectID, String robotName, double time) {
 		Optional<EnvironmentalObject> eo_o = mission.getEnvironmentalObject(objectID);
 		
 		if (eo_o.isPresent()) {

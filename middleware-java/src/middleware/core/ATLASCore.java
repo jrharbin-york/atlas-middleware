@@ -3,6 +3,7 @@ package middleware.core;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import atlasdsl.*;
@@ -15,12 +16,14 @@ import middleware.logging.ATLASLog;
 import middleware.missionmonitor.*;
 
 import fuzzingengine.*;
+import fuzzingengine.operations.FuzzingOperation;
+import fuzzingengine.operations.NumericVariableChangeFuzzingOperation;
 
 // This code will be combined with the simulator-specific code
 // during code generation
 public abstract class ATLASCore {
-	protected ATLASEventQueue carsIncoming;
-	protected ATLASEventQueue fromCI;
+	protected ATLASEventQueue<?> carsIncoming;
+	protected ATLASEventQueue<?> fromCI;
 	
 	// TODO: read this from the interface
 	private double timeLimit = 1200.0;
@@ -38,12 +41,17 @@ public abstract class ATLASCore {
 	protected FuzzingEngine fuzzEngine;
 	
 	private GUITest gui;
+
+	@SuppressWarnings("rawtypes")
 	protected List<ATLASEventQueue> queues = new ArrayList<ATLASEventQueue>();
 	protected List<FaultInstance> activeFaults = new ArrayList<FaultInstance>();
 	
 	protected List<SensorDetectionLambda> sensorWatchers = new ArrayList<SensorDetectionLambda>();
+	protected List<PositionUpdateLambda> positionWatchers = new ArrayList<PositionUpdateLambda>();
 	
 	private FaultGenerator faultGen;
+	
+	private Random fuzzGenRandom = new Random();
 	
 	private double time = 0.0;
 	
@@ -53,24 +61,27 @@ public abstract class ATLASCore {
 		fromCI = new CIEventQueue(this, mission, CI_QUEUE_CAPACITY);
 		queues.add(fromCI);
 		faultGen = new FaultGenerator(this,mission);
-		
-		fuzzEngine = new FixedNumericVariableChangeFuzzingEngine();
+		fuzzEngine = new NullFuzzingEngine();
 	}
 	
-	protected CARSTranslations getCARSTranslationOutput() {
+	public CARSTranslations getCARSTranslationOutput() {
 		return carsOutput;
 	}
 	
 	protected void createGUI() {
-		gui = new GUITest(mission, faultGen);
+		gui = new GUITest(this,mission, faultGen);
 	}
 	
 	public synchronized void registerFault(FaultInstance fi) {
-		activeFaults.add(fi);
-		System.out.println("Fault instance added");
-		Fault f = fi.getFault();
-		Optional<String> additionalData = fi.getExtraDataOpt();
-		f.immediateEffects(this, additionalData);
+		if (fi.getLength() > 0.0) {
+			activeFaults.add(fi);
+			System.out.println("Fault instance added");
+			Fault f = fi.getFault();
+			Optional<String> additionalData = fi.getExtraDataOpt();
+			f.immediateEffects(this, additionalData);
+		} else {
+			System.out.println("Invalid fault of zero length rejected");
+		}
 	}
 	
 	public synchronized void completeFault(FaultInstance fi) {
@@ -92,7 +103,7 @@ public abstract class ATLASCore {
     }
 	
     public void runMiddleware()  {
-		for (ATLASEventQueue q : queues) {
+		for (ATLASEventQueue<?> q : queues) {
 			// Since the GUI displays global status, it
 			// needs to be updated following every event on any queue
 			if (gui != null) {
@@ -104,7 +115,7 @@ public abstract class ATLASCore {
 			q.setup();
 		}
 		
-		for (ATLASEventQueue q : queues) {
+		for (ATLASEventQueue<?> q : queues) {
 			new Thread(q).start();
 		}
     }
@@ -162,7 +173,21 @@ public abstract class ATLASCore {
 		}		
 	}
 
-	protected FuzzingEngine getFuzzingEngine() {
+	public FuzzingEngine getFuzzingEngine() {
 		return fuzzEngine;
+	}
+	
+	public void setupPositionWatcher(PositionUpdateLambda l) {
+		positionWatchers.add(l);
+	}
+	
+	public void notifyPositionUpdate(GPSPositionReading gps) {
+		for (PositionUpdateLambda watcher : positionWatchers) { 
+			watcher.op(gps);
+		}
+	}
+
+	public double getTimeLimit() {
+		return timeLimit;
 	}
 }

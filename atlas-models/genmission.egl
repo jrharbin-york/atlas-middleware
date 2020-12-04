@@ -92,6 +92,20 @@ public class GeneratedDSLLoader implements DSLLoader {
 	[% } %]
 	[* end environmental objects *]
 	
+	[* Add environmental obstacles *]
+	[% var obstacleID = 0; %]
+	[% for (o in m.obstacles) { %]
+	[* Now to generate the point list *]
+	ArrayList<Point> eopoints[%= obstacleID %] = new ArrayList<Point>();
+	[% for (p in o.poly.points) { %]
+		eopoints[%= obstacleID %].add(new Point([%= p.x %], [%= p.y %], [%= p.z %]));
+	[% } %]
+	EnvironmentalObstacle eob[%= obstacleID %] = new EnvironmentalObstacle("[%= o.label %]", eopoints[%= obstacleID %]);
+	mission.addObstacle(eob[%= obstacleID %]);
+	[% obstacleID++; %]
+	[% } %]
+	[* End environmental obstacles *]
+	
 	[% var goalnum = 0; %]
 	[% for (g in m.goals) { %]
 		[% goalnum++; %]
@@ -132,6 +146,10 @@ public class GeneratedDSLLoader implements DSLLoader {
 		
 		[% if (goalAction.isKindOf(AvoidOthers)) { %]
 		GoalAction ga[%= goalnum %] = new AvoidOthers([%= goalAction.clearance %]);
+		[% } %]
+		
+		[% if (goalAction.isKindOf(TrackDistances)) { %]
+		GoalAction ga[%= goalnum %] = new TrackDistances();
 		[% } %]
 		
 		[% if (goalAction.isKindOf(DiscoverObjects)) { %]

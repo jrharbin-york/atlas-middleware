@@ -25,7 +25,6 @@ public class RepeatSameFaultConfig extends ExptParams {
 	private int repeatsCount;
 	
 	private boolean completed = false;
-	private double stepFactor;
 	
 	public RepeatSameFaultConfig(String filename, double runTime, double timeStart, double timeEnd, int repeatsCount, Fault fault) throws IOException {
 		super(runTime);

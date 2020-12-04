@@ -62,7 +62,7 @@ public class RunExperiment {
 		}
 	}
 
-	private static void doExperiment(Mission mission, String exptTag, ExptParams eparams, boolean actuallyRun) {
+	public static void doExperiment(Mission mission, String exptTag, ExptParams eparams, boolean actuallyRun) {
 		Process middleware;
 
 		int faultInstanceFileNum = 0;
@@ -246,13 +246,13 @@ public class RunExperiment {
 				Random seedGen = new Random();
 				String tempFileName = "evolve.log";
 				String resFileName = "multifault.res";
-				int repeatsCount = 30;
+				//int repeatsCount = 30;
 				double runtime = 1200.0;
 				int seed = seedGen.nextInt();
 				System.out.println("seed=" + seed);
 				int iterations = 20;
 				
-				Fault f = f_o.get();
+				//Fault f = f_o.get();
 				
 				LoggingOperation logOp = (ep, logFileDir) -> {
 					int runNoInPopulation = ep.getRunNoInPopulation();

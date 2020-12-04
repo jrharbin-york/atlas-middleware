@@ -18,10 +18,13 @@ import atlasdsl.faults.Fault;
 import atlassharedclasses.Point;
 
 import faultgen.FaultGenerator;
+import middleware.core.ATLASCore;
 
 public class GUITest {
 	
 	private final double DEFAULT_FAULT_TIME_LENGTH = 10.0;
+	
+	JLabel timeLabel = new JLabel("time = <...>");
 	
 	JFrame f;
 	JPanel robotsPanel = new JPanel();
@@ -29,6 +32,7 @@ public class GUITest {
 	JPanel faultPanel = new JPanel();
 	
 	JTextField faultLen;
+	JTextField additionalData;
 	
     HashMap<Robot,JLabel> robotLabels = new LinkedHashMap<Robot, JLabel>();
     HashMap<Goal,JLabel> goalLabels = new LinkedHashMap<Goal, JLabel>();
@@ -36,6 +40,8 @@ public class GUITest {
     private Mission mission;
     private FaultButtonListener buttonListener = new FaultButtonListener();
     private FaultChoiceListener faultChoiceListener = new FaultChoiceListener();
+    
+    private ATLASCore core;
     
     private FaultGenerator faultGen;
     private String chosenFault = "";
@@ -55,14 +61,15 @@ public class GUITest {
 	}
 	
 	private class FaultButtonListener implements ActionListener {
-		
-
+	
 		public void actionPerformed(ActionEvent e) {
 			// TODO: get the time length from the GUI
 			double faultTimeLength = DEFAULT_FAULT_TIME_LENGTH;
+			String additionalData_s = "";
 			
 			try {
 				String faultTimeLength_s = faultLen.getText();
+				additionalData_s = additionalData.getText();
 				faultTimeLength = Double.valueOf(faultTimeLength_s);
 			} catch (NumberFormatException ex) {
 				System.out.println("Fault time length not set - assuming default");
@@ -71,8 +78,11 @@ public class GUITest {
 			Optional<Fault> f_o = mission.lookupFaultByName(chosenFault);
 			if (f_o.isPresent()) {
 				Fault f = f_o.get();
-				faultGen.injectDynamicFault(f, faultTimeLength, Optional.empty());
-				// TODO: log the dynamic fault GUI action
+				if (additionalData_s.length() == 0 || additionalData_s.equals("(none)")) {
+					faultGen.injectDynamicFault(f, faultTimeLength, Optional.empty());
+				} else {
+					faultGen.injectDynamicFault(f, faultTimeLength, Optional.of(additionalData_s));
+				}
 				System.out.println("Injecting new fault from GUI");
 			} else {
 				System.out.println("Could not find fault " + chosenFault + " in model");
@@ -81,10 +91,15 @@ public class GUITest {
 	}
 	
     private void setupLabels() {
+    	timeLabel.setVisible(true);
+    	robotsPanel.add(timeLabel);
+    	
     	for (Robot r : mission.getAllRobots()) {
     		//chosenRobotName = r.getName();
 	    	JLabel l = new JLabel(robotLabelText(r));
 	    	l.setVisible(true);
+
+	    	
 	    	robotLabels.put(r, l);
 	    	robotsPanel.add(l);
     	}
@@ -114,6 +129,8 @@ public class GUITest {
     }
     
     private void updateLabels() {
+    	timeLabel.setText("time = " + Double.toString(core.getTime()));
+    	
     	for (Map.Entry<Robot, JLabel> entry : robotLabels.entrySet()) {
     		JLabel l = entry.getValue();
     		Robot r = entry.getKey();
@@ -135,7 +152,9 @@ public class GUITest {
     	
     }
     
-    public GUITest(Mission mission, FaultGenerator faultGen) {
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	public GUITest(ATLASCore core, Mission mission, FaultGenerator faultGen) {
+    	this.core = core;
     	this.mission = mission;
     	this.faultGen = faultGen;
     	
@@ -157,13 +176,14 @@ public class GUITest {
     	JButton injectButton=new JButton("Inject Fault");
     	
     	faultLen = new JTextField("Fault Length");
+    	additionalData = new JTextField("(none)");
     	injectButton.setBounds(130,100,100, 40);
 
     	List<String> robotNames = mission.getAllRobots().stream().map(r -> r.getName()).collect(Collectors.toList());
     	List<String> faultNames = mission.getFaultsAsList().stream().map(f -> f.getName()).collect(Collectors.toList());
     	
-    	JComboBox<?> robotChoice = new JComboBox(robotNames.toArray());
-    	JComboBox<?> faultChoice = new JComboBox(faultNames.toArray());
+		JComboBox<?> robotChoice = new JComboBox(robotNames.toArray());
+		JComboBox<?> faultChoice = new JComboBox(faultNames.toArray());
     	
     	robotChoice.setSelectedIndex(1);
         injectButton.addActionListener(buttonListener);
@@ -172,6 +192,7 @@ public class GUITest {
         faultPanel.add(faultChoice);
     	faultPanel.add(injectButton);
     	faultPanel.add(faultLen);
+    	faultPanel.add(additionalData);
     	//f.getContentPane().add(ptPanel, BorderLayout.CENTER);
     	f.getContentPane().add(ptPanel);
     	

@@ -21,6 +21,7 @@ Run = pBasicContactMgr @ NewConsole = false
 Run = pHostInfo @ NewConsole = false
 Run = uFldNodeBroker @ NewConsole = false
 Run = uFldHazardMgr @ NewConsole = false
+Run = pObstacleMgr @ NewConsole = false
 Run = ATLASDBInterface @ NewConsole = false
 }
 
@@ -164,6 +165,13 @@ CommsTick = 2
 swath_width = 3.0
 sensor_pd = 1.0
 report_name = brian
+}
+
+ProcessConfig = pObstacleMgr
+{
+AppTick = 2
+CommsTick = 2
+point_var = TRACKED_FEATURE
 }
 
 ProcessConfig = ATLASDBInterface

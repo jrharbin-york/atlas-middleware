@@ -34,6 +34,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="robotsNeededPerObject"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TrackDistances" eSuperTypes="#//GoalAction"/>
   <eClassifiers xsi:type="ecore:EClass" name="SensorCover" eSuperTypes="#//Cover">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="density" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="samplesPerUnit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
@@ -98,6 +99,9 @@
         eType="#//Goal" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="objects" upperBound="-1"
         eType="ecore:EClass http://www.github.com/jrharbin-york/atlas-middleware/dsl/region#//EnvironmentalObject"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="obstacles" upperBound="-1"
+        eType="ecore:EClass http://www.github.com/jrharbin-york/atlas-middleware/dsl/region#//EnvironmentalObstacle"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="messages" upperBound="-1"
         eType="ecore:EClass http://www.github.com/jrharbin-york/atlas-middleware/dsl/message#//Message"

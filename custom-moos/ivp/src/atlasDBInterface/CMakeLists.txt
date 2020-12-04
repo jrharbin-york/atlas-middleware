@@ -1,7 +1,6 @@
 #--------------------------------------------------------
 # The CMakeLists.txt for:                ATLASDBInterface
 #--------------------------------------------------------
-
 # Set System Specific Libraries
 if (${WIN32})
   SET(SYSTEM_LIBS
@@ -32,8 +31,7 @@ include_directories(${APR_INCLUDE_DIR} ${ActiveMQ_INCLUDE_DIR})
 #  NAMES activemq-cpp)
 #set(ActiveMQ_LIBRARY "/home/userfs/j/jrh512/source/activemq-cpp-install/lib/libactivemq-cpp.so")
 set(ActiveMQ_LIBRARY "/usr/local/lib/libactivemq-cpp.so")
-
-
+set(SSL_LIBRARY "/usr/lib/x86_64-linux-gnu/libssl.so")
 
 ADD_EXECUTABLE(ATLASDBInterface ${SRC})
 
@@ -41,5 +39,7 @@ TARGET_LINK_LIBRARIES(ATLASDBInterface
   ${MOOS_LIBRARIES}
   ${ActiveMQ_LIBRARY}
   mbutil
-  ${SYSTEM_LIBS})
+  ${SYSTEM_LIBS}
+  ${SSL_LIBRARY}
+)
 

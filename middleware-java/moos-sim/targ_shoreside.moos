@@ -16,6 +16,7 @@ Run = pHostInfo @ NewConsole = false
 Run = uFldShoreBroker @ NewConsole = false
 Run = pShare @ NewConsole = false
 Run = uFldNodeComms @ NewConsole = false
+Run = uFldObstacleSim @ NewConsole = false
 Run = uFldHazardSensor @ NewConsole = false
 Run = ATLASDBInterface @ NewConsole = false
 }
@@ -81,6 +82,8 @@ BRIDGE = src=APPCAST_REQ
 bridge = src=UHZ_CONFIG_ACK_$V,       alias=UHZ_CONFIG_ACK
 bridge = src=UHZ_DETECTION_REPORT_$V, alias=UHZ_DETECTION_REPORT
 bridge = src=HAZARDSET_REQUEST_$V,    alias=HAZARDSET_REQUEST
+bridge = src=GIVEN_OBSTACLE
+qbridge = TRACKED_FEATURE
 }
 
 ProcessConfig = pShare
@@ -102,6 +105,18 @@ MIN_MSG_INTERVAL = 15
 MAX_MSG_LENGTH = 1000
 GROUPS = true
 VIEW_NODE_RPT_PULSES = false
+}
+
+ProcessConfig = uFldObstacleSim
+{
+AppTick = 2
+AppTick = 1
+CommsTick = 2
+CommsTick = 1
+obstacle_file = obstacle.txt
+poly_fill_color = invisible
+reset_interval = 250
+reset_range = 10
 }
 
 ProcessConfig = uFldHazardSensor
