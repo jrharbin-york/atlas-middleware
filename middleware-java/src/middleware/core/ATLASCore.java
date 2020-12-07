@@ -6,6 +6,8 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import org.locationtech.jts.io.ParseException;
+
 import atlasdsl.*;
 import atlasdsl.faults.*;
 import atlassharedclasses.*;
@@ -51,9 +53,16 @@ public abstract class ATLASCore {
 	
 	private FaultGenerator faultGen;
 	
-	private Random fuzzGenRandom = new Random();
-	
 	private double time = 0.0;
+	
+	private void setupPositionLogging() {
+		setupPositionWatcher((gps) -> {
+			double x = gps.getX();
+			double y = gps.getY();
+			String rname = gps.getRobotName();
+			ATLASLog.logPosition(time, rname, x, y);
+		});
+	}
 	
 	public ATLASCore(Mission mission) {
 		this.mission = mission;
@@ -62,6 +71,7 @@ public abstract class ATLASCore {
 		queues.add(fromCI);
 		faultGen = new FaultGenerator(this,mission);
 		fuzzEngine = new NullFuzzingEngine();
+		setupPositionLogging();
 	}
 	
 	public CARSTranslations getCARSTranslationOutput() {

@@ -3,6 +3,9 @@ package middleware.logging;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import atlasdsl.GoalAction;
 
 public class ATLASLog {
@@ -14,6 +17,7 @@ public class ATLASLog {
 	private FileWriter goalLog;
 	private FileWriter timeLog;
 	private FileWriter optionsLog;
+	private FileWriter positionLog;
 	private FileOutputStream timeStream;
 	
 	ATLASLog() {
@@ -25,6 +29,8 @@ public class ATLASLog {
 			goalLog = new FileWriter("logs/goalLog.log");
 			timeStream = new FileOutputStream("logs/atlasTime.log");
 			optionsLog = new FileWriter("logs/options.log");
+			String fileNameDateTag = new SimpleDateFormat("yyyyMMddHHmm").format(new Date());
+			positionLog = new FileWriter("logs/robotPositionTimeSeries-" + fileNameDateTag + ".log");
 			timeLog = new FileWriter(timeStream.getFD());
 			timeLog.write("0.0\n");
 			timeLog.flush();
@@ -65,6 +71,7 @@ public class ATLASLog {
 	public static synchronized void logCARSOutbound(String queueName, String text) {
 		try {
 			getLog().carsOutboundLog.write("Sending to CARS queue " + queueName + ":" + text + "\n");
+			// TODO: remove this flush to improve performance
 			getLog().carsOutboundLog.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -116,6 +123,15 @@ public class ATLASLog {
 			// will not be updated regularly enough
 			l.timeLog.flush();
 			l.timeStream.getFD().sync();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static synchronized void logPosition(double time, String robot, double x, double y) {
+		ATLASLog l = getLog();
+		try {
+			l.positionLog.write(time + "," + robot + "," + x + "," + y + "\n");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

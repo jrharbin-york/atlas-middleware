@@ -161,14 +161,8 @@ public class MetricsProcessing {
 				}
 			}
 
-			// missedDetections = missedDetections(detectionInfo, maxObjectNum);
-			// TODO: for now, just compute missedDetections directly from the file
 			missedDetections = Math.max(0, ((mission.getEnvironmentalObjects().size() * DETECTIONS_PER_OBJECT_EXPECTED)
 					- checkDetectionCount));
-			// if (missedDetections != checkMissedCount) {
-			// System.out.println("WARNING: missedDetections != checkMissedCount - this may
-			// be OK if there are extras recorded, otherwise a bug");
-			// }
 			reader.close();
 
 		} catch (FileNotFoundException e1) {
@@ -228,9 +222,14 @@ public class MetricsProcessing {
 			int constraintID = 0;
 			List<String> names = new ArrayList<String>();
 
-			if (metrics.contains(Metrics.COMBINED_DIST_METRIC)) {
+			if (metrics.contains(Metrics.PURE_MISSED_DETECTIONS)) {
+				solution.setObjective(metricID++, -missedDetections);
+				names.add("missedDetections");
+			}
+			
+			if (metrics.contains(Metrics.COMBINED_MISSED_DETECTION_DIST_METRIC)) {
 				solution.setObjective(metricID++, -combinedDistMetric);
-				names.add("combinedDistMetric");
+				names.add("combinedMissedDetectionDistMetric");
 			}
 
 			if (metrics.contains(Metrics.OBSTACLE_AVOIDANCE_METRIC)) {
