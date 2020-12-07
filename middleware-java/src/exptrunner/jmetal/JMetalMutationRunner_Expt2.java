@@ -37,7 +37,7 @@ public class JMetalMutationRunner_Expt2 {
 	
 	public static void expt1() throws JMetalException, FileNotFoundException {
 		List<Metrics> metrics = new ArrayList<Metrics>();	
-		metrics.add(Metrics.COMBINED_DIST_METRIC);
+		metrics.add(Metrics.COMBINED_MISSED_DETECTION_DIST_METRIC);
 		metrics.add(Metrics.TIME_PROP);
 		expt("expt1", metrics);
 	}

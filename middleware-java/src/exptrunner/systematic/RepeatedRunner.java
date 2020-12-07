@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.uma.jmetal.util.JMetalException;
 
@@ -43,10 +44,12 @@ public class RepeatedRunner {
 		}
 	}
 	
-	public static void main(String[] args) throws JMetalException, FileNotFoundException {
+	public static void main(String[] args) throws JMetalException, FileNotFoundException, InterruptedException {
 		List<Metrics> l = new ArrayList<Metrics>();
-		l.add(Metrics.OBSTACLE_AVOIDANCE_METRIC);
+		l.add(Metrics.PURE_MISSED_DETECTIONS);
 		l.add(Metrics.TIME_TOTAL_ABSOLUTE);
-		runRepeatedFaultSet(l, "/home/atlas/atlas/atlas-middleware/expt-working/test-repeated-faults.fif", 20);
+		//TimeUnit.MINUTES.sleep(5);
+		runRepeatedFaultSet(l, "/home/atlas/academic/atlas/atlas-middleware/bash-scripts/jmetal-expts/res-keep/test-fif/null.fif", 20);
+		//runRepeatedFaultSet(l, "/home/atlas/academic/atlas/atlas-middleware/bash-scripts/jmetal-expts/res-keep/test-fif/22.fif", 200);
 	}
 }
