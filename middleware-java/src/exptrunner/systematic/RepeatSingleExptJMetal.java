@@ -13,7 +13,7 @@ import exptrunner.metrics.MetricsProcessing;
 import faultgen.FaultFileIO;
 import faultgen.InvalidFaultFormat;
 
-public class RepeatSingleExpt extends ExptParams {
+public class RepeatSingleExptJMetal extends ExptParams {
 	private int runCountLimit;
 	private int runCount = 0;
 	private List<FaultInstance> fixedFaultInstances;
@@ -30,7 +30,7 @@ public class RepeatSingleExpt extends ExptParams {
 		}
 	}
 	
-	public RepeatSingleExpt(MetricsProcessing mp, double runtime, int runCountLimit, Mission mission, List<FaultInstance> fixedFaultInstances) {
+	public RepeatSingleExptJMetal(MetricsProcessing mp, double runtime, int runCountLimit, Mission mission, List<FaultInstance> fixedFaultInstances) {
 		super(runtime);
 		this.runCountLimit = runCountLimit;
 		this.runCount = 0;
@@ -39,14 +39,14 @@ public class RepeatSingleExpt extends ExptParams {
 		setupResFile();
 	}
 	
-	public RepeatSingleExpt(MetricsProcessing mp, double runtime, int runCountLimit, Mission mission, String faultFileName) throws FileNotFoundException, InvalidFaultFormat {
+	public RepeatSingleExptJMetal(MetricsProcessing mp, double runtime, int runCountLimit, Mission mission, String faultFileName, int faultNumInFile) throws FileNotFoundException, InvalidFaultFormat {
 		super(runtime);
 		this.runCountLimit = runCountLimit;
 		this.runCount = 0;
 		this.metricsProcessing = mp;
 		this.mission = mission;
 		FaultFileIO io = new FaultFileIO(mission);
-		this.fixedFaultInstances = io.loadFaultsFromFile(faultFileName);
+		this.fixedFaultInstances = io.loadFaultsFromJMetalFile(faultFileName, faultNumInFile);
 		setupResFile();
 	}
 

@@ -20,10 +20,10 @@ import exptrunner.metrics.MetricsProcessing;
 
 import faultgen.InvalidFaultFormat;
 
-public class RepeatedRunner {
+public class RepeatedRunnerJMetal {
 	private static double runTime = 1200.0;
 	
-	public static void runRepeatedFaultSet(List<Metrics> metricList, String faultFileName, String fileTag, int runCount) {
+	public static void runRepeatedFaultSet(List<Metrics> metricList, String faultFileName, String fileTag, int runCount, int faultNum) {
 		DSLLoader loader = new GeneratedDSLLoader();
 		Mission mission;
 
@@ -33,7 +33,7 @@ public class RepeatedRunner {
 			FileWriter tempLog = new FileWriter("tempLog-" + fileName + ".res");
 			MetricsProcessing mp = new MetricsProcessing(mission, metricList, tempLog);
 			String resFileName = "repeatedfaults-"+fileTag+".res";
-			ExptParams ep = new RepeatSingleExpt(mp, runTime, runCount, mission, faultFileName);
+			ExptParams ep = new RepeatSingleExptJMetal(mp, runTime, runCount, mission, faultFileName, faultNum);
 			// TODO: check this file name
 			SystematicRunner.runGeneralExpt(mission, ep, resFileName, true, runTime);
 			System.out.println("Done");
@@ -52,6 +52,7 @@ public class RepeatedRunner {
 		List<Metrics> l = new ArrayList<Metrics>();
 		l.add(Metrics.PURE_MISSED_DETECTIONS);
 		l.add(Metrics.TIME_TOTAL_ABSOLUTE);
-		runRepeatedFaultSet(l, "/home/atlas/academic/atlas/atlas-middleware/bash-scripts/jmetal-expts/res-keep/test-fif/null.fif", "6robot-4.fif", 200);
+		int runCount = 60;
+		runRepeatedFaultSet(l, "/tmp/VARpf-gen-expt1-10.csv", "6robot-4.fif", runCount, 1);
 	}
 }

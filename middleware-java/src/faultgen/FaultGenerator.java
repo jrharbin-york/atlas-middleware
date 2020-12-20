@@ -102,6 +102,8 @@ public class FaultGenerator {
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+		} catch (InvalidFaultFormat e) {
+			e.printStackTrace();
 		}
 	}
 }

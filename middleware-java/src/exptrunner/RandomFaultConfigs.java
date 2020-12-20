@@ -13,6 +13,7 @@ import atlasdsl.Mission;
 import atlassharedclasses.FaultInstance;
 import faultgen.FaultFileCreator;
 import faultgen.FaultFileIO;
+import faultgen.InvalidFaultFormat;
 
 public class RandomFaultConfigs extends ExptParams {
 
@@ -55,6 +56,9 @@ public class RandomFaultConfigs extends ExptParams {
 			List<FaultInstance> selected = fs.stream().limit(run).collect(Collectors.toList());
 			return selected;
 		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return new ArrayList<FaultInstance>();
+		} catch (InvalidFaultFormat e) {
 			e.printStackTrace();
 			return new ArrayList<FaultInstance>();
 		} 
