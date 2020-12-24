@@ -52,13 +52,6 @@ ATLASLinkConsumer::ATLASLinkConsumer(ATLASDBInterface *atlas_int,
 
   // Determine the topic name
   ostringstream topicname;
-  topicname << "FAULTS-SIM-TO-ATLAS";
-  if (!atlas_link_extraname.empty())
-    topicname << "-" << atlas_link_extraname;
-
-
-  // Determine the topic name
-  ostringstream topicname;
   if (!atlas_link_extraname.empty())
     topicname << atlas_link_extraname;
 
