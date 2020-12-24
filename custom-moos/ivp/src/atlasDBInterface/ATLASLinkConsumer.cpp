@@ -56,6 +56,13 @@ ATLASLinkConsumer::ATLASLinkConsumer(ATLASDBInterface *atlas_int,
   if (!atlas_link_extraname.empty())
     topicname << "-" << atlas_link_extraname;
 
+
+  // Determine the topic name
+  ostringstream topicname;
+  if (!atlas_link_extraname.empty())
+    topicname << atlas_link_extraname;
+
+
   // Create the destination (Topic or Queue)
   destination = session->createTopic(topicname.str());
   // Create a MessageConsumer from the Session to the Topic or Queue
