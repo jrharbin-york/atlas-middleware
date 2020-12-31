@@ -36,6 +36,7 @@ public class RepeatSingleExpt extends ExptParams {
 		this.runCount = 0;
 		this.metricsProcessing = mp;
 		this.mission = mission;
+		this.fixedFaultInstances = fixedFaultInstances;
 		setupResFile();
 	}
 	

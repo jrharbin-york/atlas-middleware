@@ -33,9 +33,9 @@ public class RepeatedRunnerJMetal {
 			FileWriter tempLog = new FileWriter("tempLog-" + fileName + ".res");
 			MetricsProcessing mp = new MetricsProcessing(mission, metricList, tempLog);
 			String resFileName = "repeatedfaults-"+fileTag+".res";
-			ExptParams ep = new RepeatSingleExptJMetal(mp, runTime, runCount, mission, faultFileName, faultNum);
+			ExptParams ep = new RepeatSingleExptJMetal(mp, runTime, runCount, mission, faultFileName, faultNum, resFileName);
 			// TODO: check this file name
-			SystematicRunner.runGeneralExpt(mission, ep, resFileName, true, runTime);
+			SystematicRunner.runGeneralExpt(mission, ep, "repeatedfaults.fif", true, runTime);
 			System.out.println("Done");
 		} catch (DSLLoadFailed e) {
 			e.printStackTrace();
@@ -52,7 +52,19 @@ public class RepeatedRunnerJMetal {
 		List<Metrics> l = new ArrayList<Metrics>();
 		l.add(Metrics.PURE_MISSED_DETECTIONS);
 		l.add(Metrics.TIME_TOTAL_ABSOLUTE);
-		int runCount = 60;
-		runRepeatedFaultSet(l, "/tmp/VARpf-gen-expt1-10.csv", "6robot-4.fif", runCount, 1);
+		
+		int runCount = 40;
+		String fileName = "/home/atlas/atlas/atlas-middleware/bash-scripts/jmetal-expts/res-keep/2020-12-12-6robot/VARpf-gen-expt1-13.csv";
+		
+		// This refers to the numbers in the PF file list
+		List<Integer> nums = new ArrayList<Integer>();
+		nums.add(0);
+		nums.add(1);
+		nums.add(2);
+		nums.add(3);
+		
+		for (Integer i : nums) {
+			runRepeatedFaultSet(l, fileName, "6robot-line" + Integer.toString(i) + ".fif", runCount, i);
+		}
 	}
 }

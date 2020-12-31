@@ -21,10 +21,12 @@ public class RepeatSingleExptJMetal extends ExptParams {
 	private Mission mission;
 	
 	private FileWriter resFile;
+	// TODO: backport these changes into RepeatSingleExpt.java
+	private String resFileName = "repeatedLog.res";
 	
 	private void setupResFile() {
 		try {
-			this.resFile = new FileWriter("repeatedLog.res");
+			this.resFile = new FileWriter(resFileName);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -39,19 +41,21 @@ public class RepeatSingleExptJMetal extends ExptParams {
 		setupResFile();
 	}
 	
-	public RepeatSingleExptJMetal(MetricsProcessing mp, double runtime, int runCountLimit, Mission mission, String faultFileName, int faultNumInFile) throws FileNotFoundException, InvalidFaultFormat {
+	public RepeatSingleExptJMetal(MetricsProcessing mp, double runtime, int runCountLimit, Mission mission, String faultFileName, int faultNumInFile, String resFaultFile) throws FileNotFoundException, InvalidFaultFormat {
 		super(runtime);
 		this.runCountLimit = runCountLimit;
 		this.runCount = 0;
 		this.metricsProcessing = mp;
 		this.mission = mission;
 		FaultFileIO io = new FaultFileIO(mission);
+		System.out.println("faultNumInFile = " + faultNumInFile);
 		this.fixedFaultInstances = io.loadFaultsFromJMetalFile(faultFileName, faultNumInFile);
+		this.resFileName = resFaultFile;
 		setupResFile();
 	}
 
 	public boolean completed() {
-		return (runCount > runCountLimit);
+		return (runCount >= runCountLimit);
 	}
 
 	public void printState() {

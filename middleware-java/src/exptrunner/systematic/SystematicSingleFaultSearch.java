@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +22,8 @@ public class SystematicSingleFaultSearch extends ExptParams {
 	private double minLength;
 	private double maxLength;
 	
+	
+	
 	private MetricsProcessing metricsProcessing;
 	private FileWriter combinedResults;
 	
@@ -30,6 +33,8 @@ public class SystematicSingleFaultSearch extends ExptParams {
 	
 	private double time;
 	private double len;
+	
+	private double stepSize = 100.0;
 	
 	// The fault number to use
 	private Fault fault;
@@ -71,7 +76,8 @@ public class SystematicSingleFaultSearch extends ExptParams {
 	}
 	
 	public void advance() {
-		time += len;
+		double actualStep = Math.min(stepSize, len);
+		time += actualStep;
 		if (time >= timeEnd) {
 			time = timeStart;
 			len = len * stepFactor;
@@ -104,6 +110,10 @@ public class SystematicSingleFaultSearch extends ExptParams {
 				// Need to plot the fault instance additional data here
 				System.out.println(metricsProcessing.getMetricByID(i) + "=" + m);
 			}
+			
+			double qualityMetric = s.getObjective(0);
+			solutionLog.put(s, qualityMetric);
+			
 			combinedResults.write("\n");
 			combinedResults.flush();
 		} catch (InvalidMetrics e1) {
@@ -112,5 +122,7 @@ public class SystematicSingleFaultSearch extends ExptParams {
 			e.printStackTrace();
 		}
 	}
+
+
 }
 

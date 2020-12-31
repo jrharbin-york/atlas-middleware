@@ -15,6 +15,8 @@ import atlasdsl.Mission;
 import atlasdsl.loader.DSLLoadFailed;
 import atlasdsl.loader.DSLLoader;
 import atlasdsl.loader.GeneratedDSLLoader;
+import atlassharedclasses.FaultInstance;
+import exptrunner.jmetal.FaultInstanceSetSolution;
 import exptrunner.jmetal.Metrics;
 import exptrunner.metrics.MetricsProcessing;
 
@@ -44,6 +46,29 @@ public class RepeatedRunner {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (InvalidFaultFormat e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void runRepeatedFaultSetFI(List<Metrics> metricList, List<FaultInstance> fis, String fileTag, int runCount) {
+		DSLLoader loader = new GeneratedDSLLoader();
+		Mission mission;
+
+		try {
+			mission = loader.loadMission();
+			String fileName = new SimpleDateFormat("yyyyMMddHHmm").format(new Date());
+			FileWriter tempLog = new FileWriter("tempLog-" + fileName + ".res");
+			MetricsProcessing mp = new MetricsProcessing(mission, metricList, tempLog);
+			String resFileName = "repeatedfaults-"+fileTag+".res";
+			ExptParams ep = new RepeatSingleExpt(mp, runTime, runCount, mission, fis);
+			// TODO: check this file name
+			SystematicRunner.runGeneralExpt(mission, ep, resFileName, true, runTime);
+			System.out.println("Done");
+		} catch (DSLLoadFailed e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
