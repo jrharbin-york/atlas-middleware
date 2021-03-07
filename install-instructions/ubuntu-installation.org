@@ -48,6 +48,8 @@ cd ~/source/moos-ivp
 #+END_EXAMPLE
 
 * Setup auto-activemq script - assumes safemuv as user name
+This is mostly for convenience to start ActiveMQ on command - you may wish to use other
+methods to launch it
 #+BEGIN_EXAMPLE
 echo '#!/bin/bash' >> ~/start_activemq.sh
 echo '/home/safemuv/source/apache-activemq-5.15.12/bin/activemq start' >> ~/start_activemq.sh
