@@ -88,13 +88,14 @@ If there is an error resulting from:
 when building the custom MOOS components, it may be due to 
 the distro you're using having installed ActiveMQ at
 /usr/local/lib/
-In this case, enter the following and then retry:
+In this case, enter the following:
 #+BEGIN_EXAMPLE
 cd /usr/local/
 sudo mkdir -p lib64
 cd lib64
 sudo ln -s /usr/local/lib/libactivemq-cpp.so /usr/local/lib64
 #+END_EXAMPLE
+Then retry building the custom MOOS interfacing component
 
 * Set up the path settings for MOOS apps
 #+BEGIN_EXAMPLE
