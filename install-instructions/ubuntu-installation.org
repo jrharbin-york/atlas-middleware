@@ -63,7 +63,8 @@ sudo make install
 
 If ActiveMQ-CPP fails to link with "undefined symbol" errors
 relating to SSL, ensure the libssl-dev package is properly installed
-first. If not, it will be necessary to delete ActiveMQ-CPP and reinstall
+first. If it was not installed, it will be necessary to delete ActiveMQ-CPP
+rerun the previous stage, configuring/make/install.
 
 * Copy the APR headers to parent dir:
 For some reason, APR headers are often installed on Debian/Ubuntu
