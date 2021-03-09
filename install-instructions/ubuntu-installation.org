@@ -109,3 +109,11 @@ echo 'export PATH=$MOOS/bin:$PATH' >> ~/.bashrc
 #+BEGIN_EXAMPLE
 mkdir -p /home/safemuv/academic/atlas/atlas-middleware/middleware-java/moos-sim/console-logs
 #+END_EXAMPLE
+
+* Export PATHS for MOOS 
+Add the following to .bashrc in your home directory to set the MOOS paths
+#+BEGIN_EXAMPLE
+export MOOS=/home/safemuv/source/moos-ivp
+export PATH=$MOOS/bin:$PATH
+export PATH=$MOOS/ivp/bin:$PATH
+#+END_EXAMPLE
