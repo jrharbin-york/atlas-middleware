@@ -1,0 +1,72 @@
+* Eclipse setup
+- Download Eclipse installer online
+- Tested with version 2020-12
+
+* If you have not already, switch to the fuzzing branch of the code
+- This contains the SAFEMUV specific content for the fuzzing engine, operations etc
+ 
+cd ~/academic/atlas/atlas-middleware
+git checkout --track origin/fuzzing
+git pull
+
+* Upon switching to the fuzzing branch of the code, it is necessary to rebuild ATLASDBInterface
+- This is because ATLASDBInterface was changed to report information needed for
+  fuzzing (the source component from MOOS)
+  
+cd /home/safemuv/academic/atlas/atlas-middleware/custom-moos
+./build-ivp.sh
+cp bin/ATLASDBInterface ~/source/moos-ivp/bin
+
+* Install Eclipse via the installer (2020-12)
+Select "Eclipse IDE for Java Developers"
+Install to selected path
+/home/safemuv/eclipse/java-2020-12
+Accept License
+
+Setup workspace at ~/eclipse-workspace
+
+Add to .bashrc
+export PATH=/home/safemuv/eclipse/java-2020-12/eclipse:$PATH
+
+It can now be started via "eclipse" from the command prompt
+
+* Import the project
+- With the "fuzzing" branch, should be possible to import the project as a Maven project
+
+Select "import projects" from the Package Explorer
+Select Maven / Existing Maven Projects
+Select browser and choose /home/safemuv/academic/atlas/atlas-middleware/middleware-java,
+which contains pom.xml
+
+* Install Java JRE
+sudo apt-get install openjdk-11-jre-headless maven
+
+* Right click on project com.github.safemuv.platform
+  Right click, select Build Path / Configure Build Path
+  Remove any libraries that are not found from the build path
+  Select Project / Clean and it should be OK
+  There may be residual errors in RepeatedRunner and SAFEMUVEvaluationProblem
+  
+* Create Run configurations
+  Select Run Configurations, Java Application -> "New Launch configuration" icon
+  Name it "ATLAS-Middleware"
+  Set Main class "middleware.core.ATLASMain"
+  Set Arguments tab, under "Program arguments" enter "nofault gui"
+  This selects no fault definitions, and to show the middleware GUI
+
+  Select Run Configurations, Java Application -> "New Launch configuration" icon
+  Name it "ATLAS-CI"
+  Set Main class "atlascollectiveintgenerator.runner.CollectiveIntRunner"
+  Set Arguments tab, under "Program arguments" enter "nofault gui"
+  This selects no faults and to show the middleware GUI
+
+* To start the platform
+  Invoke ~/start_activemq.sh in the home dir
+  Start a terminal and change to ~/academic/atlas/atlas-middleware/middleware-java/moos-sim
+  Then start the middleware run configuration (ATLAS-Middleware)
+  Invoke launch.sh in the terminal to start MOOS
+  Then invoke the CI with the ATLAS-CI run configuration
+  When finished use ./terminate.sh to terminate MOOS processes
+  
+* TODO Installing all the specific eclipse plugins
+* TODO Code and fuzzing engine generation run configurations
