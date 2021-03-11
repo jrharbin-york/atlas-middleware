@@ -57,8 +57,6 @@ sudo apt-get install openjdk-11-jre-headless maven
   Select Run Configurations, Java Application -> "New Launch configuration" icon
   Name it "ATLAS-CI"
   Set Main class "atlascollectiveintgenerator.runner.CollectiveIntRunner"
-  Set Arguments tab, under "Program arguments" enter "nofault gui"
-  This selects no faults and to show the middleware GUI
 
 * To start the platform
   Invoke ~/start_activemq.sh in the home dir
