@@ -19,6 +19,8 @@ If your distribution doesn't have libpng-dev package it may be numerical, e.g. l
 mkdir -p academic/atlas
 cd academic/atlas
 git clone https://github.com/jrharbin-york/atlas-middleware.git
+git checkout --track origin/fuzzing
+git pull
 #+END_EXAMPLE
 
 * Clone the MOOS repository:
@@ -40,12 +42,15 @@ tar -xvzf apache-activemq-5.15.2-bin.tar.gz
 tar -xvzf activemq-cpp-library-3.9.5-src.tar.gz 
 #+END_EXAMPLE
 
-* Build MOOS
+* Apply patches and build MOOS
 #+BEGIN_EXAMPLE
 cd ~/source/moos-ivp
+patch -p0 < ~/academic/atlas/atlas-middleware/custom-moos/patches/behaviour_allow_nonconvex_waypoints.patch
 ./build-moos.sh
 ./build-ivp.sh
 #+END_EXAMPLE
+If the patch file is not found, please ensure you have run "git pull" on the ~/academic/atlas/atlas-middleware
+repository.
 
 * Setup auto-activemq script - assumes safemuv as user name
 This is mostly for convenience to start ActiveMQ on command - you may wish to use other

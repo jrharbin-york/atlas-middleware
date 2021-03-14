@@ -46,7 +46,18 @@ sudo apt-get install openjdk-11-jre-headless maven
   Remove any libraries that are not found from the build path
   Select Project / Clean and it should be OK
   There may be residual errors in RepeatedRunner and SAFEMUVEvaluationProblem
-  
+
+* Install all the Eclipse Modelling Framework plugins
+  Start Eclipse
+  Select "Help" / "Install New Software"
+  Select the update link for your Eclipse version e.g. "Work With" - "2020-12 - http://download.eclipse.org/releases/2020-12"
+  Select "Modeling" and check all beneath it in the check box
+  Select "Next" twice
+  Accept license
+  Wait for install to complete (indicated on "Installing Software" on lower right status bar) - it may freeze at 49% for a while
+  Select "Restart" to apply updates
+       
+
 * Create Run configurations
   Select Run Configurations, Java Application -> "New Launch configuration" icon
   Name it "ATLAS-Middleware"
@@ -58,6 +69,13 @@ sudo apt-get install openjdk-11-jre-headless maven
   Name it "ATLAS-CI"
   Set Main class "atlascollectiveintgenerator.runner.CollectiveIntRunner"
 
+  Select Run Configurations, Java Application -> "New Launch configuration" icon
+  Name it "ATLAS-MOOSCodeGen"
+  Set Main class "middleware.codegen.GenMOOSCode"
+
+* To generate the MOOS configuration files
+  Invoke the "ATLAS-MOOSCodeGen" run configuration
+
 * To start the platform
   Invoke ~/start_activemq.sh in the home dir
   Start a terminal and change to ~/academic/atlas/atlas-middleware/middleware-java/moos-sim
@@ -65,6 +83,3 @@ sudo apt-get install openjdk-11-jre-headless maven
   Invoke launch.sh in the terminal to start MOOS
   Then invoke the CI with the ATLAS-CI run configuration
   When finished use ./terminate.sh to terminate MOOS processes
-  
-* TODO Installing all the specific eclipse plugins
-* TODO Code and fuzzing engine generation run configurations
