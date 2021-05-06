@@ -22,9 +22,12 @@ public class ComputerCIshoreside_energytracking {
 	
 	static Mission mission;
 	
-	static final double TIME_BEFORE_SWITCHING = 500;
+	//static final double TIME_BEFORE_SWITCHING = 500;
 	static double ENERGY_CRITICAL_LEVEL = 0.0;
 	static final double END_TIME = 1190.0;
+	
+	static boolean gildaFinishedSweep = false;
+	static boolean henryFinishedSweep = false;
 	
 	static Region region1 = new Region(new Point(170, -100), new Point(209, -60));
 	static Region region2 = new Region(new Point(-75, -100), new Point(-35, -60));
@@ -40,8 +43,8 @@ public class ComputerCIshoreside_energytracking {
 	}
 	
 	public static void setVehicleRegions() {
-		API.setPatrolAroundRegion("gilda", gildaRegion, 10,	"UUV_COORDINATE_UPDATE_INIITAL_GILDA", 1);
-		API.setPatrolAroundRegion("henry", henryRegion, 10,	"UUV_COORDINATE_UPDATE_INIITAL_HENRY", 1);
+		API.setPatrolAroundRegion("gilda", gildaRegion, 10,	"UUV_COORDINATE_UPDATE_INIITIAL_GILDA");
+		API.setPatrolAroundRegion("henry", henryRegion, 10,	"UUV_COORDINATE_UPDATE_INIITIAL_HENRY");
 	}
 	
 	public static void loadDSL() throws DSLLoadFailed {
@@ -88,17 +91,18 @@ public class ComputerCIshoreside_energytracking {
 				System.out.println("ENERGY_CRITICAL_LEVEL = " + ENERGY_CRITICAL_LEVEL);
 			}
 			
-			PeriodicTimer tSwitchRegion = new PeriodicTimer(TIME_BEFORE_SWITCHING, (t -> {
-				alternateRegions();
-				setVehicleRegions();
-			}));
+//			PeriodicTimer tSwitchRegion = new PeriodicTimer(TIME_BEFORE_SWITCHING, (t -> {
+//				alternateRegions();
+//				setVehicleRegions();
+//			}));
+//			API.registerTimer("switchRegions", tSwitchRegion);
 			
 			// Record the count at the endtime
 			OneOffTimer tEnd = OneOffTimer.atTime(END_TIME, (t -> {
 				recordCountWaypoints();
 			}));
 			
-			API.registerTimer("switchRegions", tSwitchRegion);
+
 			API.registerTimer("recordCountWaypoints", tEnd);
 			
 		} catch (DSLLoadFailed e) {
@@ -134,5 +138,23 @@ public class ComputerCIshoreside_energytracking {
 		String robotName = robotNameUppercase.toLowerCase();
 		incrementCompleteCount(robotName);
 		System.out.println("Waypoint complete count incremented for " + robotName + " to " + waypointCompleteCounts.get(robotName));
+		
+		if (robotName.equals("gilda")) {
+			gildaFinishedSweep = true;
+			System.out.println("Setting gilda sweep finished to true");
+		}
+		
+		if (robotName.equals("henry")) {
+			henryFinishedSweep = true;
+			System.out.println("Setting henry sweep finished to true");
+		}
+		
+		if (gildaFinishedSweep && henryFinishedSweep) {
+			System.out.println("Swapping vehicle assignments");
+			gildaFinishedSweep = false;
+			henryFinishedSweep = false;
+			alternateRegions();
+			setVehicleRegions();
+		}
 	}
 }

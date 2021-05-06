@@ -1,6 +1,5 @@
 package ciexperiment.systematic;
 
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -152,9 +151,9 @@ public class RepeatedRunner {
 		Thread.sleep(1000);
 		
 		// Standard is threshold of 750 mAh for return
-		runCIExperiment(basisModel, l, "casestudy2-threshold750", ciOptions);
-		runCIExperiment("experiment-models/casestudy2/mission-basis-threshold500.model", l, "casestudy2-threshold500", ciOptions);
-		runCIExperiment("experiment-models/casestudy2/mission-basis-threshold250.model", l, "casestudy2-threshold250", ciOptions);
+		runCIExperiment(basisModel, l, "casestudy2-threshold", ciOptions);
+		//runCIExperiment("experiment-models/casestudy2/mission-basis-threshold500.model", l, "casestudy2-threshold500", ciOptions);
+		//runCIExperiment("experiment-models/casestudy2/mission-basis-threshold250.model", l, "casestudy2-threshold250", ciOptions);
 		
 	}
 }

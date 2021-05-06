@@ -9,14 +9,6 @@
     </componentProperties>
     <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_aQj4MJxZEeuXP_f35b_qpg" name="maxSpeed" value="5.0"/>
     <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_bngdAJxZEeuXP_f35b_qpg" name="startSpeed" value="1.5"/>
-    <subcomponents xsi:type="atlas:Sensor" xmi:id="_O1hYQJxZEeuXP_f35b_qpg" name="gilda-narrow" mutable="true">
-      <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_RvFmYJxZEeuXP_f35b_qpg" name="swathWidth" value="10.0"/>
-      <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_TaL2QJxZEeuXP_f35b_qpg" name="detectionProb" value="0.99"/>
-    </subcomponents>
-    <subcomponents xsi:type="atlas:Sensor" xmi:id="_73tjEJxbEeuni_WJaXBVWw" name="gilda-wide" mutable="true">
-      <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_8n30sJxbEeuni_WJaXBVWw" name="swathWidth" value="20.0"/>
-      <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_-J95kJxbEeuni_WJaXBVWw" name="detectionProb" value="0.95"/>
-    </subcomponents>
   </robots>
   <robots xmi:id="_I_DTsJzTEeun4sDYCEayRA" name="frank" mutable="true">
     <componentProperties xsi:type="atlas:PointProperty" xmi:id="_I_DTsZzTEeun4sDYCEayRA" name="startLocation">
@@ -24,14 +16,6 @@
     </componentProperties>
     <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_I_DTs5zTEeun4sDYCEayRA" name="maxSpeed" value="5.0"/>
     <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_I_DTtJzTEeun4sDYCEayRA" name="startSpeed" value="1.5"/>
-    <subcomponents xsi:type="atlas:Sensor" xmi:id="_I_DTtZzTEeun4sDYCEayRA" name="frank-narrow" mutable="true">
-      <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_I_DTtpzTEeun4sDYCEayRA" name="swathWidth" value="10.0"/>
-      <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_I_DTt5zTEeun4sDYCEayRA" name="detectionProb" value="0.99"/>
-    </subcomponents>
-    <subcomponents xsi:type="atlas:Sensor" xmi:id="_I_DTuJzTEeun4sDYCEayRA" name="frank-wide" mutable="true">
-      <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_I_DTuZzTEeun4sDYCEayRA" name="swathWidth" value="20.0"/>
-      <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_I_DTupzTEeun4sDYCEayRA" name="detectionProb" value="0.95"/>
-    </subcomponents>
   </robots>
   <robots xmi:id="_KOUjMJzTEeun4sDYCEayRA" name="henry" mutable="true">
     <componentProperties xsi:type="atlas:PointProperty" xmi:id="_KOUjMZzTEeun4sDYCEayRA" name="startLocation">
@@ -39,14 +23,6 @@
     </componentProperties>
     <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_KOUjM5zTEeun4sDYCEayRA" name="maxSpeed" value="5.0"/>
     <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_KOUjNJzTEeun4sDYCEayRA" name="startSpeed" value="1.5"/>
-    <subcomponents xsi:type="atlas:Sensor" xmi:id="_KOUjNZzTEeun4sDYCEayRA" name="henry-narrow" mutable="true">
-      <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_KOUjNpzTEeun4sDYCEayRA" name="swathWidth" value="10.0"/>
-      <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_KOUjN5zTEeun4sDYCEayRA" name="detectionProb" value="0.99"/>
-    </subcomponents>
-    <subcomponents xsi:type="atlas:Sensor" xmi:id="_KOUjOJzTEeun4sDYCEayRA" name="henry-wide" mutable="true">
-      <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_KOUjOZzTEeun4sDYCEayRA" name="swathWidth" value="20.0"/>
-      <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_KOUjOpzTEeun4sDYCEayRA" name="detectionProb" value="0.95"/>
-    </subcomponents>
   </robots>
   <robots xmi:id="_LLIJsJzTEeun4sDYCEayRA" name="ella" mutable="true">
     <componentProperties xsi:type="atlas:PointProperty" xmi:id="_LLIJsZzTEeun4sDYCEayRA" name="startLocation">
@@ -54,14 +30,6 @@
     </componentProperties>
     <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_LLIJs5zTEeun4sDYCEayRA" name="maxSpeed" value="5.0"/>
     <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_LLIJtJzTEeun4sDYCEayRA" name="startSpeed" value="1.5"/>
-    <subcomponents xsi:type="atlas:Sensor" xmi:id="_LLIJtZzTEeun4sDYCEayRA" name="ella-narrow" mutable="true">
-      <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_LLIJtpzTEeun4sDYCEayRA" name="swathWidth" value="10.0"/>
-      <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_LLIJt5zTEeun4sDYCEayRA" name="detectionProb" value="0.99"/>
-    </subcomponents>
-    <subcomponents xsi:type="atlas:Sensor" xmi:id="_LLIJuJzTEeun4sDYCEayRA" name="ella-wide" mutable="true">
-      <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_LLIJuZzTEeun4sDYCEayRA" name="swathWidth" value="20.0"/>
-      <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_LLIJupzTEeun4sDYCEayRA" name="detectionProb" value="0.95"/>
-    </subcomponents>
   </robots>
   <computers xmi:id="_vmC9UJyAEeuni_WJaXBVWw" name="shoreside"/>
   <goals xmi:id="_kwYOQHP5Eeqc6cv9mBHIKw" name="mutualAvoidance">

@@ -3,6 +3,8 @@
   <mutProgram xmi:id="_xHiP8JxZEeuXP_f35b_qpg">
     <mutationGroups xmi:id="_Sx_i8JxbEeuni_WJaXBVWw" minRequiredFromGroup="1" maxRequiredFromGroup="1" members="_eGUBwJxZEeuXP_f35b_qpg"/>
     <mutationGroups xmi:id="_PXfbIJ5BEeuYrK8Jbh7IWg" minRequiredFromGroup="1" maxRequiredFromGroup="1" members="_MGfmMJxZEeuXP_f35b_qpg"/>
+    <mutationGroups xmi:id="_bCoNEKupEeu0gu_ykv4QBA" minRequiredFromGroup="1" maxRequiredFromGroup="1" members="_kf-twKuoEeu0gu_ykv4QBA"/>
+    <mutationGroups xmi:id="_g_yvEKupEeu0gu_ykv4QBA" minRequiredFromGroup="1" maxRequiredFromGroup="1" members="_sdxqwKuoEeu0gu_ykv4QBA"/>
   </mutProgram>
   <robots xmi:id="_MGfmMJxZEeuXP_f35b_qpg" name="gilda" mutable="true">
     <componentProperties xsi:type="atlas:PointProperty" xmi:id="_W24moJxZEeuXP_f35b_qpg" name="startLocation">
@@ -15,8 +17,8 @@
       <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_8n30sJxbEeuni_WJaXBVWw" name="swathWidth" value="20.0"/>
       <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_-J95kJxbEeuni_WJaXBVWw" name="detectionProb" value="0.95"/>
     </subcomponents>
-    <subcomponents xsi:type="atlas:Battery" xmi:id="_lpEqEJ2BEeuIzfTA-1Y_Kw" name="standard" totalEnergy="2800"/>
     <subcomponents xsi:type="atlas:MotionSource" xmi:id="_mSgBkJ2BEeuIzfTA-1Y_Kw" name="motor" energyPerDistance="3.0"/>
+    <subcomponents xsi:type="atlas:Battery" xmi:id="_kf-twKuoEeu0gu_ykv4QBA" name="large-gildaslow" mutable="true" totalEnergy="5000"/>
   </robots>
   <robots xmi:id="_eGUBwJxZEeuXP_f35b_qpg" name="henry" mutable="true">
     <componentProperties xsi:type="atlas:PointProperty" xmi:id="_eGUBwZxZEeuXP_f35b_qpg" name="startLocation">
@@ -29,8 +31,8 @@
       <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_eGUBxpxZEeuXP_f35b_qpg" name="swathWidth" value="10.0"/>
       <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_eGUBx5xZEeuXP_f35b_qpg" name="detectionProb" value="0.99"/>
     </subcomponents>
-    <subcomponents xsi:type="atlas:Battery" xmi:id="_sHgGEJ2BEeuIzfTA-1Y_Kw" name="standard" totalEnergy="2800"/>
     <subcomponents xsi:type="atlas:MotionSource" xmi:id="_vE3PEJ2BEeuIzfTA-1Y_Kw" name="motor" energyPerDistance="3.0"/>
+    <subcomponents xsi:type="atlas:Battery" xmi:id="_sdxqwKuoEeu0gu_ykv4QBA" name="large-henryslow" mutable="true" totalEnergy="5000"/>
   </robots>
   <computers xmi:id="_vmC9UJyAEeuni_WJaXBVWw" name="shoreside"/>
   <goals xmi:id="_kwYOQHP5Eeqc6cv9mBHIKw" name="mutualAvoidance" priority="100">
@@ -66,19 +68,19 @@
       </staticRegion>
     </region>
   </goals>
-  <goals xmi:id="_2LRHUKIyEeurJYkYK51edw" name="multipleSensorSweeps" priority="100" behaviours="_swjgYKIyEeurJYkYK51edw">
-    <requirements xmi:id="_7Ktc0KIyEeurJYkYK51edw" latestFinishTime="1200.0"/>
-    <participants xsi:type="atlas:StaticParticipants" xmi:id="_88jN4KIyEeurJYkYK51edw" participants="_eGUBwJxZEeuXP_f35b_qpg _MGfmMJxZEeuXP_f35b_qpg"/>
-    <action xsi:type="atlas:SensorCover" xmi:id="_CqXsUKIzEeurJYkYK51edw"/>
-    <region xsi:type="atlas:StaticGoalRegion" xmi:id="___xuUKIyEeurJYkYK51edw">
-      <staticRegion xmi:id="_AhpsUKIzEeurJYkYK51edw">
-        <corner1 xmi:id="_AhpsUaIzEeurJYkYK51edw" x="30.0" y="-140.0"/>
-        <corner2 xmi:id="_AhpsUqIzEeurJYkYK51edw" x="120.0" y="-20.0"/>
+  <goals xmi:id="_7CL8AKELEeuIWv9zGlCHsQ" name="multipleSensorSweeps" priority="100" behaviours="_xSy7AKEKEeuIWv9zGlCHsQ">
+    <requirements xmi:id="_Ips6kKEMEeuIWv9zGlCHsQ" latestFinishTime="1200.0"/>
+    <participants xsi:type="atlas:StaticParticipants" xmi:id="_HEw9EKEMEeuIWv9zGlCHsQ" participants="_MGfmMJxZEeuXP_f35b_qpg _eGUBwJxZEeuXP_f35b_qpg"/>
+    <action xsi:type="atlas:SensorCover" xmi:id="_8nDBAKELEeuIWv9zGlCHsQ"/>
+    <region xsi:type="atlas:StaticGoalRegion" xmi:id="_NHqsQKIgEeu52dhUWh3Ctw">
+      <staticRegion xmi:id="_N8nXQKIgEeu52dhUWh3Ctw">
+        <corner1 xmi:id="_N8nXQaIgEeu52dhUWh3Ctw" x="30.0" y="-140.0"/>
+        <corner2 xmi:id="_N8nXQqIgEeu52dhUWh3Ctw" x="120.0" y="-20.0"/>
       </staticRegion>
     </region>
   </goals>
-  <behaviours xmi:id="_swjgYKIyEeurJYkYK51edw" className="BHV_Waypoint">
-    <bvars xmi:id="_vqeT0KIyEeurJYkYK51edw" varName="WAYPOINT_COMPLETE"/>
+  <behaviours xmi:id="_xSy7AKEKEeuIWv9zGlCHsQ" className="BHV_Waypoint">
+    <bvars xmi:id="_tQ6kgKELEeuIWv9zGlCHsQ" varName="WAYPOINT_COMPLETE"/>
   </behaviours>
   <obstacles xmi:id="_H4VtYPdKEeqBFM0D9wIRaA" label="ob_0">
     <poly xmi:id="_JNsWwPdKEeqBFM0D9wIRaA">

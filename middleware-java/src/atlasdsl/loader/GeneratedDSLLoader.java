@@ -9,21 +9,21 @@ import java.util.ArrayList;
 
 public class GeneratedDSLLoader implements DSLLoader {
 	public Mission loadMission() throws DSLLoadFailed {
-	final double MISSION_END_TIME = 1200.0;
-	final boolean STOP_ON_NO_ENERGY = true;
+	final double MISSION_END_TIME = 2400.0;
+	final boolean STOP_ON_NO_ENERGY = false;
 	Mission mission = new Mission(MISSION_END_TIME, STOP_ON_NO_ENERGY);
 	
 	Computer c1 = new Computer("shoreside");
 	mission.addComputer(c1);
 	
 		Robot rgilda = new Robot("gilda");
-		rgilda.setPointComponentProperty("startLocation", new Point(15.0,0.0,0.0));
+		rgilda.setPointComponentProperty("startLocation", new Point(40.0,0.0,0.0));
 		rgilda.setDoubleComponentProperty("maxSpeed", 5.0);
 		rgilda.setDoubleComponentProperty("startSpeed", 1.5);
 		rgilda.setDoubleComponentProperty("maxDepth", 0.0);
 		
  
-		// SENSORNAME=gilda
+		// SENSORNAME=gilda-wide
 		Sensor srgilda_1 = new Sensor(SensorType.SONAR);
 		srgilda_1.setParent(rgilda);
 		srgilda_1.setDoubleComponentProperty("swathWidth", 20.0);
@@ -33,123 +33,83 @@ public class GeneratedDSLLoader implements DSLLoader {
 			
 			
 			
- 
-			
-			
-			Battery srgilda_2 = new Battery(2800);
-			rgilda.addSubcomponent(srgilda_2);
-			
-			
- 
-			
-			MotionSource srgilda_3 = new MotionSource(3.0);
-			rgilda.addSubcomponent(srgilda_3);
-			
-			
-			
 			
 		mission.addRobot(rgilda);
+		Robot rfrank = new Robot("frank");
+		rfrank.setPointComponentProperty("startLocation", new Point(-20.0,0.0,0.0));
+		rfrank.setDoubleComponentProperty("maxSpeed", 5.0);
+		rfrank.setDoubleComponentProperty("startSpeed", 1.5);
+		rfrank.setDoubleComponentProperty("maxDepth", 0.0);
+		
+ 
+		// SENSORNAME=frank-wide
+		Sensor srfrank_1 = new Sensor(SensorType.SONAR);
+		srfrank_1.setParent(rfrank);
+		srfrank_1.setDoubleComponentProperty("swathWidth", 20.0);
+		srfrank_1.setDoubleComponentProperty("detectionProb", 0.95);
+		rfrank.addSubcomponent(srfrank_1);
+			
+			
+			
+			
+			
+		mission.addRobot(rfrank);
 		Robot rhenry = new Robot("henry");
-		rhenry.setPointComponentProperty("startLocation", new Point(-8.0,0.0,0.0));
+		rhenry.setPointComponentProperty("startLocation", new Point(0.0,0.0,0.0));
 		rhenry.setDoubleComponentProperty("maxSpeed", 5.0);
-		rhenry.setDoubleComponentProperty("startSpeed", 3.0);
+		rhenry.setDoubleComponentProperty("startSpeed", 1.5);
 		rhenry.setDoubleComponentProperty("maxDepth", 0.0);
 		
  
-		// SENSORNAME=henry
+		// SENSORNAME=henry-wide
 		Sensor srhenry_1 = new Sensor(SensorType.SONAR);
 		srhenry_1.setParent(rhenry);
-		srhenry_1.setDoubleComponentProperty("swathWidth", 10.0);
-		srhenry_1.setDoubleComponentProperty("detectionProb", 0.99);
+		srhenry_1.setDoubleComponentProperty("swathWidth", 20.0);
+		srhenry_1.setDoubleComponentProperty("detectionProb", 0.95);
 		rhenry.addSubcomponent(srhenry_1);
 			
 			
 			
 			
- 
-			
-			
-			Battery srhenry_2 = new Battery(2800);
-			rhenry.addSubcomponent(srhenry_2);
-			
-			
- 
-			
-			MotionSource srhenry_3 = new MotionSource(3.0);
-			rhenry.addSubcomponent(srhenry_3);
-			
-			
-			
 			
 		mission.addRobot(rhenry);
+		Robot rella = new Robot("ella");
+		rella.setPointComponentProperty("startLocation", new Point(20.0,0.0,0.0));
+		rella.setDoubleComponentProperty("maxSpeed", 5.0);
+		rella.setDoubleComponentProperty("startSpeed", 1.5);
+		rella.setDoubleComponentProperty("maxDepth", 0.0);
+		
+ 
+		// SENSORNAME=ella-wide
+		Sensor srella_1 = new Sensor(SensorType.SONAR);
+		srella_1.setParent(rella);
+		srella_1.setDoubleComponentProperty("swathWidth", 20.0);
+		srella_1.setDoubleComponentProperty("detectionProb", 0.95);
+		rella.addSubcomponent(srella_1);
+			
+			
+			
+			
+			
+		mission.addRobot(rella);
+	
+	
+	EnvironmentalObject eo1 = new EnvironmentalObject(1, new Point(0.0,-160.0,0.0), false);
+	mission.addObject(eo1);
+	EnvironmentalObject eo2 = new EnvironmentalObject(2, new Point(185.0,-100.0,0.0), true);
+	mission.addObject(eo2);
+	EnvironmentalObject eo3 = new EnvironmentalObject(3, new Point(80.0,-130.0,0.0), false);
+	mission.addObject(eo3);
 	
 	
 	
-	ArrayList<Point> eopoints0 = new ArrayList<Point>();
-		eopoints0.add(new Point(107.0, -101.0, 0.0));
-		eopoints0.add(new Point(112.0, -106.0, 0.0));
-		eopoints0.add(new Point(112.0, -113.0, 0.0));
-		eopoints0.add(new Point(107.0, -118.0, 0.0));
-		eopoints0.add(new Point(100.0, -118.0, 0.0));
-		eopoints0.add(new Point(95.0, -113.0, 0.0));
-		eopoints0.add(new Point(95.0, -106.0, 0.0));
-		eopoints0.add(new Point(100.0, -101.0, 0.0));
-	EnvironmentalObstacle eob0 = new EnvironmentalObstacle("ob_0", eopoints0);
-	mission.addObstacle(eob0);
-	ArrayList<Point> eopoints1 = new ArrayList<Point>();
-		eopoints1.add(new Point(50.0, -30.0, 0.0));
-		eopoints1.add(new Point(53.0, -33.0, 0.0));
-		eopoints1.add(new Point(53.0, -38.0, 0.0));
-		eopoints1.add(new Point(50.0, -42.0, 0.0));
-		eopoints1.add(new Point(45.0, -42.0, 0.0));
-		eopoints1.add(new Point(41.0, -38.0, 0.0));
-		eopoints1.add(new Point(41.0, -33.0, 0.0));
-		eopoints1.add(new Point(45.0, -30.0, 0.0));
-	EnvironmentalObstacle eob1 = new EnvironmentalObstacle("ob_1", eopoints1);
-	mission.addObstacle(eob1);
-	ArrayList<Point> eopoints2 = new ArrayList<Point>();
-		eopoints2.add(new Point(82.0, -65.0, 0.0));
-		eopoints2.add(new Point(87.0, -70.0, 0.0));
-		eopoints2.add(new Point(87.0, -76.0, 0.0));
-		eopoints2.add(new Point(82.0, -81.0, 0.0));
-		eopoints2.add(new Point(76.0, -81.0, 0.0));
-		eopoints2.add(new Point(71.0, -76.0, 0.0));
-		eopoints2.add(new Point(71.0, -70.0, 0.0));
-		eopoints2.add(new Point(76.0, -65.0, 0.0));
-	EnvironmentalObstacle eob2 = new EnvironmentalObstacle("ob_2", eopoints2);
-	mission.addObstacle(eob2);
-	ArrayList<Point> eopoints3 = new ArrayList<Point>();
-		eopoints3.add(new Point(59.0, -101.0, 0.0));
-		eopoints3.add(new Point(64.0, -105.0, 0.0));
-		eopoints3.add(new Point(64.0, -112.0, 0.0));
-		eopoints3.add(new Point(59.0, -116.0, 0.0));
-		eopoints3.add(new Point(53.0, -116.0, 0.0));
-		eopoints3.add(new Point(48.0, -112.0, 0.0));
-		eopoints3.add(new Point(48.0, -105.0, 0.0));
-		eopoints3.add(new Point(53.0, -101.0, 0.0));
-	EnvironmentalObstacle eob3 = new EnvironmentalObstacle("ob_3", eopoints3);
-	mission.addObstacle(eob3);
-	ArrayList<Point> eopoints4 = new ArrayList<Point>();
-		eopoints4.add(new Point(107.0, -38.0, 0.0));
-		eopoints4.add(new Point(112.0, -43.0, 0.0));
-		eopoints4.add(new Point(112.0, -49.0, 0.0));
-		eopoints4.add(new Point(107.0, -54.0, 0.0));
-		eopoints4.add(new Point(100.0, -54.0, 0.0));
-		eopoints4.add(new Point(96.0, -49.0, 0.0));
-		eopoints4.add(new Point(96.0, -43.0, 0.0));
-		eopoints4.add(new Point(100.0, -38.0, 0.0));
-	EnvironmentalObstacle eob4 = new EnvironmentalObstacle("ob_4", eopoints4);
-	mission.addObstacle(eob4);
 	
-	Region eregion = new Region(new Point(30.0, -140.0, 0.0),
-								new Point(120.0, -20.0, 0.0));
-	mission.setObstacleRegion(eregion);
-	
-	
+ 
+ 
  
  
 		
-		Robot [] grp1 = {rgilda,rhenry}; 
+		Robot [] grp1 = {rella,rfrank,rgilda,rhenry}; 
 		GoalParticipants gpmutualAvoidance = new StaticParticipants(grp1, mission);
 		
 		
@@ -174,82 +134,147 @@ public class GeneratedDSLLoader implements DSLLoader {
 		mission.addGoal("mutualAvoidance", mutualAvoidance);
  
  
-		
-		Robot [] grp2 = {rgilda,rhenry}; 
-		GoalParticipants gptrackDistances = new StaticParticipants(grp2, mission);
-		
-		
-		
-		GoalTemporalConstraints gt2 = new GoalTemporalConstraints(0.0, 1201.0);
-		
-		
-		
-		
-		GoalAction ga2 = new TrackDistances();
-		
-		
-		
-		GoalRegion grtrackDistances = new StaticGoalRegion(
-			new Region(new Point(0.0, 0.0, 0.0),
-			           new Point(0.0, 0.0, 0.0)));
-		
-		
-		Goal trackDistances = new Goal("trackDistances", mission, gt2, gptrackDistances, Optional.of(grtrackDistances), ga2);
-		
-		
-		mission.addGoal("trackDistances", trackDistances);
  
  
 		
-		Robot [] grp3 = {rgilda,rhenry}; 
-		GoalParticipants gpreturnOnLowEnergy = new StaticParticipants(grp3, mission);
+		Robot [] grp2 = {rella,rfrank,rgilda,rhenry}; 
+		GoalParticipants gpprimarySensorSweep = new StaticParticipants(grp2, mission);
 		
+		
+		
+		GoalTemporalConstraints gt2 = new GoalTemporalConstraints(0.0, 1200.0);
+		
+		GoalAction ga2 = new SensorCover(10.0, 1, SensorType.SONAR);
+		
+		
+		
+		
+		
+		
+		GoalRegion grprimarySensorSweep = new StaticGoalRegion(
+			new Region(new Point(-50.0, -230.0, 0.0),
+			           new Point(200.0, -30.0, 0.0)));
+		
+		
+		Goal primarySensorSweep = new Goal("primarySensorSweep", mission, gt2, gpprimarySensorSweep, Optional.of(grprimarySensorSweep), ga2);
+		
+		
+		mission.addGoal("primarySensorSweep", primarySensorSweep);
+		
+	
+		GoalParticipants gpverifySensorDetections = new RelativeParticipants(primarySensorSweep, (StaticParticipants)gpprimarySensorSweep, "UUV_NAME", RelativeParticipants.LogicOps.SUBTRACT, 1);
 		
 		
 		GoalTemporalConstraints gt3 = new GoalTemporalConstraints(0.0, 1200.0);
 		
-		
-		
-		GoalAction ga3 = new ReturnOnLowEnergy(250.0);
-		
+		GoalAction ga3 = new SensorCover(5.0, 1, SensorType.SONAR);
 		
 		
 		
-		GoalRegion grreturnOnLowEnergy = new StaticGoalRegion(
-			new Region(new Point(0.0, 0.0, 0.0),
-			           new Point(0.0, 0.0, 0.0)));
 		
 		
-		Goal returnOnLowEnergy = new Goal("returnOnLowEnergy", mission, gt3, gpreturnOnLowEnergy, Optional.of(grreturnOnLowEnergy), ga3);
 		
 		
-		mission.addGoal("returnOnLowEnergy", returnOnLowEnergy);
+		GoalRegion grverifySensorDetections = new DynamicGoalRegion(primarySensorSweep, "UUV_DETECTION_COORD", 30.0);
+		
+		Goal verifySensorDetections = new Goal("verifySensorDetections", mission, gt3, gpverifySensorDetections, Optional.of(grverifySensorDetections), ga3);
+		
+		try {
+			verifySensorDetections.setDependencyOn(primarySensorSweep);
+		} catch (SelfDependencyError e) {
+			throw new DSLLoadFailed("Goal verifySensorDetections depends on itself");
+		}
+		
+		mission.addGoal("verifySensorDetections", verifySensorDetections);
+ 
+ 
  
  
 		
-		Robot [] grp4 = {rgilda,rhenry}; 
-		GoalParticipants gpmultipleSensorSweeps = new StaticParticipants(grp4, mission);
+		Robot [] grp4 = {rella,rfrank,rgilda,rhenry}; 
+		GoalParticipants gpfindTestObjects = new StaticParticipants(grp4, mission);
 		
 		
 		
 		GoalTemporalConstraints gt4 = new GoalTemporalConstraints(0.0, 1200.0);
 		
-		GoalAction ga4 = new SensorCover(0.0, 0, SensorType.SONAR);
 		
 		
 		
 		
 		
-		
-		GoalRegion grmultipleSensorSweeps = new StaticGoalRegion(
-			new Region(new Point(30.0, -140.0, 0.0),
-			           new Point(120.0, -20.0, 0.0)));
-		
-		
-		Goal multipleSensorSweeps = new Goal("multipleSensorSweeps", mission, gt4, gpmultipleSensorSweeps, Optional.of(grmultipleSensorSweeps), ga4);
+		List<EnvironmentalObject> ga4Objs = new ArrayList<EnvironmentalObject>();
+		ga4Objs.add(eo1);
+		ga4Objs.add(eo3);
+		ga4Objs.add(eo2);
+		GoalAction ga4 = new DiscoverObjects(ga4Objs, 1, 2);
 		
 		
-		mission.addGoal("multipleSensorSweeps", multipleSensorSweeps);
+		GoalRegion grfindTestObjects = new StaticGoalRegion(
+			new Region(new Point(0.0, 0.0, 0.0),
+			           new Point(0.0, 0.0, 0.0)));
+		
+		
+		Goal findTestObjects = new Goal("findTestObjects", mission, gt4, gpfindTestObjects, Optional.of(grfindTestObjects), ga4);
+		
+		
+		mission.addGoal("findTestObjects", findTestObjects);
+ 
+ 
+ 
+ 
+		
+		Robot [] grp5 = {rella,rfrank,rgilda,rhenry}; 
+		GoalParticipants gpstayInRegion = new StaticParticipants(grp5, mission);
+		
+		
+		
+		GoalTemporalConstraints gt5 = new GoalTemporalConstraints(0.0, 1200.0);
+		
+		
+		
+		
+		
+		GoalAction ga5 = new StayInRegion(false);
+		
+		
+		GoalRegion grstayInRegion = new StaticGoalRegion(
+			new Region(new Point(-150.0, -260.0, -40.0),
+			           new Point(245.0, 20.0, 100.0)));
+		
+		
+		Goal stayInRegion = new Goal("stayInRegion", mission, gt5, gpstayInRegion, Optional.of(grstayInRegion), ga5);
+		
+		
+		mission.addGoal("stayInRegion", stayInRegion);
+ 
+ 
+ 
+ 
+		
+		Robot [] grp6 = {rella,rfrank,rgilda,rhenry}; 
+		GoalParticipants gptrackDistances = new StaticParticipants(grp6, mission);
+		
+		
+		
+		GoalTemporalConstraints gt6 = new GoalTemporalConstraints(0.0, 1190.0);
+		
+		
+		
+		
+		GoalAction ga6 = new TrackDistances();
+		
+		
+		
+		GoalRegion grtrackDistances = new StaticGoalRegion(
+			new Region(new Point(-150.0, -260.0, -40.0),
+			           new Point(245.0, 20.0, 100.0)));
+		
+		
+		Goal trackDistances = new Goal("trackDistances", mission, gt6, gptrackDistances, Optional.of(grtrackDistances), ga6);
+		
+		
+		mission.addGoal("trackDistances", trackDistances);
 	
 
 	

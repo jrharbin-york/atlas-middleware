@@ -71,7 +71,24 @@ public class ResultsAnalyser {
 	public static void printAllConfigs(String filepath) {
 		try {
 			SpecMatcher smAlways = new SpecMatcherAlways();
-			runAnalysisLoop(filepath, "allconfigs-standard-ci.res", "ComputerCIshoreside_standard", smAlways);
+			runAnalysisLoop(filepath, "casestudy1-allconfigs-standard-ci.list", "ComputerCIshoreside_standard", smAlways);
+		} catch (EolModelLoadingException | EglRuntimeException | InterruptedException | IOException
+				| URISyntaxException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void printConfigsForExpt1(String filepath) {
+		try {
+			int colNumForMissed = 2;
+			SpecMatcher smOptimal = new SpecMatcherIntValue(colNumForMissed, 0);
+			SpecMatcher sm3Missed = new SpecMatcherIntValue(colNumForMissed, 3);
+			SpecMatcher sm7Missed = new SpecMatcherIntValue(colNumForMissed, 7);
+			
+			runAnalysisLoop(filepath, "casestudy1-optimal-standard-ci.list", "ComputerCIshoreside_standard", smOptimal);
+			runAnalysisLoop(filepath, "casestudy1-3missed-standard-ci.list", "ComputerCIshoreside_standard", sm3Missed);
+			runAnalysisLoop(filepath, "casestudy1-7missed-standard-ci.list", "ComputerCIshoreside_standard", sm7Missed);
+			
 		} catch (EolModelLoadingException | EglRuntimeException | InterruptedException | IOException
 				| URISyntaxException e) {
 			// TODO Auto-generated catch block
@@ -79,13 +96,14 @@ public class ResultsAnalyser {
 		}
 	}
 	
-	public static void printConfigsForExpt1(String filepath) {
+	public static void printConfigsForExpt2(String filepath) {
 		try {
-			SpecMatcher smOptimal = new SpecMatcherIntValue(3, 0);
-			SpecMatcher sm3Missed = new SpecMatcherIntValue(3, 3);
+			int colNumForMissed = 8;
+			SpecMatcher sm2Sweeps = new SpecMatcherDoubleValue(colNumForMissed, 2);
 			
-			runAnalysisLoop(filepath, "optimal-standard-ci.res", "ComputerCIshoreside_standard", smOptimal);
-			runAnalysisLoop(filepath, "3missed-standard-ci.res", "ComputerCIshoreside_standard", sm3Missed);
+			runAnalysisLoop(filepath, "casestudy2-2missed-detections.list", "ComputerCIshoreside_standard", sm2Sweeps);
+		
+			
 		} catch (EolModelLoadingException | EglRuntimeException | InterruptedException | IOException
 				| URISyntaxException e) {
 			// TODO Auto-generated catch block
@@ -94,9 +112,11 @@ public class ResultsAnalyser {
 	}
 	
 	public static void main(String [] args) {
-		String filepath = "/home/atlas/atlas/atlas-middleware/middleware-java/res/ciexpt/2021_04_27/ciexpt-casestudy1.res";
-		printAllConfigs(filepath);
-		printConfigsForExpt1(filepath);
+		String filepath_expt1 = "/home/atlas/atlas/atlas-middleware/middleware-java/res/ciexpt/2021_04_30/ciexpt-casestudy1.res";
+		String filepath_expt2 = "/home/atlas/atlas/atlas-middleware/middleware-java/res/ciexpt/2021_05_03_2/ciexpt-casestudy2.res";
+		//printAllConfigs(filepath_expt1);
+		//printConfigsForExpt1(filepath_expt1);
+		printConfigsForExpt2(filepath_expt2);
 	}
 	
 }

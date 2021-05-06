@@ -18,11 +18,20 @@ public abstract class ExptResultsLogged extends ExptParams {
 		super(runtime);
 	}
 	
+	private String ciClassLastName(String ciClassFull) {
+		String [] fields = ciClassFull.split(".");
+		if (fields.length > 0) {
+			return fields[fields.length-1];
+		} else { 
+			return ciClassFull;
+		}	
+	}
+	
 	public void logResults(String logDir, String modelFile, String ciClass) {
 		System.out.println("Writing results to result file: " + resFileName);
 		try {
 			Map<Metrics,Object> metricRes = metricsProcessing.readMetricsFromLogFiles(logDir);
-			resFile.write(modelFile + "," + ciClass + ",");
+			resFile.write(modelFile + "," + ciClassLastName(ciClass) + ",");
 			List<Metrics> metricsToOutput = metricsProcessing.getAllMetrics(); 
 						
 			for (Metrics m : metricsToOutput) {

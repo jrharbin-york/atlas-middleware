@@ -54,16 +54,16 @@ public class RepeatedRunnerSingleModel {
 	}
 
 	public static void runCIExperimentSingleModel(String sourceModelFile, List<Metrics> metricList, String fileTag,
-			List<String> ciOptions, int count) {
+			List<String> ciOptions, int count, double runTime) {
 		DSLLoader loader = new GeneratedDSLLoader();
 
 		try {
-			Mission baseMission = loader.loadMission();
-			double runTime = baseMission.getEndTime();
+			//Mission baseMission = loader.loadMission();
+			//double runTime = baseMission.getEndTime();
 			String fileName = new SimpleDateFormat("yyyyMMddHHmm").format(new Date());
 			FileWriter tempLog = new FileWriter("tempLog-" + fileName + ".res");
 			MetricsProcessing mp = new MetricsProcessing(metricList, tempLog);
-			mp.setMetricState(MetricStateKeys.MISSION_END_TIME, baseMission.getEndTime());
+			mp.setMetricState(MetricStateKeys.MISSION_END_TIME, runTime);
 			String resFileName = "ciexpt-" + fileTag + ".res";
 			System.out.println("Starting experiment set - repeated run for " + sourceModelFile);
 			RunSameModel ep = new RunSameModel(mp, runTime, sourceModelFile, resFileName, count);
@@ -78,8 +78,6 @@ public class RepeatedRunnerSingleModel {
 			runCIRepeatedModel(ep, resFileName, true, runTime, ciOptions);
 
 			System.out.println("Done");
-		} catch (DSLLoadFailed e) {
-			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
@@ -91,6 +89,7 @@ public class RepeatedRunnerSingleModel {
 	}
 
 	public static void expt_caseStudy1() {
+		double runtime = 2400.0;
 		List<Metrics> l = new ArrayList<Metrics>();
 		l.add(Metrics.PURE_MISSED_DETECTIONS);
 		// l.add(Metrics.DETECTION_COMPLETION_TIME);
@@ -102,14 +101,17 @@ public class RepeatedRunnerSingleModel {
 		ArrayList<String> ciOptions = new ArrayList<String>();
 		ciOptions.add(standardCI);
 		ciOptions.add(advancedCI);
-		runCIExperimentSingleModel(sourceModelFile, l, "casestudy1", ciOptions, 1);
+		runCIExperimentSingleModel(sourceModelFile, l, "casestudy1", ciOptions, 1, runtime);
 	}
 
-	public static void expt2_test() {
+	public static void expt2_test(String modelFile, String output) {
+		double runtime = 1200.0;
 		List<Metrics> l = new ArrayList<Metrics>();
 		l.add(Metrics.OBSTACLE_AVOIDANCE_METRIC);
 		l.add(Metrics.AVOIDANCE_METRIC);
+		l.add(Metrics.TOTAL_ENERGY_AT_END);
 		l.add(Metrics.MEAN_ENERGY_AT_END);
+		l.add(Metrics.TOTAL_FINAL_DISTANCE_AT_END);
 		l.add(Metrics.MEAN_FINAL_DISTANCE_AT_END);
 		l.add(Metrics.TOTAL_WAYPOINT_SWITCH_COUNT);
 
@@ -121,9 +123,7 @@ public class RepeatedRunnerSingleModel {
 		ArrayList<String> ciOptions = new ArrayList<String>();
 		ciOptions.add(standardCI);
 		ciOptions.add(energyTrackingCI);
-		runCIExperimentSingleModel(
-				"experiment-models/casestudy2/mission-basis.model-7e62cd04-8a2d-428c-980f-6ac01f8c0f67.model", l,
-				"casestudy2-threshold750-repeated", ciOptions, repeatCount);
+		runCIExperimentSingleModel(modelFile, l, output, ciOptions, repeatCount, runtime);
 	}
 	
 	public static void expt1_test() {
@@ -131,6 +131,7 @@ public class RepeatedRunnerSingleModel {
 		l.add(Metrics.PURE_MISSED_DETECTIONS);
 		l.add(Metrics.WORST_CASE_WAYPOINT_COMPLETION_FROM_CI);
 
+		double runtime = 2400.0;
 		int repeatCount = 30;
 		String standardCI = "atlascollectiveint.expt.casestudy1.ComputerCIshoreside_standard"; 
 		String energyTrackingCI = "atlascollectiveint.expt.casestudy1.ComputerCIshoreside_advanced"; 
@@ -139,15 +140,22 @@ public class RepeatedRunnerSingleModel {
 		ciOptions.add(standardCI);
 		ciOptions.add(energyTrackingCI);
 		runCIExperimentSingleModel(
-				"experiment-models/casestudy1/mission-basis.model-c6a1d6af-b14f-48d7-b2e1-b7f1f4d04b92.model", l,
-				"casestudy1-lowvalue-repeated", ciOptions, repeatCount);
+				"/home/atlas/atlas/atlas-middleware/middleware-java/experiment-models/casestudy1/mission-basis.model-5274393d-ed7c-4f48-92f4-e4ad56cdaf22.model", l,
+				"casestudy1-optimal-repeated", ciOptions, repeatCount, runtime);
+	}
+	
+	public static void run1() {
+		expt1_test();
+		expt2_test("experiment-models/casestudy2/mission-basis.model-a208758b-642e-4bf7-bdb5-278890b6050f.model", "casestudy2-optimal-repeated");
+
+	}
+	
+	public static void run2() {
+		expt2_test("experiment-models/casestudy2/mission-basis.model-42addeeb-3bb1-4151-8053-630979f57604.model", "casestudy2-worst-repeated");
+		expt1_test();
 	}
 
 	public static void main(String[] args) throws FileNotFoundException, InterruptedException {
-		// TODO: be sure to run the genmission run configuration for the particular
-		// mission
-		// otherwise the runtime will not be correct
-		// expt_caseStudy1();
-		expt1_test();
+		run2();
 	}
 }

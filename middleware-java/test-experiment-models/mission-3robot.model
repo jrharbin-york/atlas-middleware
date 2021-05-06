@@ -148,10 +148,6 @@
   <messages xmi:id="_OIc_AHfyEeq8sKdfSq6qug" name="DETECTION_HENRY" from="_zWcekH2jEeqRdcV7Ed4ZKQ" to="_fXV6wHP-Eeqc6cv9mBHIKw">
     <fields xmi:id="_OIc_AXfyEeq8sKdfSq6qug" name="UUV_DETECTION_NAME"/>
   </messages>
-  <faults xmi:id="_eW05sJRPEeq4FYD6a9PbTQ" name="SPEEDFAULT-FRANK">
-    <affectedTime xmi:id="_eW05sZRPEeq4FYD6a9PbTQ" latestFaultEnd="1200.0" maxFaultLength="1200.0" maxFaultRepeatCount="3" faultProb="0.8"/>
-    <impact xsi:type="atlas:MotionFault" xmi:id="_eW05spRPEeq4FYD6a9PbTQ" affectedComponent="_txN7cH2jEeqRdcV7Ed4ZKQ" affectedProperty="speed" newValue="5.0"/>
-  </faults>
   <faults xmi:id="_ewiaMJRPEeq4FYD6a9PbTQ" name="SPEEDFAULT-GILDA">
     <affectedTime xmi:id="_ewiaMZRPEeq4FYD6a9PbTQ" latestFaultEnd="1200.0" maxFaultLength="1200.0" maxFaultRepeatCount="3" faultProb="0.8"/>
     <impact xsi:type="atlas:MotionFault" xmi:id="_ewiaMpRPEeq4FYD6a9PbTQ" affectedComponent="_zWcekH2jEeqRdcV7Ed4ZKQ" affectedProperty="speed" newValue="5.0"/>
@@ -159,10 +155,6 @@
   <faults xmi:id="_e8JNQJRPEeq4FYD6a9PbTQ" name="SPEEDFAULT-HENRY">
     <affectedTime xmi:id="_e8JNQZRPEeq4FYD6a9PbTQ" latestFaultEnd="1200.0" maxFaultLength="1200.0" maxFaultRepeatCount="3" faultProb="0.8"/>
     <impact xsi:type="atlas:MotionFault" xmi:id="_e8JNQpRPEeq4FYD6a9PbTQ" affectedComponent="_3bj50H2jEeqRdcV7Ed4ZKQ" affectedProperty="speed" newValue="5.0"/>
-  </faults>
-  <faults xmi:id="_xyoc8JnzEeqfCc6JwfilfA" name="HEADINGFAULT-FRANK">
-    <affectedTime xmi:id="_xyoc8ZnzEeqfCc6JwfilfA" latestFaultEnd="1200.0" maxFaultLength="1200.0" maxFaultRepeatCount="1" faultProb="0.8"/>
-    <impact xsi:type="atlas:MotionFault" xmi:id="_xyoc8pnzEeqfCc6JwfilfA" affectedComponent="_txN7cH2jEeqRdcV7Ed4ZKQ" affectedProperty="heading" newValue="153.0"/>
   </faults>
   <faults xmi:id="_0Vbw4JnzEeqfCc6JwfilfA" name="HEADINGFAULT-GILDA">
     <affectedTime xmi:id="_0Vbw4ZnzEeqfCc6JwfilfA" latestFaultEnd="1200.0" maxFaultLength="1200.0" maxFaultRepeatCount="1" faultProb="0.8"/>
