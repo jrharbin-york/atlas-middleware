@@ -1,0 +1,94 @@
+The API for the collective intelligence is specified as a number of functions in
+Listing \ref{CI-API}. The first API function \function{startVehicle} sends the start
+command to the CARS simulation. The vehicle helm is not automatically active in
+a MOOS simulation, since inconsistencies in start-up time may lead to vehicles
+beginning at different times. This also provides a way for the CI to start some
+robots later part way through the simulation when needed. Conversely,
+\function{stopVehicle} sends the stop command to the vehicle helm, and
+\function{returnHome} sends the command for the vehicle to navigate to its home
+location and to remain there. \function{setPatrolAroundRegion} sets the robot to
+navigate in a lawn-mower style patrol (initially horizontally, then vertically)
+around a particular specified rectangular region. The step size is the vertical
+step used in the vertical motion steps. \var{messageName} specifies the message
+name in the DSL which is used to activate the message. The function is supplied
+in two versions, one of which includes a repeat count for specifying how many
+times the vehicles will traverse the given waypoints before completion is
+signalled. \function{setSweepAroundPoint} creates an analogous sweep pattern
+around the given point. All of these waypoint navigation functions return the
+set of raw coordinates that were used for the waypoint sweep, allowing them to
+be stored by the CI for later use. \function{registerTimer} registers a new
+timer than can be used in order to perform work later upon the CI. The timers
+specified as the Timer object may be periodic or one-off, and a Java lambda
+expression is used in these timers to supply the code which is to be executed
+when the timer is invoked. This mechanism can be used, e.g. in the motivating
+example, to return vehicles to their original sweep pattern after a certain time
+for verification is expired.
+
+
+
+\begin{figure}[t]
+\begin{lstlisting}[basicstyle=\scriptsize, caption=CI API function interface, label={CI-API}]
+  public static void startVehicle(String robotName);
+  public static void stopVehicle(String robotName);
+  public static void returnHome(String robotName);
+  public static List<Point> setPatrolAroundRegion(String robotName, Region r, double stepSize, String messageName);
+  public static List<Point> setPatrolAroundRegion(String robotName, Region r, double stepSize, String messageName, int repeatCount);
+  public static List<Point> setSweepAroundPoint(String robotName, Point p, double size, double stepSize, String messageName);
+  public static List<Point> setPatrolCoords(String robotName, List<Point> coords, String MessageName, int repeatCount);
+  public static void setDepth(String robotName, double depth, String messageName);
+  public static void registerTimer (String timerName, Timer timer);
+\end{lstlisting}
+\end{figure}
+
+
+
+A fragment of the advanced collective intelligence for our motivating example in
+Section \ref{sec:motivating-example} is presented in Listing
+\ref{CI-EXAMPLE-CASESTUDY1}, which illustrates the response to a sonar sensor
+detection. \function{SONARDetectionHook} is called when a sensor detection
+occurs. Firstly, the code verifies if the detection is fresh, that is, if it is
+an original detection has not been handled by any other vehicles. If so, the
+detected classification is used to select a number of vehicles to perform
+verifications according to the type of the objects. Every call to the function
+\function{verifyOneRobot} selects a vehicle not currently confirming a detection
+and uses an API function to reassign it to perform verifications in an area
+around the detection zone. The vehicles will be reassigned to return to their
+original sweep patterns using a behaviour variable, in particular the behaviour
+variable \(WAYPOINT\_COMPLETE\) which will be set to true when the navigation of
+these waypoints is completed.
+
+
+\begin{figure}[t]
+  \begin{lstlisting}[basicstyle=\scriptsize, caption=CI API fragment example for the motivating example , label={CI-EXAMPLE-CASESTUDY1}]
+	public static void SONARDetectionHook(SensorDetection detection, String robotName) {
+		int label = (Integer) detection.getField("objectID");
+		String detectionType = (String) detection.getField("type");
+
+		if (freshDetection(label)) {
+			if (detectionType.equals("benign")) {
+				for (int i = 0; i < numberOfVerificationsBenign; i++) {
+					verifyOneRobot(detection, sweepRobots, robotName);
+				}
+			} else {
+				for (int i = 0; i < numberOfVerificationsMalicious; i++) {
+					verifyOneRobot(detection, sweepRobots, robotName);
+				}
+			}
+		}
+	}
+
+  public static void verifyOneRobot(SensorDetection detection, List<String> candidateRobots,
+			String detectingRobotName) {
+		Point loc = (Point) detection.getField("location");
+		Optional<String> rName_o = chooseRobot(loc, candidateRobots, detectingRobotName);
+		if (rName_o.isPresent()) {
+			String rName = rName_o.get();
+			API.setSweepAroundPoint(rName, loc, SWEEP_RADIUS, VERTICAL_STEP_SIZE_CONFIRM_SWEEP,
+					("UUV_COORDINATE_UPDATE_VERIFY_" + rName.toUpperCase()));
+			CollectiveIntLog.logCI("Setting robot " + rName + " to verify detection");
+		} else {
+			CollectiveIntLog.logCI("ERROR: No robots avaiable to confirm the detection");
+		}
+	}
+  \end{lstlisting}
+\end{figure}
