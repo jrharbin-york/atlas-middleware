@@ -34,11 +34,28 @@ A video of the platform in operation is available [here](https://github.com/jrha
 
 ## Case Studies
 ### Case Study 1
-This is a search and locate scenario incorporating four vehicles. The various configurations involve selecting three of the four
-available robots, with either a wide or narrow sensor for each
-![alt text](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/images-and-videos/screenshot-image.png "Case Study image")
+This is a search and locate scenario incorporating a maximum of four vehicles,
+which scan using a sonar sensor and mutually verify detections of objects. The
+variation programs in the model selecting three of the four available robots,
+with either a wide or narrow sensor for each vehicle. This produces 48 different
+configurations
+
+![alt
+text](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/images-and-videos/screenshot-image.png
+"Case Study image")
 
 * ![Mission basis model](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/middleware-java/experiment-models/casestudy1/mission-basis.model "Mission basis model")
 * ![Collective Intelligence Standard](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/middleware-java/src/atlascollectiveint/expt/casestudy1/ComputerCIshoreside_standard.java "Collective Intelligence Standard")
 * ![Collective Intelligence Advanced](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/middleware-java/src/atlascollectiveint/expt/casestudy1/ComputerCIshoreside_advanced.java "Collective Intelligence Advanced")
+
+### Case Study 2
+This is based upon the MOOS bo-alpha mission. It incorporates obstacle avoidance
+and inter-robot avoidance as the two vehicles scan specific areas and take
+measurements, alternating and crossing a central regions
+
+![alt text](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/images-and-videos/casestudy2-screenshot.png "Case Study image")
+
+* ![Mission basis model](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/middleware-java/experiment-models/casestudy2/mission-basis.model "Mission basis model")
+* ![Collective Intelligence Standard](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/middleware-java/src/atlascollectiveint/expt/casestudy2/ComputerCIshoreside_standard.java "Collective Intelligence Standard")
+* ![Collective Intelligence Advanced](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/middleware-java/src/atlascollectiveint/expt/casestudy2/ComputerCIshoreside_energytracking.java "Collective Intelligence Advanced")
 
