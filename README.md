@@ -60,4 +60,4 @@ contains numerous obstacles
 * ![Collective Intelligence Standard](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/middleware-java/src/atlascollectiveint/expt/casestudy2/ComputerCIshoreside_standard.java "Collective Intelligence Standard")
 * ![Collective Intelligence Energy Tracking](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/middleware-java/src/atlascollectiveint/expt/casestudy2/ComputerCIshoreside_energytracking.java "Collective Intelligence Energy Tracking")
 
-![Test link](./blob/ciexpt/middleware-java/experiment-models/casestudy2/mission-basis.model "Test")
+![Test link](middleware-java/experiment-models/casestudy2/mission-basis.model "Test")
