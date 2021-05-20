@@ -44,9 +44,9 @@ configurations
 text](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/images-and-videos/screenshot-image.png
 "Case Study image")
 
-* ![Mission basis model](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/middleware-java/experiment-models/casestudy1/mission-basis.model "Mission basis model")
-* ![Collective Intelligence Standard](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/middleware-java/src/atlascollectiveint/expt/casestudy1/ComputerCIshoreside_standard.java "Collective Intelligence Standard")
-* ![Collective Intelligence Advanced](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/middleware-java/src/atlascollectiveint/expt/casestudy1/ComputerCIshoreside_advanced.java "Collective Intelligence Advanced")
+* ![Mission basis model](middleware-java/experiment-models/casestudy1/mission-basis.model "Mission basis model")
+* ![Collective Intelligence Standard](middleware-java/src/atlascollectiveint/expt/casestudy1/ComputerCIshoreside_standard.java "Collective Intelligence Standard")
+* ![Collective Intelligence Advanced](middleware-java/src/atlascollectiveint/expt/casestudy1/ComputerCIshoreside_advanced.java "Collective Intelligence Advanced")
 
 ### Case Study 2
 This is based upon the MOOS bo-alpha mission. It incorporates obstacle avoidance
@@ -56,8 +56,6 @@ contains numerous obstacles
 
 ![alt text](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/images-and-videos/casestudy2-screenshot.png "Case Study image")
 
-* ![Mission basis model](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/middleware-java/experiment-models/casestudy2/mission-basis.model "Mission basis model")
-* ![Collective Intelligence Standard](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/middleware-java/src/atlascollectiveint/expt/casestudy2/ComputerCIshoreside_standard.java "Collective Intelligence Standard")
-* ![Collective Intelligence Energy Tracking](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/middleware-java/src/atlascollectiveint/expt/casestudy2/ComputerCIshoreside_energytracking.java "Collective Intelligence Energy Tracking")
-
-![Test link](middleware-java/experiment-models/casestudy2/mission-basis.model "Test")
+* ![Mission basis model](middleware-java/experiment-models/casestudy2/mission-basis.model "Mission basis model")
+* ![Collective Intelligence Standard](middleware-java/src/atlascollectiveint/expt/casestudy2/ComputerCIshoreside_standard.java "Collective Intelligence Standard")
+* ![Collective Intelligence Energy Tracking](middleware-java/src/atlascollectiveint/expt/casestudy2/ComputerCIshoreside_energytracking.java "Collective Intelligence Energy Tracking")
