@@ -40,8 +40,7 @@ variation programs in the model selecting three of the four available robots,
 with either a wide or narrow sensor for each vehicle. This produces 48 different
 configurations
 
-![alt
-text](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/images-and-videos/screenshot-image.png "Case Study image")
+<img src="https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/images-and-videos/screenshot-image.png" alt="Case Study 1 Screenshot" width="50%" height="50%" />
 
 * ![Mission basis model](middleware-java/experiment-models/casestudy1/mission-basis.model "Mission basis model")
 * ![Collective Intelligence Standard](middleware-java/src/atlascollectiveint/expt/casestudy1/ComputerCIshoreside_standard.java "Collective Intelligence Standard")
@@ -53,7 +52,7 @@ and inter-robot avoidance as the two vehicles scan specific areas and take
 measurements, periodically alternating and crossing a central region which
 contains numerous obstacles
 
-![alt text](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/images-and-videos/casestudy2-screenshot.png "Case Study image")
+<img src="https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/images-and-videos/casestudy2-screenshot.png" alt="Case Study 2 Screenshot" width="50%" height="50%" />
 
 * ![Mission basis model](middleware-java/experiment-models/casestudy2/mission-basis.model "Mission basis model")
 * ![Collective Intelligence Standard](middleware-java/src/atlascollectiveint/expt/casestudy2/ComputerCIshoreside_standard.java "Collective Intelligence Standard")
