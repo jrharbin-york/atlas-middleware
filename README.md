@@ -38,7 +38,7 @@ This is a search and locate scenario incorporating four vehicles. The various co
 available robots, with either a wide or narrow sensor for each
 ![alt text](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/images-and-videos/screenshot-image.png "Case Study image")
 
-![Mission basis model](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/middleware-java/experiment-models/casestudy1/mission-basis.model "Mission basis model")
-![Collective Intelligence Standard](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/middleware-java/src/atlascollectiveint/expt/casestudy1/ComputerCIshoreside_standard.java "Collective Intelligence Standard")
-![Collective Intelligence Advanced](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/middleware-java/src/atlascollectiveint/expt/casestudy1/ComputerCIshoreside_standard.java "Collective Intelligence Advanced")
+* ![Mission basis model](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/middleware-java/experiment-models/casestudy1/mission-basis.model "Mission basis model")
+* ![Collective Intelligence Standard](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/middleware-java/src/atlascollectiveint/expt/casestudy1/ComputerCIshoreside_standard.java "Collective Intelligence Standard")
+* ![Collective Intelligence Advanced](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/middleware-java/src/atlascollectiveint/expt/casestudy1/ComputerCIshoreside_advanced.java "Collective Intelligence Advanced")
 
