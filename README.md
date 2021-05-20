@@ -15,9 +15,8 @@ This internal state, including goal events, is stored in log files that allow th
 The low coupling between the CI and the MRS simulator, mediated by the middleware, enables not only to experiment easily with several candidate CI 
 algorithms but also reinforces maintainability and extensibility (e.g., the components can be computing platform and programming language independent)
 
-![alt text](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/images-and-videos/methodologyV.png "ATLAS Methodology")
-![alt text](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/images-and-videos/architecture3.png "ATLAS Architecture")
 <img src="https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/images-and-videos/architecture3.png" alt="ATLAS Architecture" width="50%" height="50%" />
+<img src="https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/images-and-videos/methodologyV.png" alt="ATLAS Methodology" width="50%" height="50%" />
 
 A video of the platform in operation is available [here](https://www.dropbox.com/s/uprxwkcljbhdxv5/atlas-ci-testing-casestudy1.mp4?dl=0 "Video of case study 1")
 
@@ -42,8 +41,7 @@ with either a wide or narrow sensor for each vehicle. This produces 48 different
 configurations
 
 ![alt
-text](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/images-and-videos/screenshot-image.png
-"Case Study image")
+text](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/images-and-videos/screenshot-image.png "Case Study image")
 
 * ![Mission basis model](middleware-java/experiment-models/casestudy1/mission-basis.model "Mission basis model")
 * ![Collective Intelligence Standard](middleware-java/src/atlascollectiveint/expt/casestudy1/ComputerCIshoreside_standard.java "Collective Intelligence Standard")
