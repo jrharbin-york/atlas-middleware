@@ -34,8 +34,11 @@ A video of the platform in operation is available [here](https://github.com/jrha
 
 ## Case Studies
 ### Case Study 1
+This is a search and locate scenario incorporating four vehicles. The various configurations involve selecting three of the four
+available robots, with either a wide or narrow sensor for each
 ![alt text](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/images-and-videos/screenshot-image.png "Case Study image")
 
-The models for this are located in the 
+![Mission basis model](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/middleware-java/experiment-models/casestudy1/mission-basis.model "Mission basis model")
+![Collective Intelligence Standard](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/middleware-java/src/atlascollectiveint/expt/casestudy1/ComputerCIshoreside_standard.java "Collective Intelligence Standard")
+![Collective Intelligence Advanced](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/middleware-java/src/atlascollectiveint/expt/casestudy1/ComputerCIshoreside_standard.java "Collective Intelligence Advanced")
 
-Set up the run configuration at:
