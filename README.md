@@ -51,11 +51,12 @@ text](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/images-and-v
 ### Case Study 2
 This is based upon the MOOS bo-alpha mission. It incorporates obstacle avoidance
 and inter-robot avoidance as the two vehicles scan specific areas and take
-measurements, alternating and crossing a central regions
+measurements, periodically alternating and crossing a central region which
+contains numerous obstacles
 
 ![alt text](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/images-and-videos/casestudy2-screenshot.png "Case Study image")
 
 * ![Mission basis model](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/middleware-java/experiment-models/casestudy2/mission-basis.model "Mission basis model")
 * ![Collective Intelligence Standard](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/middleware-java/src/atlascollectiveint/expt/casestudy2/ComputerCIshoreside_standard.java "Collective Intelligence Standard")
-* ![Collective Intelligence Advanced](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/middleware-java/src/atlascollectiveint/expt/casestudy2/ComputerCIshoreside_energytracking.java "Collective Intelligence Advanced")
+* ![Collective Intelligence Energy Tracking](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/middleware-java/src/atlascollectiveint/expt/casestudy2/ComputerCIshoreside_energytracking.java "Collective Intelligence Energy Tracking")
 
