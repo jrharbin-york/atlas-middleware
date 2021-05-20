@@ -17,6 +17,7 @@ algorithms but also reinforces maintainability and extensibility (e.g., the comp
 
 ![alt text](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/images-and-videos/methodologyV.png "ATLAS Methodology")
 ![alt text](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/images-and-videos/architecture3.png "ATLAS Architecture")
+<img src="https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/images-and-videos/architecture3.png" alt="ATLAS Architecture" width="50%" height="50%" />
 
 A video of the platform in operation is available [here](https://www.dropbox.com/s/uprxwkcljbhdxv5/atlas-ci-testing-casestudy1.mp4?dl=0 "Video of case study 1")
 
