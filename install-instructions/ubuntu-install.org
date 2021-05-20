@@ -1,0 +1,124 @@
+* Installation configuration and requirements
+- Assumes Debian/Ubuntu APT style installation commands
+- Tested on Ubuntu LTS 20.04 (amd64) - VirtualBox machine
+- Minimal installation assumed when installing
+- User name "safemuv" - if other user name used, will have to replace /home/safemuv with the target user name
+
+* Install the dependencies for the compilers/build tools, MOOS and ActiveMQ/APR (Apache Portable Runtime)
+These are used in the dependencies:
+#+BEGIN_EXAMPLE
+sudo apt-get install  git gcc make cmake subversion
+sudo apt-get install  libfltk1.3-dev  freeglut3-dev  libpng-dev  libjpeg-dev
+sudo apt-get install  libxft-dev  libxinerama-dev   libtiff5-dev
+sudo apt-get install  libapr1-dev libssl-dev bbe
+#+END_EXAMPLE
+If your distribution doesn't have libpng-dev package it may be numerical, e.g. libpng12-dev
+
+* Clone the ATLAS/SAFEMUV platform:
+#+BEGIN_EXAMPLE
+mkdir -p academic/atlas
+cd academic/atlas
+git clone https://github.com/jrharbin-york/atlas-middleware.git
+git checkout --track origin/fuzzing
+git pull
+#+END_EXAMPLE
+
+* Clone the MOOS repository:
+#+BEGIN_EXAMPLE
+cd ~
+mkdir source && cd source
+svn co https://oceanai.mit.edu/svn/moos-ivp-aro/releases/moos-ivp-19.8.1 moos-ivp
+#+END_EXAMPLE
+
+* Download and expand ActiveMQ and the ActiveMQ-CPP interface:
+- This is tested with versions 5.15.2 of ActiveMQ and 3.9.5 of ActiveMQ-CPP.
+- Other versions might well work, particularly later ActiveMQ versions
+#+BEGIN_EXAMPLE
+cd ~/source
+wget https://archive.apache.org/dist/activemq/5.15.2/apache-activemq-5.15.2-bin.tar.gz
+wget https://apache.mirrors.nublue.co.uk/activemq/activemq-cpp/3.9.5/activemq-cpp-library-3.9.5-src.tar.gz
+# If these links are not present, please download these files manually and place in ~/source:
+tar -xvzf apache-activemq-5.15.2-bin.tar.gz 
+tar -xvzf activemq-cpp-library-3.9.5-src.tar.gz 
+#+END_EXAMPLE
+
+* Apply patches and build MOOS
+#+BEGIN_EXAMPLE
+cd ~/source/moos-ivp
+patch -p0 < ~/academic/atlas/atlas-middleware/custom-moos/patches/behaviour_allow_nonconvex_waypoints.patch
+./build-moos.sh
+./build-ivp.sh
+#+END_EXAMPLE
+If the patch file is not found, please ensure you have run "git pull" on the ~/academic/atlas/atlas-middleware
+repository.
+
+* Setup auto-activemq script - assumes safemuv as user name
+This is mostly for convenience to start ActiveMQ on command - you may wish to use other
+methods to launch it
+#+BEGIN_EXAMPLE
+echo '#!/bin/bash' >> ~/start_activemq.sh
+echo '/home/safemuv/source/apache-activemq-5.15.12/bin/activemq start' >> ~/start_activemq.sh
+#+END_EXAMPLE
+
+* Install ActiveMQ-CPP to /usr/local:
+#+BEGIN_EXAMPLE
+cd ~/source/activemq-cpp-library-3.9.5
+./configure
+make
+sudo make install
+#+END_EXAMPLE
+
+If ActiveMQ-CPP fails to link with "undefined symbol" errors
+relating to SSL, ensure the libssl-dev package is properly installed
+first. If it was not installed, it will be necessary to delete ActiveMQ-CPP
+rerun the previous stage, configuring/make/install.
+
+* Copy the APR headers to parent dir:
+For some reason, APR headers are often installed on Debian/Ubuntu
+in a custom directory, where they are not found. To prevent 
+"apr_pools.h: No such file or directory" later, the following 
+will be helpful
+#+BEGIN_EXAMPLE
+cd /usr/include/apr-1.0
+sudo cp *.h ..
+#+END_EXAMPLE
+
+* Build the custom MOOS interfacing component (ATLASDBInterface):
+#+BEGIN_EXAMPLE
+cd /home/safemuv/academic/atlas/atlas-middleware/custom-moos
+./build-ivp.sh
+cp bin/ATLASDBInterface ~/source/moos-ivp/bin
+#+END_EXAMPLE
+
+If there is an error resulting from:
+"No rule to make target '/usr/local/lib64/libactivemq-cpp.so'..."
+when building the custom MOOS components, it may be due to 
+the distro you're using having installed ActiveMQ at
+/usr/local/lib/
+In this case, enter the following:
+#+BEGIN_EXAMPLE
+cd /usr/local/
+sudo mkdir -p lib64
+cd lib64
+sudo ln -s /usr/local/lib/libactivemq-cpp.so /usr/local/lib64
+#+END_EXAMPLE
+Then retry building the custom MOOS interfacing component
+
+* Set up the path settings for MOOS apps
+#+BEGIN_EXAMPLE
+echo 'export MOOS=/home/safemuv/source/moos-ivp' >> ~/.bashrc
+echo 'export PATH=$MOOS/bin:$PATH' >> ~/.bashrc
+#+END_EXAMPLE
+
+* Ensure console-logs directory exists
+#+BEGIN_EXAMPLE
+mkdir -p /home/safemuv/academic/atlas/atlas-middleware/middleware-java/moos-sim/console-logs
+#+END_EXAMPLE
+
+* Export PATHS for MOOS 
+Add the following to .bashrc in your home directory to set the MOOS paths
+#+BEGIN_EXAMPLE
+export MOOS=/home/safemuv/source/moos-ivp
+export PATH=$MOOS/bin:$PATH
+export PATH=$MOOS/ivp/bin:$PATH
+#+END_EXAMPLE

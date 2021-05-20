@@ -16,3 +16,14 @@ The low coupling between the CI and the MRS simulator, mediated by the middlewar
 algorithms but also reinforces maintainability and extensibility (e.g., the components can be computing platform and programming language independent)
 
 ![alt text](https://github.com/jrharbin-york/atlas-middleware/blob/master/images-and-videos/screenshot-image.png "Case Study image")
+
+## Dependencies
+* ActiveMQ
+* CARS simulators (MOOS-IvP simulator/ROS)
+* ActiveMQ CMS Client (C++ interface)
+* Eclipse Modelling Framework
+* Epsilon
+* Emfatic
+
+## Installation instructions
+[I'm an inline-style link with title](https://www.google.com "Google's Homepage")
