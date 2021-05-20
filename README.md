@@ -15,4 +15,4 @@ This internal state, including goal events, is stored in log files that allow th
 The low coupling between the CI and the MRS simulator, mediated by the middleware, enables not only to experiment easily with several candidate CI 
 algorithms but also reinforces maintainability and extensibility (e.g., the components can be computing platform and programming language independent)
 
-![alt text](https://github.com/jrharbin-york/atlas-middleware/blob/master/images-and-videos/screenshot-image.png "Case Study image")
+![alt text](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/images-and-videos/screenshot-image.png "Case Study image")
