@@ -28,4 +28,4 @@ A video of the platform in operation is available [here](https://github.com/jrha
 * Emfatic
 
 ## Installation instructions
-* [Ubuntu installation](https://raw.githubusercontent.com/jrharbin-york/atlas-middleware/ciexpt/install-instructions/ubuntu-install.org "Ubuntu Installation instructions")
+* [Ubuntu installation](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/install-instructions/ubuntu-install.org "Ubuntu Installation instructions")
