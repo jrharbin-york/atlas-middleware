@@ -15,8 +15,6 @@ This internal state, including goal events, is stored in log files that allow th
 The low coupling between the CI and the MRS simulator, mediated by the middleware, enables not only to experiment easily with several candidate CI 
 algorithms but also reinforces maintainability and extensibility (e.g., the components can be computing platform and programming language independent)
 
-![alt text](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/images-and-videos/screenshot-image.png "Case Study image")
-
 A video of the platform in operation is available [here](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/images-and-videos/atlas-ci-testing-casestudy1.mp4 "Video of case study 1")
 
 ## Dependencies
@@ -29,3 +27,12 @@ A video of the platform in operation is available [here](https://github.com/jrha
 
 ## Installation instructions
 * [Ubuntu installation](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/install-instructions/ubuntu-install.org "Ubuntu Installation instructions")
+* [Eclipse additional instructions](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/install-instructions/eclipse-setup.org "Eclipse additional instructions")
+
+## Case Studies
+### Case Study 1
+![alt text](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/images-and-videos/screenshot-image.png "Case Study image")
+
+The models for this are located in the 
+
+Set up the run configuration at:
