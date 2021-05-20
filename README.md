@@ -17,7 +17,7 @@ algorithms but also reinforces maintainability and extensibility (e.g., the comp
 
 ![alt text](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/images-and-videos/screenshot-image.png "Case Study image")
 
-A video of the platform in operation is available here:
+A video of the platform in operation is available [here](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/images-and-videos/atlas-ci-testing-casestudy1.mp4 "Video of case study 1")
 
 ## Dependencies
 * ActiveMQ
@@ -28,4 +28,4 @@ A video of the platform in operation is available here:
 * Emfatic
 
 ## Installation instructions
-[I'm an inline-style link with title](https://www.google.com "Google's Homepage")
+* [Ubuntu installation](https://raw.githubusercontent.com/jrharbin-york/atlas-middleware/ciexpt/install-instructions/ubuntu-install.org "Ubuntu Installation instructions")
