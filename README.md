@@ -48,6 +48,11 @@ text](https://github.com/jrharbin-york/atlas-middleware/blob/ciexpt/images-and-v
 * ![Collective Intelligence Standard](middleware-java/src/atlascollectiveint/expt/casestudy1/ComputerCIshoreside_standard.java "Collective Intelligence Standard")
 * ![Collective Intelligence Advanced](middleware-java/src/atlascollectiveint/expt/casestudy1/ComputerCIshoreside_advanced.java "Collective Intelligence Advanced")
 
+On the anonymised repository, the links may not work. For these files please navigate manually to:
+* middleware-java/experiment-models/casestudy1/mission-basis.model
+* middleware-java/src/atlascollectiveint/expt/casestudy1/ComputerCIshoreside_standard.java
+* middleware-java/src/atlascollectiveint/expt/casestudy1/ComputerCIshoreside_advanced.java
+
 ### Case Study 2
 This is based upon the MOOS bo-alpha mission. It incorporates obstacle avoidance
 and inter-robot avoidance as the two vehicles scan specific areas and take
@@ -59,4 +64,11 @@ contains numerous obstacles
 * ![Mission basis model](middleware-java/experiment-models/casestudy2/mission-basis.model "Mission basis model")
 * ![Collective Intelligence Standard](middleware-java/src/atlascollectiveint/expt/casestudy2/ComputerCIshoreside_standard.java "Collective Intelligence Standard")
 * ![Collective Intelligence Energy Tracking](middleware-java/src/atlascollectiveint/expt/casestudy2/ComputerCIshoreside_energytracking.java "Collective Intelligence Energy Tracking")
+
+On the anonymised repository, the links may not work. For these files please navigate manually to:
+* middleware-java/experiment-models/casestudy2/mission-basis.model
+* middleware-java/src/atlascollectiveint/expt/casestudy2/ComputerCIshoreside_standard.java 
+* middleware-java/src/atlascollectiveint/expt/casestudy2/ComputerCIshoreside_energytracking.java 
+
+
 
