@@ -124,7 +124,9 @@ public class GeneratedDSLLoader implements DSLLoader {
 			[% } %]
 			[* Strip off the final comma from the end of it *]
 			[% var allNamesLen = allNames.length(); %]
-			[% allNames = allNames.substring(0, allNamesLen-1); %]
+			[% if (allNamesLen > 0) { %]
+				[% allNames = allNames.substring(0, allNamesLen-1); %]
+			[% } %]
 		
 		Robot [] grp[%= goalnum%] = {[%= allNames %]}; 
 		GoalParticipants gp[%= goalName %] = new StaticParticipants(grp[%= goalnum %], mission);

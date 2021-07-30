@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<atlas:Mission xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:atlas="http://www.github.com/jrharbin-york/atlas-middleware/dsl/atlas" xmi:id="ffc67d04-b84c-4937-92c4-104a0a106a4a" endTime="430.0">
+  <robots xmi:id="376df72a-5102-45f3-88f4-cd51bae366f6" name="uav_1">
+    <componentProperties xsi:type="atlas:PointProperty" xmi:id="594ea9df-759f-412f-a4af-0621892ac668" name="startLocation">
+      <value xmi:id="1e6023e6-454c-4556-a3fa-73c91b097a93" x="7.0" y="2.0"/>
+    </componentProperties>
+    <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="4bf63e98-4d0d-4fce-9ecc-95aa0b2ba1bd" name="maxSpeed" value="1.0"/>
+  </robots>
+  <robots xmi:id="3d402e5c-04fc-4516-9964-e73bff14572a" name="uav_2">
+    <componentProperties xsi:type="atlas:PointProperty" xmi:id="a11a15b4-cb61-49f7-936a-54fb6b8540d4" name="startLocation">
+      <value xmi:id="07ebf367-ebef-48fe-b42a-8a322e8b8103" x="7.0" y="-2.0"/>
+    </componentProperties>
+    <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="1a809f8b-8f02-4ddb-917a-506750525bca" name="maxSpeed" value="1.0"/>
+  </robots>
+  <goals xmi:id="df3b3477-0a90-42d6-9e3a-0dec1d6f60ee" name="AvoidPlaneInner">
+    <requirements xmi:id="bca61720-a686-4a8c-8c59-ed07eedb5429" latestFinishTime="430.0"/>
+    <participants xsi:type="atlas:StaticParticipants" xmi:id="52e2b98a-09ce-4a1f-a74f-58c7b68a5e4a" participants="376df72a-5102-45f3-88f4-cd51bae366f6 3d402e5c-04fc-4516-9964-e73bff14572a"/>
+  </goals>
+  <goals xmi:id="8781700a-6fa1-4e4e-a110-c7ed55ca7b08" name="StayInOuterRegion">
+    <requirements xmi:id="b716b4e4-b56d-4f15-92f7-a4666cc302b9" latestFinishTime="430.0"/>
+    <participants xsi:type="atlas:StaticParticipants" xmi:id="33ad7b8a-dba3-4e58-89e9-711dcf2cdb1d" participants="376df72a-5102-45f3-88f4-cd51bae366f6 3d402e5c-04fc-4516-9964-e73bff14572a"/>
+  </goals>
+  <goals xmi:id="097b2bcc-d643-4b39-9ef0-8816794a9db1" name="CheckUAVAllocations">
+    <requirements xmi:id="268f467d-1b31-44fb-bead-e415cec8036c" latestFinishTime="430.0"/>
+    <participants xsi:type="atlas:StaticParticipants" xmi:id="84738231-07a2-480a-8533-c81d937691b4" participants="376df72a-5102-45f3-88f4-cd51bae366f6 3d402e5c-04fc-4516-9964-e73bff14572a"/>
+  </goals>
+  <goals xmi:id="992bff14-ae76-493b-83c8-bea561b349c4" name="AvoidOthers">
+    <requirements xmi:id="8b63fef7-7184-44dd-a5d8-fea7e91fd073" latestFinishTime="430.0"/>
+    <participants xsi:type="atlas:StaticParticipants" xmi:id="2afa1a78-0652-41bd-a0be-437225dff980" participants="376df72a-5102-45f3-88f4-cd51bae366f6 3d402e5c-04fc-4516-9964-e73bff14572a"/>
+  </goals>
+  <goals xmi:id="798cfaaf-db3f-4936-970c-69a44cfd5daf" name="trackDistancesAndVelocities">
+    <requirements xmi:id="cecb1b92-4f59-4583-917f-9c1d44a7b499" latestFinishTime="430.0"/>
+    <participants xsi:type="atlas:StaticParticipants" xmi:id="749f408c-19cb-42be-bcff-baab5e0786f5" participants="376df72a-5102-45f3-88f4-cd51bae366f6 3d402e5c-04fc-4516-9964-e73bff14572a"/>
+    <metrics xmi:id="79d2b7e8-e6c1-4171-85ea-e21482eaefe9" name="SpeedViolationsCount"/>
+  </goals>
+  <goals xmi:id="12341272-781a-41f4-a021-55075c47e9a0" name="CheckMitigation">
+    <requirements xmi:id="7e10435d-bd81-4f16-8e37-0c8d69168eee" latestFinishTime="430.0"/>
+    <participants xsi:type="atlas:StaticParticipants" xmi:id="3e0f8def-85b5-4664-963b-c3ce6ccce82c" participants="376df72a-5102-45f3-88f4-cd51bae366f6 3d402e5c-04fc-4516-9964-e73bff14572a"/>
+  </goals>
+  <goals xmi:id="97ccda0b-f00d-4be2-9929-cd4c071d2c5c" name="CheckPathDeviation">
+    <requirements xmi:id="b01bd96e-502b-4d39-8856-895ae15b8e80" latestFinishTime="430.0"/>
+    <participants xsi:type="atlas:StaticParticipants" xmi:id="dd93fa27-8caa-4856-b6c8-9582244759e5"/>
+  </goals>
+  <goals xmi:id="06c09bf7-95bd-4f63-b041-795891e738b7" name="AvoidObstacles">
+    <requirements xmi:id="150c2f4a-2f8c-4686-8af7-0996cdc89aff" latestFinishTime="430.0"/>
+    <participants xsi:type="atlas:StaticParticipants" xmi:id="306b0411-19d0-4f67-a1be-4c451a2f1d43" participants="376df72a-5102-45f3-88f4-cd51bae366f6 3d402e5c-04fc-4516-9964-e73bff14572a"/>
+  </goals>
+  <goals xmi:id="a00bc9f0-38db-4e19-ac49-93496437b457" name="AssessCameraPerformance">
+    <requirements xmi:id="2f3914b0-791b-4a80-aecc-02ae17a8e9ac" latestFinishTime="430.0"/>
+    <participants xsi:type="atlas:StaticParticipants" xmi:id="0ef47651-a4c4-4dab-a7c0-0103112a438d" participants="376df72a-5102-45f3-88f4-cd51bae366f6 3d402e5c-04fc-4516-9964-e73bff14572a"/>
+  </goals>
+</atlas:Mission>

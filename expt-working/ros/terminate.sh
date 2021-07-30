@@ -20,6 +20,7 @@ killall -9 mavros_node
 docker stop SAFEMUV
 docker stop SAFEMUV1
 docker stop SAFEMUV2
+docker stop safemuv_metrics
 
 kill $(ps aux | grep '[c]ore.ATLASMain' | awk '{print $2}')
 kill $(ps aux | grep 'ROSLauncher' | awk '{print $2}')

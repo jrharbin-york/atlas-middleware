@@ -24,6 +24,7 @@ sleep 5
 xterm -e /bin/bash -l -c "roslaunch safemuv_launchers safemuv_visualizator.launch" &
 xterm -e /bin/bash -l -c "docker exec -it SAFEMUV1 bash -c 'source /catkin_ws/devel/setup.bash && roslaunch safemuv_shared afi_uav_1.launch'" &
 xterm -e /bin/bash -l -c "docker exec -it SAFEMUV2 bash -c 'source /catkin_ws/devel/setup.bash && roslaunch safemuv_shared afi_uav_2.launch'" &
+xterm -e /bin/bash -l -c "docker run -it --network host safemuv_metrics" &
 sleep 10
 xterm -e /bin/bash -l -c "rosrun safemuv_mission state_machine.py" &
 xterm -e /bin/bash -l -c "rosrun safemuv_mission state_machine_2.py"
