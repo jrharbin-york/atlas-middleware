@@ -162,21 +162,11 @@ public class ROSEventQueue extends CARSLinkEventQueue<ROSEvent> {
 
 					ROSEvent rev = new ROSTopicUpdate(vehicleName, tag, topicName, message, core.getTime(), rosType);
 					rosQueue.add(rev);
+					core.setGoalVariable(vehicleName, topicName, message);
 				}
 			});
 		}
 	}
-
-//	private void subscribeForStandardVehicleTopics(String vehicleName) {
-//		// We always require the position and velocity of vehicles for the middleware
-//		// state
-//		String velTopicName = "/ual/velocity";
-//		String posTopicName = "/ual/pose";
-//		String velType = "geometry_msgs/TwistStamped";
-//		String posType = "geometry_msgs/PoseStamped";
-//		standardSubscribeVehicle(vehicleName, ATLASTag.VELOCITY, velTopicName, velType);
-//		standardSubscribeVehicle(vehicleName, ATLASTag.POSE, posTopicName, posType);
-//	}
 
 	private void subscribeForStandardVehicleTopics(String vehicleName) {
 		// We always require the position and velocity of vehicles for the middleware

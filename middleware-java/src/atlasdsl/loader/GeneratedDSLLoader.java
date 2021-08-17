@@ -48,6 +48,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 		
 		
 		
+		
 		GoalAction ga1 = new TrackDistances();
 		
 		
@@ -82,6 +83,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 		
 		
 			GoalTemporalConstraints gt2 = new GoalTemporalConstraints(0.0, MISSION_END_TIME);
+		
 		
 		
 		
@@ -154,6 +156,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 		
 		
 		
+		
 		   
 		GoalRegion grAvoidOthers = new StaticGoalRegion(
 			new Region(new Point(-10.0, -10.0, 0.0),
@@ -170,6 +173,33 @@ public class GeneratedDSLLoader implements DSLLoader {
 		AvoidOthers.addMetric(met5);
 		
 		mission.addGoal("AvoidOthers", AvoidOthers);
+ 
+ 
+		
+		Robot [] grp4 = {ruav_1,ruav_2}; 
+		GoalParticipants gpAvoidInnerRegion = new StaticParticipants(grp4, mission);
+		
+		
+		
+			GoalTemporalConstraints gt4 = new GoalTemporalConstraints(0.0, MISSION_END_TIME);
+		
+		
+		
+		GoalAction ga4 = new MaintainDistanceFrom();
+		
+		
+		
+		
+		
+		
+		
+		Goal AvoidInnerRegion = new Goal("AvoidInnerRegion", mission, gt4, gpAvoidInnerRegion, Optional.empty(), ga4);
+		
+			GoalVariable gvar1 = new GoalVariable("/airframe_clearance", "", true);
+			AvoidInnerRegion.addVariable(gvar1);
+		
+		
+		mission.addGoal("AvoidInnerRegion", AvoidInnerRegion);
 	
 
 	

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ASCII"?>
-<fuzzspec:FuzzingSpecification xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:fuzzspec="http://www.github.com/jrharbin-york/atlas-middleware/dsl/fuzzspec" xsi:schemaLocation="http://www.github.com/jrharbin-york/atlas-middleware/dsl/fuzzspec ../../com.github.atlas.dsl/fuzzspec.ecore" xmi:id="_sYO_MLsZEeute_EAlr7M3A">
+<fuzzspec:FuzzingSpecification xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:fuzzspec="http://www.github.com/jrharbin-york/atlas-middleware/dsl/fuzzspec" xmi:id="_sYO_MLsZEeute_EAlr7M3A">
   <sims xmi:id="_xZ0CsLsZEeute_EAlr7M3A" name="ROS" baseDirectory="/home/jharbin/catkin_ws/src/safemuv">
     <components xmi:id="_11NP8LsZEeute_EAlr7M3A" name="trajectory_tracking_controller_fuzzy" componentRelativePath="/trajectory_tracking_controller_fuzzy">
       <vars xmi:id="_2EyjsMcEEeumT524tcEZIQ" component="_11NP8LsZEeute_EAlr7M3A" variable="/ual/set_velocity_prime" reflectionName="/ual/set_velocity" dir="OUTBOUND" vehicleSpecific="true">
@@ -21,10 +21,6 @@
       </vars>
     </components>
     <components xmi:id="_Ix39YM7mEeu_Qtc8Axo4IQ" name="trajectory_planning">
-      <vars xmi:id="_JEwnsM7nEeu_Qtc8Axo4IQ" component="_Ix39YM7mEeu_Qtc8Axo4IQ" variable="/desired_trajectory_path_prime" reflectionName="/desired_trajectory_path" dir="OUTBOUND" vehicleSpecific="true">
-        <vtype xsi:type="fuzzspec:ROSVariableType" xmi:id="_sB2csM7nEeu_Qtc8Axo4IQ" ROSTypename="nav_msgs/Path"/>
-        <probInfo xmi:id="_xKcHIM7nEeu_Qtc8Axo4IQ"/>
-      </vars>
       <vars xmi:id="_jWM7MM7nEeu_Qtc8Axo4IQ" component="_Ix39YM7mEeu_Qtc8Axo4IQ" variable="/desired_path_prime" reflectionName="/desired_path" dir="OUTBOUND" vehicleSpecific="true">
         <vtype xsi:type="fuzzspec:ROSVariableType" xmi:id="_uHWwoM7nEeu_Qtc8Axo4IQ" ROSTypename="nav_msgs/Path"/>
         <opParamsType xmi:id="_d4eyMNlDEeuPm8zY7fhTLg" opParam="_SRcHwM7pEeu_Qtc8Axo4IQ" subSpec="poses"/>
@@ -45,6 +41,12 @@
       <params xsi:type="fuzzspec:DoubleRangeOperationParameter" xmi:id="_vJI4EL8gEeuxyMr3nK2BCQ" name="X" lower="-1.0" upper="1.0"/>
       <params xsi:type="fuzzspec:DoubleRangeOperationParameter" xmi:id="_rHC7oL8gEeuxyMr3nK2BCQ" name="Y" lower="-1.0" upper="1.0"/>
       <params xsi:type="fuzzspec:DoubleRangeOperationParameter" xmi:id="_s8eMML8gEeuxyMr3nK2BCQ" name="Z" lower="-1.0" upper="1.0"/>
+    </paramSets>
+    <paramSets xmi:id="_A25iAPwkEeurod2TdoR0yw" name="JSONPointChange-Offset-1">
+      <params xsi:type="fuzzspec:StringConstantOperationParameter" xmi:id="_A25iAfwkEeurod2TdoR0yw" name="Nature" value="OFFSET"/>
+      <params xsi:type="fuzzspec:DoubleRangeOperationParameter" xmi:id="_A25iAvwkEeurod2TdoR0yw" name="X" lower="-1.0" upper="1.0"/>
+      <params xsi:type="fuzzspec:DoubleRangeOperationParameter" xmi:id="_A25iA_wkEeurod2TdoR0yw" name="Y" lower="-1.0" upper="1.0"/>
+      <params xsi:type="fuzzspec:DoubleRangeOperationParameter" xmi:id="_A25iBPwkEeurod2TdoR0yw" name="Z" lower="-1.0" upper="1.0"/>
     </paramSets>
   </operations>
   <operations xmi:id="_PJam4M7pEeu_Qtc8Axo4IQ" operationClassName="PathPointChanges">

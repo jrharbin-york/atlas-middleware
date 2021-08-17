@@ -14,6 +14,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import atlasdsl.*;
 import atlasdsl.faults.*;
 import atlassharedclasses.*;
+import edu.wpi.rail.jrosbridge.messages.Message;
 import faultgen.FaultGenerator;
 import middleware.carstranslations.CARSTranslations;
 import middleware.gui.GUITest;
@@ -233,5 +234,9 @@ public abstract class ATLASCore {
 		for (Robot r : mission.getAllRobots()) {
 			r.setupRobotEnergy();
 		}
+	}
+
+	public void setGoalVariable(String vehicleName, String topicName, Message message) {
+		
 	}
 }
