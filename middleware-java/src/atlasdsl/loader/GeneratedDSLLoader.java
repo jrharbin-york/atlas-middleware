@@ -120,6 +120,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 		
 		
 		
+		
 		GoalAction ga3 = new Avoid(1.5);
 		
 		
@@ -176,16 +177,16 @@ public class GeneratedDSLLoader implements DSLLoader {
  
  
 		
-		Robot [] grp4 = {ruav_1,ruav_2}; 
-		GoalParticipants gpAvoidInnerRegion = new StaticParticipants(grp4, mission);
+		Robot [] grp5 = {ruav_1,ruav_2}; 
+		GoalParticipants gpAvoidInnerRegion = new StaticParticipants(grp5, mission);
 		
 		
 		
-			GoalTemporalConstraints gt4 = new GoalTemporalConstraints(0.0, MISSION_END_TIME);
+			GoalTemporalConstraints gt5 = new GoalTemporalConstraints(0.0, MISSION_END_TIME);
 		
 		
 		
-		GoalAction ga4 = new MaintainDistanceFrom();
+		GoalAction ga5 = new MaintainDistanceFrom(1.0);
 		
 		
 		
@@ -193,10 +194,10 @@ public class GeneratedDSLLoader implements DSLLoader {
 		
 		
 		
-		Goal AvoidInnerRegion = new Goal("AvoidInnerRegion", mission, gt4, gpAvoidInnerRegion, Optional.empty(), ga4);
+		Goal AvoidInnerRegion = new Goal("AvoidInnerRegion", mission, gt5, gpAvoidInnerRegion, Optional.empty(), ga5);
 		
-			GoalVariable gvar1 = new GoalVariable("/airframe_clearance", "", true);
-			AvoidInnerRegion.addVariable(gvar1);
+			GoalVariable gvar2 = new GoalVariable("/airframe_clearance", "std_msgs/Float64", true);
+			AvoidInnerRegion.addVariable(gvar2);
 		
 		
 		mission.addGoal("AvoidInnerRegion", AvoidInnerRegion);

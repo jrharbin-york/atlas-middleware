@@ -56,6 +56,6 @@
   <goals xmi:id="_ySLtoP6PEeuDlp7kO-rlzA" name="AvoidInnerRegion">
     <participants xsi:type="atlas:StaticParticipants" xmi:id="_0iqigP6PEeuDlp7kO-rlzA" participants="_MGfmMJxZEeuXP_f35b_qpg _I_DTsJzTEeun4sDYCEayRA"/>
     <action xsi:type="atlas:MaintainDistanceFrom" xmi:id="_m-89gP6dEeuDlp7kO-rlzA" distance="1.0"/>
-    <variables xmi:id="_orUYsP6dEeuDlp7kO-rlzA" name="/airframe_clearance" vehicleSpecific="true"/>
+    <variables xmi:id="_orUYsP6dEeuDlp7kO-rlzA" name="/airframe_clearance" variableType="std_msgs/Float64" vehicleSpecific="true"/>
   </goals>
 </atlas:Mission>
