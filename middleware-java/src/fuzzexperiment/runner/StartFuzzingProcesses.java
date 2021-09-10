@@ -27,7 +27,7 @@ public class StartFuzzingProcesses {
 	private final static boolean CLEAR_ROS_LOGS_EACH_TIME = true;
 
 	// This is an emergency time cutout if the failsafe is not operating normally
-	private static double failsafeTimeLimit = 1000;
+	private static double failsafeTimeLimit = 1500;
 
 	private static void exptLog(String s) {
 		System.out.println(s);

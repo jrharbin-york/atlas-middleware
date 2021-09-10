@@ -46,6 +46,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 		
 		
 		
+		
 		GoalAction ga1 = new TrackDistances();
 		
 		
@@ -85,6 +86,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 		
 		
 		
+		
 		GoalAction ga2 = new StayInRegion(false);
 		
 		
@@ -116,7 +118,8 @@ public class GeneratedDSLLoader implements DSLLoader {
 		
 		
 		
-		GoalAction ga3 = new Avoid(1.5);
+		
+		GoalAction ga3 = new MaintainDistanceFrom(3.0);
 		
 		
 		
@@ -125,6 +128,8 @@ public class GeneratedDSLLoader implements DSLLoader {
 		
 		Goal AvoidPlaneInner = new Goal("AvoidPlaneInner", mission, gt3, gpAvoidPlaneInner, Optional.empty(), ga3);
 		
+			GoalVariable gvar1 = new GoalVariable("/airframe_clearance", "std_msgs/Float64", true);
+			AvoidPlaneInner.addVariable(gvar1);
 		
 		
 		
@@ -145,6 +150,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 		
 		
 		GoalAction ga4 = new AvoidOthers(2.0);
+		
 		
 		
 		

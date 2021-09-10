@@ -141,7 +141,7 @@ public class GeneratedFuzzingSpec {
 				
 		simMapping.addRecord("trajectory_tracking_controller_fuzzy", "/ual/set_velocity_prime", "/ual/set_velocity", 
 		FuzzingSimMapping.VariableDirection.OUTBOUND, Optional.of("/home/jharbin/catkin_ws/src/safemuv//trajectory_tracking_controller_fuzzy"), Optional.of("geometry_msgs/TwistStamped"),
-		true, Optional.of(new TimeSpec(m,0.0,200.0)), Optional.of(1.0));
+		true, Optional.of(new TimeSpec(m,0.0,600.0)), Optional.of(1.0));
 	
 			simMapping.addOperationParameterSetForVariable("/ual/set_velocity_prime", ops1, "twist.linear");
 			simMapping.addOperationParameterSetForVariable("/ual/set_velocity_prime", ops2, "twist.linear");
@@ -179,22 +179,9 @@ public class GeneratedFuzzingSpec {
 				
 		simMapping.addRecord("trajectory_planning", "/desired_path_prime", "/desired_path", 
 		FuzzingSimMapping.VariableDirection.OUTBOUND, Optional.of("/home/jharbin/catkin_ws/src/safemuv/"), Optional.of("nav_msgs/Path"),
-		true, Optional.of(new TimeSpec(m,0.0,200.0)), Optional.of(0.0));
+		true, Optional.of(new TimeSpec(m,0.0,600.0)), Optional.of(0.0));
 	
 			simMapping.addOperationParameterSetForVariable("/desired_path_prime", ops3, "poses");
-	
-		
-		
-		
-		
-	simMapping.setComponentFuzzingInfo("traj_plan_external", FuzzingSimMapping.FuzzingNature.NO_MODIFICATIONS, Optional.empty(), Optional.empty(), true);
-		
-				
-		simMapping.addRecord("traj_plan_external", "trajectory_planner_external.yaml", "", 
-		FuzzingSimMapping.VariableDirection.OUTBOUND, Optional.of("/home/jharbin/catkin_ws/src/safemuv/traj_plan_external"), Optional.empty(),
-		false, Optional.empty(), Optional.of(0.0));
-	
-			simMapping.addOperationParameterSetForVariable("trajectory_planner_external.yaml", , "trajectory_planner_geometric_primitives.discrete_graph.num_nodes");
 	
 	
 
@@ -205,7 +192,7 @@ public class GeneratedFuzzingSpec {
 	
 	fe.setSimMapping(simMapping);
 	if (loadCSV) {
-		fe.setupFromFuzzingFile("/home/jharbin//academic/atlas/atlas-middleware/fuzz-configs/ros-fuzztest.csv", m);
+		fe.setupFromFuzzingFile("/home/ubuntu/academic/atlas/atlas-middleware/fuzz-configs/ros-fuzztest.csv", m);
 	}
 	return fe;
 	}

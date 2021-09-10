@@ -247,6 +247,9 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="sensortype" eType="#//SensorType"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="collective" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MaintainDistanceFrom" eSuperTypes="#//GoalAction">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="distance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="GoalParticipants" abstract="true"/>
   <eClassifiers xsi:type="ecore:EEnum" name="logicOps">
     <eLiterals name="ADD" value="1"/>

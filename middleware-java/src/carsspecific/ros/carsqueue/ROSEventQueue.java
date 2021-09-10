@@ -163,6 +163,7 @@ public class ROSEventQueue extends CARSLinkEventQueue<ROSEvent> {
 
 					ROSEvent rev = new ROSTopicUpdate(vehicleName, tag, topicName, message, core.getTime(), rosType);
 					rosQueue.add(rev);
+					core.setGoalVariable(vehicleName, topicName, message);
 				}
 			});
 		}

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="ASCII"?>
-<fuzzspec:FuzzingSpecification xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:fuzzspec="http://www.github.com/jrharbin-york/atlas-middleware/dsl/fuzzspec" xsi:schemaLocation="http://www.github.com/jrharbin-york/atlas-middleware/dsl/fuzzspec ../../com.github.atlas.dsl/fuzzspec.ecore" xmi:id="_sYO_MLsZEeute_EAlr7M3A">
+<fuzzspec:FuzzingSpecification xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:fuzzspec="http://www.github.com/jrharbin-york/atlas-middleware/dsl/fuzzspec" xmi:id="_sYO_MLsZEeute_EAlr7M3A">
   <sims xmi:id="_xZ0CsLsZEeute_EAlr7M3A" name="ROS" baseDirectory="/home/jharbin/catkin_ws/src/safemuv">
     <components xmi:id="_11NP8LsZEeute_EAlr7M3A" name="trajectory_tracking_controller_fuzzy" componentRelativePath="/trajectory_tracking_controller_fuzzy">
       <vars xmi:id="_2EyjsMcEEeumT524tcEZIQ" component="_11NP8LsZEeute_EAlr7M3A" variable="/ual/set_velocity_prime" reflectionName="/ual/set_velocity" dir="OUTBOUND" vehicleSpecific="true">
         <vtype xsi:type="fuzzspec:ROSVariableType" xmi:id="_7GsXUMcEEeumT524tcEZIQ" ROSTypename="geometry_msgs/TwistStamped"/>
         <opParamsType xmi:id="_9diS4McEEeumT524tcEZIQ" opParam="_h-bxUL8gEeuxyMr3nK2BCQ" subSpec="twist.linear"/>
         <opParamsType xmi:id="_F3NcQAxhEeyHaY3ebI30PA" opParam="_kqTLcAxgEeyHaY3ebI30PA" subSpec="twist.linear"/>
-        <timeLimit xmi:id="_RpzTcMerEeuSQfDXSpD4CA" endTime="200.0"/>
+        <timeLimit xmi:id="_RpzTcMerEeuSQfDXSpD4CA" endTime="600.0"/>
         <probInfo xmi:id="_Nu5UgMilEeuXkJUdIAjG9g" includeVariableProbability="1.0"/>
       </vars>
     </components>
@@ -29,14 +29,8 @@
       <vars xmi:id="_jWM7MM7nEeu_Qtc8Axo4IQ" component="_Ix39YM7mEeu_Qtc8Axo4IQ" variable="/desired_path_prime" reflectionName="/desired_path" dir="OUTBOUND" vehicleSpecific="true">
         <vtype xsi:type="fuzzspec:ROSVariableType" xmi:id="_uHWwoM7nEeu_Qtc8Axo4IQ" ROSTypename="nav_msgs/Path"/>
         <opParamsType xmi:id="_d4eyMNlDEeuPm8zY7fhTLg" opParam="_SRcHwM7pEeu_Qtc8Axo4IQ" subSpec="poses"/>
-        <timeLimit xmi:id="_zl7WENlDEeuPm8zY7fhTLg" endTime="200.0"/>
+        <timeLimit xmi:id="_zl7WENlDEeuPm8zY7fhTLg" endTime="600.0"/>
         <probInfo xmi:id="_y7J20M7nEeu_Qtc8Axo4IQ"/>
-      </vars>
-    </components>
-    <components xsi:type="fuzzspec:Environment" xmi:id="_Y1wkMNkMEeuAQ_x5ldjrIg" name="traj_plan_external" componentRelativePath="traj_plan_external">
-      <vars xmi:id="_eUnZkNkMEeuAQ_x5ldjrIg" component="_Y1wkMNkMEeuAQ_x5ldjrIg" variable="trajectory_planner_external.yaml" dir="OUTBOUND">
-        <opParamsType xmi:id="_IQSfYNkPEeuAQ_x5ldjrIg" subSpec="trajectory_planner_geometric_primitives.discrete_graph.num_nodes"/>
-        <probInfo xmi:id="_CCpRYNkPEeuAQ_x5ldjrIg"/>
       </vars>
     </components>
   </sims>
@@ -65,4 +59,5 @@
       <params xsi:type="fuzzspec:IntRangeOperationParameter" xmi:id="_OiOroAxhEeyHaY3ebI30PA" name="SEED" upper="1073741824"/>
     </paramSets>
   </operations>
+  <operations xmi:id="_SFV5gAzDEeyJtqR1Kxka0Q" operationClassName="DelayFuzzingOperation"/>
 </fuzzspec:FuzzingSpecification>

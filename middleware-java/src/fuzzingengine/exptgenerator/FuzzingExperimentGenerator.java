@@ -109,11 +109,20 @@ public class FuzzingExperimentGenerator {
 
 	protected List<String> getRandomParticipantsFromMission() {
 		List<String> participants = new ArrayList<String>();
-		for (Robot r : mission.getAllRobots()) {
-			if (rng.nextDouble() < DEFAULT_PROB_OF_INCLUDING_ROBOT) {
-				participants.add(r.getName());
+		boolean ready = false;
+		
+		while (!ready) {
+			for (Robot r : mission.getAllRobots()) {
+				if (rng.nextDouble() < DEFAULT_PROB_OF_INCLUDING_ROBOT) {
+					participants.add(r.getName());
+				}
+			}
+			
+			if (participants.size() > 0) {
+				ready = true;
 			}
 		}
+				
 		return participants;
 	}
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ASCII"?>
-<atlas:Mission xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:atlas="http://www.github.com/jrharbin-york/atlas-middleware/dsl/atlas" xmi:id="_8OLx8HP4Eeqc6cv9mBHIKw" endTime="600.0">
+<atlas:Mission xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:atlas="http://www.github.com/jrharbin-york/atlas-middleware/dsl/atlas" xsi:schemaLocation="http://www.github.com/jrharbin-york/atlas-middleware/dsl/atlas ../../com.github.atlas.dsl/atlas.ecore" xmi:id="_8OLx8HP4Eeqc6cv9mBHIKw" endTime="600.0">
   <robots xmi:id="_MGfmMJxZEeuXP_f35b_qpg" name="uav_1" mutable="true">
     <componentProperties xsi:type="atlas:PointProperty" xmi:id="_W24moJxZEeuXP_f35b_qpg" name="startLocation">
       <value xmi:id="_X6QvMJxZEeuXP_f35b_qpg" x="7.0" y="-2.0"/>
@@ -37,7 +37,8 @@
   </goals>
   <goals xmi:id="_vpVZEMj6EeuWdKT93dm6Ig" name="AvoidPlaneInner" priority="1">
     <participants xsi:type="atlas:StaticParticipants" xmi:id="_vpVZEcj6EeuWdKT93dm6Ig" participants="_MGfmMJxZEeuXP_f35b_qpg _I_DTsJzTEeun4sDYCEayRA"/>
-    <action xsi:type="atlas:Avoid" xmi:id="_o6Zy0NAUEeuTY9Uq5rlyZA" clearance="1.5"/>
+    <action xsi:type="atlas:MaintainDistanceFrom" xmi:id="_XsQlQBHSEey17tavBfxLgg" distance="3.0"/>
+    <variables xmi:id="_xubckBGkEey17tavBfxLgg" name="/airframe_clearance" variableType="std_msgs/Float64" vehicleSpecific="true"/>
     <metrics xmi:id="_vpVZF8j6EeuWdKT93dm6Ig" name="OutsideOfInnerRegionViolations"/>
   </goals>
   <goals xmi:id="_7J7d0M7hEeu_Qtc8Axo4IQ" name="AvoidOthers" priority="1">

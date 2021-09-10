@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ASCII"?>
-<fuzzspec:FuzzingSpecification xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:fuzzspec="http://www.github.com/jrharbin-york/atlas-middleware/dsl/fuzzspec" xsi:schemaLocation="http://www.github.com/jrharbin-york/atlas-middleware/dsl/fuzzspec ../../com.github.atlas.dsl/fuzzspec.ecore" xmi:id="_sYO_MLsZEeute_EAlr7M3A">
+<fuzzspec:FuzzingSpecification xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:fuzzspec="http://www.github.com/jrharbin-york/atlas-middleware/dsl/fuzzspec" xmi:id="_sYO_MLsZEeute_EAlr7M3A">
   <sims xmi:id="_xZ0CsLsZEeute_EAlr7M3A" name="ROS" baseDirectory="/home/jharbin/catkin_ws/src/safemuv">
     <components xmi:id="_11NP8LsZEeute_EAlr7M3A" name="trajectory_tracking_controller_fuzzy" componentRelativePath="/trajectory_tracking_controller_fuzzy">
       <vars xmi:id="_2EyjsMcEEeumT524tcEZIQ" component="_11NP8LsZEeute_EAlr7M3A" variable="/ual/set_velocity_prime" reflectionName="/ual/set_velocity" dir="OUTBOUND" vehicleSpecific="true">
@@ -30,12 +30,6 @@
         <opParamsType xmi:id="_d4eyMNlDEeuPm8zY7fhTLg" opParam="_SRcHwM7pEeu_Qtc8Axo4IQ" subSpec="poses"/>
         <timeLimit xmi:id="_zl7WENlDEeuPm8zY7fhTLg" endTime="100.0"/>
         <probInfo xmi:id="_y7J20M7nEeu_Qtc8Axo4IQ" includeVariableProbability="0.5"/>
-      </vars>
-    </components>
-    <components xsi:type="fuzzspec:Environment" xmi:id="_Y1wkMNkMEeuAQ_x5ldjrIg" name="traj_plan_external" componentRelativePath="traj_plan_external">
-      <vars xmi:id="_eUnZkNkMEeuAQ_x5ldjrIg" component="_Y1wkMNkMEeuAQ_x5ldjrIg" variable="trajectory_planner_external.yaml" dir="OUTBOUND">
-        <opParamsType xmi:id="_IQSfYNkPEeuAQ_x5ldjrIg" opParam="_09vikNkMEeuAQ_x5ldjrIg" subSpec="trajectory_planner_geometric_primitives.discrete_graph.num_nodes"/>
-        <probInfo xmi:id="_CCpRYNkPEeuAQ_x5ldjrIg"/>
       </vars>
     </components>
   </sims>

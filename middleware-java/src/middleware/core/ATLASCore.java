@@ -2,6 +2,7 @@ package middleware.core;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -46,6 +47,7 @@ public abstract class ATLASCore {
 
 	@SuppressWarnings("rawtypes")
 	protected List<ATLASEventQueue> queues = new ArrayList<ATLASEventQueue>();
+	protected HashMap<String,Object> goalVariables = new LinkedHashMap<String,Object>();
 	protected List<FaultInstance> activeFaults = new ArrayList<FaultInstance>();
 	protected List<SensorDetectionLambda> sensorWatchers = new ArrayList<SensorDetectionLambda>();
 	protected List<PositionUpdateLambda> positionWatchers = new ArrayList<PositionUpdateLambda>();
@@ -248,5 +250,13 @@ public abstract class ATLASCore {
 		for (Robot r : mission.getAllRobots()) {
 			r.setupRobotEnergy();
 		}
+	}
+	
+	public void setGoalVariable(String vehicleName, String topicName, Object val) {
+		goalVariables.put(vehicleName + "-_-" + topicName, val);
+	}
+	
+	public Object getGoalVariable(String vehicleName, String topicName) {
+		return goalVariables.get(vehicleName + "-_-" + topicName);
 	}
 }
