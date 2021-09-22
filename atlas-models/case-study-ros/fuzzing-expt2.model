@@ -7,7 +7,7 @@
         <opParamsType xmi:id="_9diS4McEEeumT524tcEZIQ" opParam="_h-bxUL8gEeuxyMr3nK2BCQ" subSpec="twist.linear"/>
         <opParamsType xmi:id="_F3NcQAxhEeyHaY3ebI30PA" opParam="_kqTLcAxgEeyHaY3ebI30PA" subSpec="twist.linear"/>
         <timeLimit xmi:id="_RpzTcMerEeuSQfDXSpD4CA" endTime="600.0"/>
-        <probInfo xmi:id="_Nu5UgMilEeuXkJUdIAjG9g" includeVariableProbability="1.0"/>
+        <probInfo xmi:id="_Nu5UgMilEeuXkJUdIAjG9g" includeVariableProbability="0.5"/>
       </vars>
     </components>
     <components xsi:type="fuzzspec:Environment" xmi:id="_a9kGgMPJEeuxquRJ8lTruw" name="CalibrationDefinitions" componentRelativePath="safemuv_situational_awareness/config">
@@ -18,7 +18,7 @@
         <opParamsType xmi:id="_U-8rwMcmEeu7po30IwHYqg" opParam="_h-bxUL8gEeuxyMr3nK2BCQ" subSpec="frameB_3"/>
         <opParamsType xmi:id="_VRkFwMcmEeu7po30IwHYqg" opParam="_h-bxUL8gEeuxyMr3nK2BCQ" subSpec="frameB_4"/>
         <opParamsType xmi:id="_VkMG0McmEeu7po30IwHYqg" opParam="_h-bxUL8gEeuxyMr3nK2BCQ" subSpec="frameB_5"/>
-        <probInfo xmi:id="_KNA3QMinEeuXkJUdIAjG9g"/>
+        <probInfo xmi:id="_KNA3QMinEeuXkJUdIAjG9g" includeVariableProbability="0.5"/>
       </vars>
     </components>
     <components xmi:id="_Ix39YM7mEeu_Qtc8Axo4IQ" name="trajectory_planning">
@@ -30,7 +30,7 @@
         <vtype xsi:type="fuzzspec:ROSVariableType" xmi:id="_uHWwoM7nEeu_Qtc8Axo4IQ" ROSTypename="nav_msgs/Path"/>
         <opParamsType xmi:id="_d4eyMNlDEeuPm8zY7fhTLg" opParam="_SRcHwM7pEeu_Qtc8Axo4IQ" subSpec="poses"/>
         <timeLimit xmi:id="_zl7WENlDEeuPm8zY7fhTLg" endTime="600.0"/>
-        <probInfo xmi:id="_y7J20M7nEeu_Qtc8Axo4IQ"/>
+        <probInfo xmi:id="_y7J20M7nEeu_Qtc8Axo4IQ" includeVariableProbability="0.5"/>
       </vars>
     </components>
   </sims>

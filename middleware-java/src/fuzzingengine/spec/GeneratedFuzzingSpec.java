@@ -140,8 +140,8 @@ public class GeneratedFuzzingSpec {
 		
 				
 		simMapping.addRecord("trajectory_tracking_controller_fuzzy", "/ual/set_velocity_prime", "/ual/set_velocity", 
-		FuzzingSimMapping.VariableDirection.OUTBOUND, Optional.of("/home/jharbin/catkin_ws/src/safemuv//trajectory_tracking_controller_fuzzy"), Optional.of("geometry_msgs/TwistStamped"),
-		true, Optional.of(new TimeSpec(m,0.0,600.0)), Optional.of(1.0));
+		FuzzingSimMapping.VariableDirection.OUTBOUND, Optional.of("/home/ubuntu/catkin_ws/src/safemuv_ros//trajectory_tracking_controller_fuzzy"), Optional.of("geometry_msgs/TwistStamped"),
+		true, Optional.of(new TimeSpec(m,0.0,600.0)), Optional.of(0.5));
 	
 			simMapping.addOperationParameterSetForVariable("/ual/set_velocity_prime", ops1, "twist.linear");
 			simMapping.addOperationParameterSetForVariable("/ual/set_velocity_prime", ops2, "twist.linear");
@@ -154,8 +154,8 @@ public class GeneratedFuzzingSpec {
 		
 				
 		simMapping.addRecord("CalibrationDefinitions", "calibration_points.yaml", "", 
-		FuzzingSimMapping.VariableDirection.OUTBOUND, Optional.of("/home/jharbin/catkin_ws/src/safemuv/safemuv_situational_awareness/config"), Optional.empty(),
-		false, Optional.empty(), Optional.of(0.0));
+		FuzzingSimMapping.VariableDirection.OUTBOUND, Optional.of("/home/ubuntu/catkin_ws/src/safemuv_ros/safemuv_situational_awareness/config"), Optional.empty(),
+		false, Optional.empty(), Optional.of(0.5));
 	
 			simMapping.addOperationParameterSetForVariable("calibration_points.yaml", ops1, "frameB_0");
 			simMapping.addOperationParameterSetForVariable("calibration_points.yaml", ops1, "frameB_1");
@@ -172,14 +172,14 @@ public class GeneratedFuzzingSpec {
 		
 				
 		simMapping.addRecord("trajectory_planning", "/desired_trajectory_path_prime", "/desired_trajectory_path", 
-		FuzzingSimMapping.VariableDirection.OUTBOUND, Optional.of("/home/jharbin/catkin_ws/src/safemuv/"), Optional.of("nav_msgs/Path"),
+		FuzzingSimMapping.VariableDirection.OUTBOUND, Optional.of("/home/ubuntu/catkin_ws/src/safemuv_ros/"), Optional.of("nav_msgs/Path"),
 		true, Optional.empty(), Optional.of(0.0));
 	
 	
 				
 		simMapping.addRecord("trajectory_planning", "/desired_path_prime", "/desired_path", 
-		FuzzingSimMapping.VariableDirection.OUTBOUND, Optional.of("/home/jharbin/catkin_ws/src/safemuv/"), Optional.of("nav_msgs/Path"),
-		true, Optional.of(new TimeSpec(m,0.0,600.0)), Optional.of(0.0));
+		FuzzingSimMapping.VariableDirection.OUTBOUND, Optional.of("/home/ubuntu/catkin_ws/src/safemuv_ros/"), Optional.of("nav_msgs/Path"),
+		true, Optional.of(new TimeSpec(m,0.0,600.0)), Optional.of(0.5));
 	
 			simMapping.addOperationParameterSetForVariable("/desired_path_prime", ops3, "poses");
 	

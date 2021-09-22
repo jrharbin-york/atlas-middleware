@@ -95,8 +95,6 @@ public class RunJMetal extends AbstractAlgorithmRunner {
 //				metrics.add((OfflineMetric)m);
 //			}
 //		}
-		
-		metrics.add(new FindSpecificTime(100.0, 10.0));
 
 		Random problemRNG = new Random();
 		Random crossoverRNG = new Random();

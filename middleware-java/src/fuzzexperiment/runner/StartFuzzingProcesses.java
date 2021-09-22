@@ -105,12 +105,15 @@ public class StartFuzzingProcesses {
 		}
 	}
 	
-	public double doExperimentFromFile(String exptTag, boolean actuallyRun, double timeLimit, String fuzzFilePath)
-			throws InterruptedException, IOException {
-		Process middleware;
-
-		double returnValue = 0;
+	public void waitAfterExperiments() throws IOException {
+		// TODO: ensure simulation/SAFEMUV state is properly cleared
+		sleepHandlingInterruption(40000);
+		exptLog("Destroy commands completed");	
+	}
+	
+	public double doExperimentFromFile(String exptTag, boolean actuallyRun, double timeLimit, String fuzzFilePath) throws InterruptedException, IOException {
 		
+		double returnValue = 0;
 		if (actuallyRun) {	
 			exptLog("Starting ROS/SAFEMUV launch scripts"); 
 			ExptHelper.startScript(ABS_WORKING_PATH, "auto_launch_safemuv.sh");
@@ -129,24 +132,16 @@ public class StartFuzzingProcesses {
 			waitUntilMiddlewareTime(timeLimit, failsafeTimeLimit);
 			//waitWallClockTime(timeLimit);
 			exptLog("Middleware end time reached");
-
-			// TODO: ensure simulation/SAFEMUV state is properly cleared
+			// Wait 5 seconds to ensure the logs are written properly
+			exptLog("Kill MOOS / Java processes command sent");
+			
 			if (CLEAR_ROS_LOGS_EACH_TIME) {
 				ExptHelper.startCmd(ABS_WORKING_PATH, "terminate_clear_logs.sh");
 			} else {
 				ExptHelper.startCmd(ABS_WORKING_PATH, "terminate.sh");
 			}
-			exptLog("Kill MOOS / Java processes command sent");
-			sleepHandlingInterruption(40000);
-			exptLog("Destroy commands completed");
-		}
-
-		returnValue = 0;
-
-		if (actuallyRun) {
-			exptLog("Waiting to restart experiment");
-			// Wait 10 seconds before ending
-			TimeUnit.MILLISECONDS.sleep(10000);
+			
+			TimeUnit.MILLISECONDS.sleep(5000);
 		}
 
 		return returnValue;

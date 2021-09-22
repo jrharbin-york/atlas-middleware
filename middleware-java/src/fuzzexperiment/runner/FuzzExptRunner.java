@@ -106,23 +106,24 @@ public class FuzzExptRunner {
 				// Assess the metrics (which the user defined using filled-in templates)
 				// This should be done by the metrics handler now
 				try {
+					System.out.println("Processing metrics from logs in " + logPath);
 					// Need to get the fuzzing selection records
 					List<FuzzingKeySelectionRecord> fuzzrecs = FuzzingEngineSupport.loadFuzzingRecords(baseMission, file);
-					System.out.println("Fuzzing records = " + fuzzrecs);
 					metricResults = mh.computeAllOffline(fuzzrecs, logPath);
 					mh.printMetricsToOutputFile(file, metricResults);
 					eparams.advance(metricResults);
-					
-					
+					System.out.println("Processing metrics done successfully");
 				} catch (MetricComputeFailure e) {
 					// If we get metric computation failure, ignore the whole line
 					// TODO: log the failure
 					e.printStackTrace();
+					System.out.println("Metric compilation failed");
 					eparams.advance();
 				}
 				
 				System.out.println("----------------------------------------------------------------------------------------------------");
 				eparams.printStateAfter();
+				runner.waitAfterExperiments();
 			}	
 		}
 		System.out.println("Run completed");
