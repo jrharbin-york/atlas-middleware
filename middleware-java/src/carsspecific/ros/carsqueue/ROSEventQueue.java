@@ -9,6 +9,7 @@ import javax.json.*;
 import atlasdsl.*;
 import atlassharedclasses.GPSPositionReading;
 import atlassharedclasses.Point;
+import atlassharedclasses.SpeedReading;
 import carsspecific.ros.carsqueue.ROSTopicUpdate.ATLASTag;
 import carsspecific.ros.connection.ROSConnection;
 
@@ -32,19 +33,19 @@ public class ROSEventQueue extends CARSLinkEventQueue<ROSEvent> {
 	private static final long serialVersionUID = 1L;
 	private FuzzingEngine fuzzEngine;
 
-	private HashMap<String, Double> robotSpeeds = new HashMap<String, Double>();
+	//private HashMap<String, Double> robotSpeeds = new HashMap<String, Double>();
 
-	public void setupSpeeds() {
-		for (Robot r : mission.getAllRobots()) {
-			robotSpeeds.put(r.getName(), 0.0);
-		}
-	}
+//	public void setupSpeeds() {
+//		for (Robot r : mission.getAllRobots()) {
+//			robotSpeeds.put(r.getName(), 0.0);
+//		}
+//	}
 
 	public ROSEventQueue(ATLASCore core, Mission mission, int queueCapacity, FuzzingEngine fuzzEngine) {
 		super(core, queueCapacity, '.');
 		this.mission = mission;
 		this.fuzzEngine = fuzzEngine;
-		setupSpeeds();
+		//setupSpeeds();
 	}
 
 	public void run() {
@@ -102,8 +103,8 @@ public class ROSEventQueue extends CARSLinkEventQueue<ROSEvent> {
 				Point p = new Point(jx.doubleValue(), jy.doubleValue(), jz.doubleValue());
 				System.out.println("ODometry Point:" + p.toString());
 				System.out.println();
-				double speedStored = robotSpeeds.get(rtu.getVehicleName());
-				GPSPositionReading gps = new GPSPositionReading(p, speedStored, rtu.getVehicleName());
+				//double speedStored = robotSpeeds.get(rtu.getVehicleName());
+				GPSPositionReading gps = new GPSPositionReading(p, rtu.getVehicleName());
 				core.notifyPositionUpdate(gps);
 			}
 
@@ -117,7 +118,9 @@ public class ROSEventQueue extends CARSLinkEventQueue<ROSEvent> {
 				Point vel = new Point(jx.doubleValue(), jy.doubleValue(), jz.doubleValue());
 
 				double s = vel.absLength();
-				robotSpeeds.put(rtu.getVehicleName(), s);
+				SpeedReading sr = new SpeedReading(s, rtu.getVehicleName());
+				//robotSpeeds.put(rtu.getVehicleName(), s);
+				core.notifySpeedUpdate(sr);
 
 				System.out.println("Vel:" + vel.toString());
 			}

@@ -130,7 +130,7 @@ public class MOOSEventQueue extends CARSLinkEventQueue<MOOSEvent> {
 
 					// TODO: for now, assume the position sensor updates are provided directly
 					// by ground-truth position
-					GPSPositionReading gps = new GPSPositionReading(x, y, speed, entityName);
+					GPSPositionReading gps = new GPSPositionReading(x, y, entityName);
 					core.notifyPositionUpdate(gps);
 
 //					try {

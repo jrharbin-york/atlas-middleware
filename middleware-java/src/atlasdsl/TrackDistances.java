@@ -338,7 +338,7 @@ public class TrackDistances extends GoalAction {
 				double x = gps.getX();
 				double y = gps.getY();
 				double z = gps.getZ();
-				double speed = gps.getSpeed();
+				//double speed = gps.getSpeed();
 				String rname = gps.getRobotName();
 				Point p = new Point(x, y, z);
 				positions.put(rname, p);
@@ -350,15 +350,20 @@ public class TrackDistances extends GoalAction {
 					e1.printStackTrace();
 				}
 
-				checkDistanceToObjects(rname, x, y, speed);
+				//checkDistanceToObjects(rname, x, y, speed);
 				try {
 					checkPointIntersection(rname, p);
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
-
-				checkSpeed(rname, speed);
 			});
+			
+            core.setupSpeedWatcher((speedReading) -> {
+                String rname = speedReading.getRobotName();
+                double speed = speedReading.getSpeed();
+                checkSpeed(rname, speed);
+            });
+
 
 		} catch (IOException e2) {
 			// TODO Auto-generated catch block
