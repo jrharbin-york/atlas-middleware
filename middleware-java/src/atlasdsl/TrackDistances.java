@@ -23,6 +23,10 @@ public class TrackDistances extends GoalAction {
 	private Mission mission;
 	private double completionTime;
 	private GeometryFactory jtsGeoFactory = new GeometryFactory();
+	
+	private final double SPEED_VIOLATION_TIME_THRESHOLD = 1.0;
+	
+	private HashMap<String,Double> robotLastSpeedViolationTime = new HashMap<String,Double>();
 
 	public class SpeedViolationRecord {
 		private String robotName;
@@ -266,7 +270,7 @@ public class TrackDistances extends GoalAction {
 		}
 
 		// If completion time is exceeded, write the results file
-		if ((time > completionTime) && !writtenYet) {
+		if ((time > (completionTime-1.0)) && !writtenYet) {
 			getFinalDistFromStart();
 			writeResultsOut();
 			return Optional.empty();
@@ -308,13 +312,27 @@ public class TrackDistances extends GoalAction {
 			}
 		}
 	}
+	
+	public boolean speedViolationReadyToLog(String robotName, double currentTime) {
+		if (!robotLastSpeedViolationTime.containsKey(robotName)) {
+			robotLastSpeedViolationTime.put(robotName, Double.MIN_VALUE);
+		}
+		
+		double lastTime = robotLastSpeedViolationTime.get(robotName);
+		if ((currentTime - lastTime) >= SPEED_VIOLATION_TIME_THRESHOLD) {
+			robotLastSpeedViolationTime.put(robotName, currentTime);
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	protected void checkSpeed(String robotName, double currentSpeed) {
 		Robot r = mission.getRobot(robotName);
 		try {
 			double maxSpeed = r.getDoubleComponentProperty("maxSpeed");
 			double time = core.getTime();
-			if (currentSpeed > maxSpeed) {
+			if (currentSpeed > maxSpeed && speedViolationReadyToLog(robotName, time)) {
 				SpeedViolationRecord svr = new SpeedViolationRecord(robotName, currentSpeed, maxSpeed, time);
 				speedViolations.add(svr);
 			}

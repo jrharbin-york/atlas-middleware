@@ -40,7 +40,7 @@ public class RunRepeated extends ExptParams {
 	}
 
 	@Override
-	public void printStateAfter() throws IOException {
+	public void printStateAfter(List<OfflineMetric> ms) throws IOException {
 		// TODO Auto-generated method stub
 		
 	}

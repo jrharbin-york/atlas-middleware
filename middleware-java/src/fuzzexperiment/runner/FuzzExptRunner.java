@@ -122,7 +122,7 @@ public class FuzzExptRunner {
 				}
 				
 				System.out.println("----------------------------------------------------------------------------------------------------");
-				eparams.printStateAfter();
+				eparams.printStateAfter(mh.getMetrics());
 				runner.waitAfterExperiments();
 			}	
 		}

@@ -23,3 +23,6 @@ docker stop $(docker ps -a -q)
 kill $(ps aux | grep '[c]ore.ATLASMain' | awk '{print $2}')
 kill $(ps aux | grep 'ROSLauncher' | awk '{print $2}')
 
+# Ensure the YAML file is always refreshed properly from the original backup
+YAML_FILE=/home/ubuntu/catkin_ws/src/safemuv_ros/safemuv_situational_awareness/config/calibration_points.yaml
+cp $YAML_FILE.original $YAML_FILE

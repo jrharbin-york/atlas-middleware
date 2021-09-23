@@ -12,12 +12,12 @@
     </components>
     <components xsi:type="fuzzspec:Environment" xmi:id="_a9kGgMPJEeuxquRJ8lTruw" name="CalibrationDefinitions" componentRelativePath="safemuv_situational_awareness/config">
       <vars xmi:id="_gEFUYMPJEeuxquRJ8lTruw" component="_a9kGgMPJEeuxquRJ8lTruw" variable="calibration_points.yaml" dir="OUTBOUND">
-        <opParamsType xmi:id="_qfQOgMcFEeuUivYxWEGxgQ" opParam="_h-bxUL8gEeuxyMr3nK2BCQ" subSpec="frameB_0"/>
-        <opParamsType xmi:id="_UWN30McmEeu7po30IwHYqg" opParam="_h-bxUL8gEeuxyMr3nK2BCQ" subSpec="frameB_1"/>
-        <opParamsType xmi:id="_Uq5uYMcmEeu7po30IwHYqg" opParam="_h-bxUL8gEeuxyMr3nK2BCQ" subSpec="frameB_2"/>
-        <opParamsType xmi:id="_U-8rwMcmEeu7po30IwHYqg" opParam="_h-bxUL8gEeuxyMr3nK2BCQ" subSpec="frameB_3"/>
-        <opParamsType xmi:id="_VRkFwMcmEeu7po30IwHYqg" opParam="_h-bxUL8gEeuxyMr3nK2BCQ" subSpec="frameB_4"/>
-        <opParamsType xmi:id="_VkMG0McmEeu7po30IwHYqg" opParam="_h-bxUL8gEeuxyMr3nK2BCQ" subSpec="frameB_5"/>
+        <opParamsType xmi:id="_qfQOgMcFEeuUivYxWEGxgQ" opParam="_J1GV0BwSEeyTuJV2eOB92Q" subSpec="frameB_0"/>
+        <opParamsType xmi:id="_UWN30McmEeu7po30IwHYqg" opParam="_J1GV0BwSEeyTuJV2eOB92Q" subSpec="frameB_1"/>
+        <opParamsType xmi:id="_Uq5uYMcmEeu7po30IwHYqg" opParam="_J1GV0BwSEeyTuJV2eOB92Q" subSpec="frameB_2"/>
+        <opParamsType xmi:id="_U-8rwMcmEeu7po30IwHYqg" opParam="_J1GV0BwSEeyTuJV2eOB92Q" subSpec="frameB_3"/>
+        <opParamsType xmi:id="_VRkFwMcmEeu7po30IwHYqg" opParam="_J1GV0BwSEeyTuJV2eOB92Q" subSpec="frameB_4"/>
+        <opParamsType xmi:id="_VkMG0McmEeu7po30IwHYqg" opParam="_J1GV0BwSEeyTuJV2eOB92Q" subSpec="frameB_5"/>
         <probInfo xmi:id="_KNA3QMinEeuXkJUdIAjG9g" includeVariableProbability="0.5"/>
       </vars>
     </components>
@@ -47,6 +47,13 @@
       <params xsi:type="fuzzspec:DoubleRangeOperationParameter" xmi:id="_kqTLcwxgEeyHaY3ebI30PA" name="Y" lower="-1.0" upper="1.0"/>
       <params xsi:type="fuzzspec:DoubleRangeOperationParameter" xmi:id="_kqTLdAxgEeyHaY3ebI30PA" name="Z" lower="-1.0" upper="1.0"/>
       <params xsi:type="fuzzspec:IntRangeOperationParameter" xmi:id="_wHN6sAxgEeyHaY3ebI30PA" name="SEED" upper="1073741824"/>
+    </paramSets>
+    <paramSets xmi:id="_J1GV0BwSEeyTuJV2eOB92Q" name="JSONPointChange-FixedOffset">
+      <params xsi:type="fuzzspec:StringConstantOperationParameter" xmi:id="_J1GV0RwSEeyTuJV2eOB92Q" name="Nature" value="FIXEDOFFSET"/>
+      <params xsi:type="fuzzspec:DoubleRangeOperationParameter" xmi:id="_J1GV0hwSEeyTuJV2eOB92Q" name="X" lower="-3.0" upper="3.0"/>
+      <params xsi:type="fuzzspec:DoubleRangeOperationParameter" xmi:id="_J1GV0xwSEeyTuJV2eOB92Q" name="Y" lower="-3.0" upper="3.0"/>
+      <params xsi:type="fuzzspec:DoubleRangeOperationParameter" xmi:id="_J1GV1BwSEeyTuJV2eOB92Q" name="Z" lower="-0.5" upper="0.5"/>
+      <params xsi:type="fuzzspec:IntRangeOperationParameter" xmi:id="_J1GV1RwSEeyTuJV2eOB92Q" name="SEED" upper="1073741824"/>
     </paramSets>
   </operations>
   <operations xmi:id="_PJam4M7pEeu_Qtc8Axo4IQ" operationClassName="PathPointChanges">

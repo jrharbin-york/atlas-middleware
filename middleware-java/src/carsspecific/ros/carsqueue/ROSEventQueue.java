@@ -33,14 +33,6 @@ public class ROSEventQueue extends CARSLinkEventQueue<ROSEvent> {
 	private static final long serialVersionUID = 1L;
 	private FuzzingEngine fuzzEngine;
 
-	//private HashMap<String, Double> robotSpeeds = new HashMap<String, Double>();
-
-//	public void setupSpeeds() {
-//		for (Robot r : mission.getAllRobots()) {
-//			robotSpeeds.put(r.getName(), 0.0);
-//		}
-//	}
-
 	public ROSEventQueue(ATLASCore core, Mission mission, int queueCapacity, FuzzingEngine fuzzEngine) {
 		super(core, queueCapacity, '.');
 		this.mission = mission;
@@ -76,21 +68,6 @@ public class ROSEventQueue extends CARSLinkEventQueue<ROSEvent> {
 					}
 				}
 			}
-
-//			if (rtu.tagEquals(ATLASTag.POSE)) {
-//				JsonObject j = rtu.getJSON();
-//				JsonObject pose = j.getJsonObject("pose");
-//				JsonObject pos = pose.getJsonObject("position");
-//				JsonNumber jx = pos.getJsonNumber("x");
-//				JsonNumber jy = pos.getJsonNumber("y");
-//				JsonNumber jz = pos.getJsonNumber("z");
-//				Point p = new Point(jx.doubleValue(), jy.doubleValue(), jz.doubleValue());
-//				System.out.println("ATLAS Point:" + p.toString());
-//				System.out.println();
-//				double speedStored = robotSpeeds.get(rtu.getVehicleName());
-//				GPSPositionReading gps = new GPSPositionReading(p, speedStored, rtu.getVehicleName());
-//				core.notifyPositionUpdate(gps);
-//			}
 
 			if (rtu.tagEquals(ATLASTag.ODOMETRY)) {
 				JsonObject j = rtu.getJSON();

@@ -25,6 +25,7 @@ public class RunExperimentsMetricFeedback extends ExptParams {
 	private int populationLimit;
 	private FileWriter populationLog;
 	private FileWriter finalPopulationLog;
+	private FileWriter finalPopulationLogNonDom;
 
 	private FuzzingExperimentModifier g;
 
@@ -58,6 +59,7 @@ public class RunExperimentsMetricFeedback extends ExptParams {
 		this.fuzzCSVBaseName = fuzzCSVBaseName;
 		this.populationLog = new FileWriter("population.log");
 		this.finalPopulationLog = new FileWriter("finalPopulation.res");
+		this.finalPopulationLogNonDom = new FileWriter("finalPopulationNonDom.res");
 		this.pop = new FuzzingPopulation(populationLimit);
 		g = new FuzzingExperimentModifier(mission);
 		newRandomFile();
@@ -78,9 +80,13 @@ public class RunExperimentsMetricFeedback extends ExptParams {
 		populationLog.write("STARTING ITERATION " + count + ": population state\n");
 	}
 
-	public void printStateAfter() throws IOException {
+	public void printStateAfter(List<OfflineMetric> ms) throws IOException {
 		logPopulation();
+		pop.logFinalPopulation(finalPopulationLog, ms, false);
+		pop.logFinalPopulation(finalPopulationLogNonDom, ms, true);
 		populationLog.flush();
+		finalPopulationLog.flush();
+		finalPopulationLogNonDom.flush();
 	}
 
 	public void advance() {
@@ -114,7 +120,9 @@ public class RunExperimentsMetricFeedback extends ExptParams {
 	}
 
 	protected void printFinal(List<OfflineMetric> ms) throws IOException {
-		pop.logFinalPopulation(finalPopulationLog, ms);
+		pop.logFinalPopulation(finalPopulationLog, ms, false);
+		pop.logFinalPopulation(finalPopulationLogNonDom, ms, true);
 		finalPopulationLog.close();
+		finalPopulationLogNonDom.close();
 	}
 }

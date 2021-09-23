@@ -15,7 +15,7 @@ public abstract class ExptParams {
 
 	public abstract boolean completed();
 	public abstract void printState() throws IOException;
-	public abstract void printStateAfter() throws IOException;
+	public abstract void printStateAfter(List<OfflineMetric> ms) throws IOException;
 	public abstract void advance();
 	public abstract void advance(Map<Metric, Double> res);
 	

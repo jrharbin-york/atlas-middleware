@@ -213,7 +213,7 @@ public class FuzzingPopulation {
 		return rankedSubPopulations;
 	}
 
-	public void logFinalPopulation(FileWriter outLog, List<OfflineMetric> ms) throws IOException {
+	public void logFinalPopulation(FileWriter outLog, List<OfflineMetric> ms, boolean onlyNonDom) throws IOException {
 		String firstCol = "ID";
 		int id = 1;
 		
@@ -224,7 +224,20 @@ public class FuzzingPopulation {
 		
 		outLog.write("\n");
 		
-		for (FuzzingExptResult r : pop) {
+		List<FuzzingExptResult> chosen;
+		if (onlyNonDom) {
+			List<ArrayList<FuzzingExptResult>> rankings = computeRankings();
+			if (rankings.size() > 0) {
+				chosen = rankings.get(0);
+			} else {
+				// If there are no non-dom solutions, chosen is empty
+				chosen = new ArrayList<>();
+			}
+		} else {
+			chosen = pop;
+		}
+		
+		for (FuzzingExptResult r : chosen) {
 			outLog.write(String.valueOf(id) + ",");
 			id++;
 			Map<Metric,Double> metrics = r.getMetrics();
