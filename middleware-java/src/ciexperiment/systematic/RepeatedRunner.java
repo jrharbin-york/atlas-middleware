@@ -90,6 +90,9 @@ public class RepeatedRunner {
 			String resFileName = "ciexpt-"+fileTag+".res";
 			System.out.println("Model generation beginning for " + sourceModelFile);
 			List<String> missionFiles = modelTransformer.retriveAllModels(sourceModelFile);
+			
+			// TODO: add model filteration according to the EVL constraints here
+			
 			System.out.println("Model generation completed successfully!");
 			Thread.sleep(10000);
 			System.out.println("Starting experiment set");

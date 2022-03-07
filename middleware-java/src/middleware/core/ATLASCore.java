@@ -2,6 +2,7 @@ package middleware.core;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -10,6 +11,7 @@ import java.util.stream.Collectors;
 import atlasdsl.*;
 import atlasdsl.faults.*;
 import atlassharedclasses.*;
+import edu.wpi.rail.jrosbridge.messages.Message;
 import faultgen.FaultGenerator;
 import middleware.carstranslations.CARSTranslations;
 import middleware.gui.GUITest;
@@ -43,9 +45,11 @@ public abstract class ATLASCore {
 
 	@SuppressWarnings("rawtypes")
 	protected List<ATLASEventQueue> queues = new ArrayList<ATLASEventQueue>();
+	protected HashMap<String, Object> goalVariables = new LinkedHashMap<String, Object>();
 	protected List<FaultInstance> activeFaults = new ArrayList<FaultInstance>();
 	protected List<SensorDetectionLambda> sensorWatchers = new ArrayList<SensorDetectionLambda>();
 	protected List<PositionUpdateLambda> positionWatchers = new ArrayList<PositionUpdateLambda>();
+	protected List<SpeedUpdateLambda> speedWatchers = new ArrayList<SpeedUpdateLambda>();
 	
 	private FaultGenerator faultGen;	
 	private double time = 0.0;
@@ -181,6 +185,12 @@ public abstract class ATLASCore {
 		}
 	}
 	
+	public void notifySpeedUpdate(SpeedReading s) {
+		for (SpeedUpdateLambda watcher : speedWatchers) {
+			watcher.op(s);
+		}
+	}
+	
 	public double getTimeLimit() {
 		return timeLimit;
 	}
@@ -206,4 +216,19 @@ public abstract class ATLASCore {
 			r.setupRobotEnergy();
 		}
 	}
+
+	public void setupSpeedWatcher(SpeedUpdateLambda l) {
+		speedWatchers.add(l);
+	}
+
+	public void setGoalVariable(String vehicleName, String topicName, Object val) {
+		System.out.println("setGoalVariable: vehicleName=" + vehicleName + ",topicName=" + topicName + ",val=" + val);
+		goalVariables.put(vehicleName + "-_-" + topicName, val);
+	}
+
+	public Object getGoalVariable(String vehicleName, String topicName) {
+		return goalVariables.get(vehicleName + "-_-" + topicName);
+	}
+	
+	
 }

@@ -81,4 +81,9 @@ public class Point {
 		}
 		return closest;
 	}
+	
+	public double absLength() {
+		double sqrsum = Math.pow(x, 2.0) + Math.pow(y, 2.0) + Math.pow(z, 2.0);
+		return Math.sqrt(sqrsum);
+	}
 }

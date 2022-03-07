@@ -110,6 +110,24 @@
 	    <artifactId>commands</artifactId>
 	    <version>3.3.0-I20070605-0010</version>
 	</dependency>
+	
+	<dependency>
+	    <groupId>com.fasterxml.jackson.dataformat</groupId>
+	    <artifactId>jackson-dataformat-yaml</artifactId>
+	    <version>2.11.1</version>
+	</dependency>
+	
+	<dependency>
+    <groupId>javax.json</groupId>
+    <artifactId>javax.json-api</artifactId>
+    <version>1.0</version>
+</dependency>
+
+	<dependency>
+	    <groupId>edu.wpi.rail</groupId>
+	    <artifactId>jrosbridge</artifactId>
+	    <version>0.2.0</version>
+	</dependency>
 
   </dependencies>
 </project>

@@ -33,7 +33,7 @@ import middleware.logging.ATLASLog;
 public class FuzzingEngine<E> {
 	Mission m;
 	FuzzingConfig confs = new FuzzingConfig();
-	FuzzingSimMapping simmapping = new FuzzingSimMapping();
+	FuzzingSimMapping fuzzingspec = new FuzzingSimMapping();
 
 	PriorityQueue<FutureEvent<E>> delayedEvents = new PriorityQueue<FutureEvent<E>>();
 
@@ -56,7 +56,7 @@ public class FuzzingEngine<E> {
 
 	public void addFuzzingKeyOperation(String fuzzingKey, String vehicleNameList, int groupNum, double startTime,
 			double endTime, FuzzingOperation op) throws MissingRobot {
-		VariableSpecification vr = simmapping.getRecordForKey(fuzzingKey);
+		VariableSpecification vr = fuzzingspec.getRecordForKey(fuzzingKey);
 		List<String> vehicles = getVehicles(vehicleNameList);
 		FuzzingKeySelectionRecord fr = new FuzzingKeySelectionRecord(fuzzingKey, vr.getReflectionName_opt(),
 				vr.getComponent(), vr.getRegexp(), groupNum, op, vehicles, startTime, endTime);
@@ -77,7 +77,7 @@ public class FuzzingEngine<E> {
 			throw new InvalidMessage(messageName, "Message not in model");
 		} else {
 			String primedKeyName = messageFieldName + "'";
-			VariableSpecification vr = simmapping.getRecordForKey(primedKeyName);
+			VariableSpecification vr = fuzzingspec.getRecordForKey(primedKeyName);
 			if (vr == null) {
 				throw new InvalidMessage(messageName,
 						"Simmapping key not present for message field name " + messageFieldName);
@@ -130,7 +130,7 @@ public class FuzzingEngine<E> {
 	// need to test: look up the key in simmodel, is its specific component set as
 	// active
 	private Optional<FuzzingOperation> getOperationByInboundComponentAndVehicle(String key, String vehicle) {
-		VariableSpecification vr = simmapping.getRecordForKey(key);
+		VariableSpecification vr = fuzzingspec.getRecordForKey(key);
 		if (vr != null) {
 			Optional<String> comp = vr.getComponent();
 			if (comp.isPresent()) {
@@ -189,7 +189,7 @@ public class FuzzingEngine<E> {
 			CARSVariableUpdate cv = (CARSVariableUpdate) event;
 			String k = cv.getKey();
 			// return confs.getReflectionKey(k);
-			return simmapping.getReflectionKey(k);
+			return fuzzingspec.getReflectionKey(k);
 		}
 		return Optional.empty();
 	}
@@ -244,7 +244,7 @@ public class FuzzingEngine<E> {
 	}
 
 	public FuzzingSimMapping getSimMapping() {
-		return simmapping;
+		return fuzzingspec;
 	}
 
 	public FuzzingConfig getConfig() {
@@ -265,7 +265,7 @@ public class FuzzingEngine<E> {
 	}
 
 	public void setSimMapping(FuzzingSimMapping simMapping) {
-		this.simmapping = simMapping;
+		this.fuzzingspec = simMapping;
 	}
 
 	public List<String> getMessageKeys(String robotName, VariableDirection dir) {
@@ -396,6 +396,10 @@ public class FuzzingEngine<E> {
 		catch (IOException ex) {
 			ex.printStackTrace();
 		} 
+	}
+	
+	public FuzzingSimMapping getSpec() {
+		return fuzzingspec;
 	}
 
 	// This gets the explicitly selected keys upon this component

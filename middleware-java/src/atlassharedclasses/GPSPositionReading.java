@@ -3,7 +3,9 @@ package atlassharedclasses;
 public class GPSPositionReading extends SensorInfo {
 	private double x;
 	private double y;
-	private double speed;
+	private double z;
+	//private double speed;
+	//Speed readings now in SpeedReading
 	private String robotName;
 	
 	// There has to be a default constructor to allow the class to be 
@@ -12,10 +14,26 @@ public class GPSPositionReading extends SensorInfo {
 		
 	}
 	
-	public GPSPositionReading(double x, double y, double speed, String robotName) {
+	public GPSPositionReading(double x, double y, String robotName) {
 		this.x = x;
 		this.y = y;
-		this.speed = speed;
+		//this.speed = speed;
+		this.robotName = robotName;
+	}
+	
+	public GPSPositionReading(double x, double y, double z, String robotName) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		//this.speed = speed;
+		this.robotName = robotName;
+	}
+	
+	public GPSPositionReading(Point pos, String robotName) {
+		this.x = pos.getX();
+		this.y = pos.getY();
+		this.z = pos.getZ();
+		//this.speed = speed;
 		this.robotName = robotName;
 	}
 	
@@ -27,11 +45,16 @@ public class GPSPositionReading extends SensorInfo {
 		return y;
 	}
 	
+	public double getZ() {
+		return z;
+	}
+	
 	public String getRobotName() {
 		return robotName;
 	}
 
 	public double getSpeed() {
-		return speed;
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

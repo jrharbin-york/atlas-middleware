@@ -15,6 +15,7 @@ public class Goal {
 	//private List<Goal> subgoals = new ArrayList<Goal>();
 	private GoalAction action;
 	private List<GoalResult> results = new ArrayList<GoalResult>();
+	private List<GoalVariable> variables = new ArrayList<GoalVariable>();
 	
 	public Goal(String name, Mission mission, GoalTemporalConstraints timingReqs, GoalParticipants participants, Optional<GoalRegion> region, GoalAction action) {
 		this.name = name;
@@ -90,5 +91,9 @@ public class Goal {
 			}
 		}
 		return complete;
+	}
+	
+	public List<GoalVariable> getGoalVariables() {
+		return variables;
 	}
 }

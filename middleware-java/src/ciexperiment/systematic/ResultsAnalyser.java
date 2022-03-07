@@ -96,27 +96,26 @@ public class ResultsAnalyser {
 		}
 	}
 	
-	public static void printConfigsForExpt2(String filepath) {
-		try {
-			int colNumForMissed = 8;
-			SpecMatcher sm2Sweeps = new SpecMatcherDoubleValue(colNumForMissed, 2);
-			
-			runAnalysisLoop(filepath, "casestudy2-2missed-detections.list", "ComputerCIshoreside_standard", sm2Sweeps);
-		
-			
-		} catch (EolModelLoadingException | EglRuntimeException | InterruptedException | IOException
-				| URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+//	public static void printConfigsForExpt2(String filepath) {
+//		try {
+//			int colNumForMissed = 8;
+//			//SpecMatcher sm2Sweeps = new SpecMatcherDoubleValue(colNumForMissed, 2);
+//			//			runAnalysisLoop(filepath, "casestudy2-2missed-detections.list", "ComputerCIshoreside_standard", sm2Sweeps);
+//		
+//			
+//		} catch (EolModelLoadingException | EglRuntimeException | InterruptedException | IOException
+//				| URISyntaxException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
 	
 	public static void main(String [] args) {
 		String filepath_expt1 = "/home/atlas/atlas/atlas-middleware/middleware-java/res/ciexpt/2021_04_30/ciexpt-casestudy1.res";
 		String filepath_expt2 = "/home/atlas/atlas/atlas-middleware/middleware-java/res/ciexpt/2021_05_03_2/ciexpt-casestudy2.res";
 		//printAllConfigs(filepath_expt1);
 		//printConfigsForExpt1(filepath_expt1);
-		printConfigsForExpt2(filepath_expt2);
+		//printConfigsForExpt2(filepath_expt2);
 	}
 	
 }

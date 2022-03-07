@@ -87,7 +87,6 @@ public class ModelsTransformer {
 				mg.getMemberIds().add(memberId);
 			}
 			allMutationGroupsWithMemberIds.add(mg);
-
 		}
 
 		List<EObject> missions = (List<EObject>) sourceModel.getAllOfType("Mission");
@@ -216,44 +215,6 @@ public class ModelsTransformer {
 		}
 		
 		return allTheCreatedModels;
-
-		// !!! END OF MUTATION LOGIC !!!
-
-		// !!! START OF EGL EXECUTION FROM JAVA !!!
-
-//		// emf source (your mission model)
-//		EmfModel sourceModelForEGL = new EmfModel();
-//		sourceModelForEGL.setName("Source");
-//		File sourceModelForEGLFile = new File("models/mission.model");
-//		sourceModelForEGL.setModelFile(sourceModelForEGLFile.getAbsolutePath());
-//		
-//		sourceModelForEGL.setMetamodelUris(mmURIS);
-//		
-//		sourceModelForEGL.load();
-//
-//		// egl factory and module
-//		EglFileGeneratingTemplateFactory factory = new EglFileGeneratingTemplateFactory();
-//		EglTemplateFactoryModuleAdapter eglModule = new EglTemplateFactoryModuleAdapter(factory);
-//		eglModule.getContext().getModelRepository().addModel(sourceModelForEGL);
-//
-//		// Point to where the EGL file is located
-//		// TODO: replace the egl file path. Make it dynamic.
-//		String rawLocation = "files/myEGLFile.egl";
-//		
-//		File EglFile = new File(rawLocation);
-////		System.out.println(EglFile.toURI());
-//		EglFileGeneratingTemplate template = (EglFileGeneratingTemplate) factory.load(EglFile);
-//		template.process();
-//
-//		// Set the target file, ie. where the results will be generated to.
-//		// TODO: replace the path for the Java generated DSL here. Make it dynamic.
-//		File target = new File("files/GeneratedFile2.txt");
-//		target.createNewFile();
-//		template.generate(target.toURI().toString());
-//
-//		// !!! END OF EGL EXECUTION FROM JAVA !!!
-		
-
 	}
 
 	protected EmfModel createEmfModel(String name, String model, String metamodel, boolean readOnLoad,
