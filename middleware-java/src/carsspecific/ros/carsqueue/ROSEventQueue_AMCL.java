@@ -21,7 +21,7 @@ import fuzzingengine.FuzzingSimMapping;
 import fuzzingengine.FuzzingSimMapping.VariableSpecification;
 import middleware.core.*;
 
-public class ROSEventQueue extends CARSLinkEventQueue<ROSEvent> {
+public class ROSEventQueue_AMCL extends CARSLinkEventQueue<ROSEvent> {
 	// This is used in the subscriptions to ensure we do not duplicate them - e.g.
 	// by subscribing twice to the same topic
 	private Map<String, Boolean> topicSubscriptions = new HashMap<String, Boolean>();
@@ -41,7 +41,7 @@ public class ROSEventQueue extends CARSLinkEventQueue<ROSEvent> {
 		}
 	}
 
-	public ROSEventQueue(ATLASCore core, Mission mission, int queueCapacity, FuzzingEngine fuzzEngine) {
+	public ROSEventQueue_AMCL(ATLASCore core, Mission mission, int queueCapacity, FuzzingEngine fuzzEngine) {
 		super(core, queueCapacity, '.');
 		this.mission = mission;
 		this.fuzzEngine = fuzzEngine;
@@ -95,17 +95,17 @@ public class ROSEventQueue extends CARSLinkEventQueue<ROSEvent> {
 			if (rtu.tagEquals(ATLASTag.VELOCITY)) {
 				JsonObject j = rtu.getJSON();
 				JsonObject tw = j.getJsonObject("twist");
-				JsonObject linear = tw.getJsonObject("linear");
-				JsonNumber jx = linear.getJsonNumber("x");
-				JsonNumber jy = linear.getJsonNumber("y");
-				JsonNumber jz = linear.getJsonNumber("z");
-				Point vel = new Point(jx.doubleValue(), jy.doubleValue(), jz.doubleValue());
-
-				double s = vel.absLength();
-				SpeedReading sr = new SpeedReading(s, rtu.getVehicleName());
-				core.notifySpeedUpdate(sr);
+//				JsonObject linear = tw.getJsonObject("linear");
+//				JsonNumber jx = linear.getJsonNumber("x");
+//				JsonNumber jy = linear.getJsonNumber("y");
+//				JsonNumber jz = linear.getJsonNumber("z");
+//				Point vel = new Point(jx.doubleValue(), jy.doubleValue(), jz.doubleValue());
+//
+//				double s = vel.absLength();
+//				SpeedReading sr = new SpeedReading(s, rtu.getVehicleName());
+//				core.notifySpeedUpdate(sr);
 				
-				System.out.println("Vel:" + vel.toString());
+				//System.out.println("Vel:" + vel.toString());
 			}
 		}
 	}
@@ -114,7 +114,7 @@ public class ROSEventQueue extends CARSLinkEventQueue<ROSEvent> {
 		if (topicSubscriptions.containsKey(fullTopicName)) {
 			System.out.println("Ignoring second subscription attempt to " + fullTopicName);
 		} else {
-			ROSEventQueue rosQueue = this;
+			ROSEventQueue_AMCL rosQueue = this;
 			Topic t = new Topic(ros, fullTopicName, rosType);
 			topicSubscriptions.put(fullTopicName, true);
 			t.subscribe(new TopicCallback() {
@@ -137,7 +137,7 @@ public class ROSEventQueue extends CARSLinkEventQueue<ROSEvent> {
 			System.out.println("Ignoring second subscription attempt to " + topicNameFull);
 		} else {
 			System.out.println("Subscribing to " + topicNameFull);
-			ROSEventQueue rosQueue = this;
+			ROSEventQueue_AMCL rosQueue = this;
 			Topic t = new Topic(ros, topicNameFull, rosType);
 			topicSubscriptions.put(topicNameFull, true);
 			t.subscribe(new TopicCallback() {
@@ -155,14 +155,24 @@ public class ROSEventQueue extends CARSLinkEventQueue<ROSEvent> {
 		}
 	}
 
+//	private void subscribeForStandardVehicleTopics(String vehicleName) {
+//		// We always require the position and velocity of vehicles for the middleware
+//		// state
+//		String velTopicName = "/ual/velocity";
+//		String posTopicName = "/ual/pose";
+//		String velType = "geometry_msgs/TwistStamped";
+//		String posType = "geometry_msgs/PoseStamped";
+//		standardSubscribeVehicle(vehicleName, ATLASTag.VELOCITY, velTopicName, velType);
+//		standardSubscribeVehicle(vehicleName, ATLASTag.POSE, posTopicName, posType);
+//	}
+
 	private void subscribeForStandardVehicleTopics(String vehicleName) {
 		// We always require the position and velocity of vehicles for the middleware
 		// state
-		
-		String velTopicName = "/ual/velocity";
-		String posTopicName = "/ground_truth/state";
-		String velType = "geometry_msgs/TwistStamped";
-		String posType = "nav_msgs/Odometry";
+		String velTopicName = "/cmd_vel";
+		String posTopicName = "/amcl_pose";
+		String velType = "geometry_msgs/Twist";
+		String posType = "geometry_msgs/PoseWithCovarianceStamped";
 		standardSubscribeVehicle(vehicleName, ATLASTag.VELOCITY, velTopicName, velType);
 		standardSubscribeVehicle(vehicleName, ATLASTag.ODOMETRY, posTopicName, posType);
 	}

@@ -364,6 +364,7 @@ class Goal {
 	ref Behaviour[*] behaviours;
 }
 
+// TODO: change to SimulatorVariable
 class BehaviourVariable {
 	attr String varName;
 }

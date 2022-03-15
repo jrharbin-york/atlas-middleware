@@ -41,7 +41,7 @@ public abstract class ATLASCore {
 	
 	protected Map<String,Boolean> vehicleBatteryFlat = new HashMap<String,Boolean>(); 
 	
-	private GUITest gui;
+	protected GUITest gui;
 
 	@SuppressWarnings("rawtypes")
 	protected List<ATLASEventQueue> queues = new ArrayList<ATLASEventQueue>();
@@ -52,7 +52,26 @@ public abstract class ATLASCore {
 	protected List<SpeedUpdateLambda> speedWatchers = new ArrayList<SpeedUpdateLambda>();
 	
 	private FaultGenerator faultGen;	
+	private static ATLASCore coreRef;
 	private double time = 0.0;
+	
+	public void setupPositionPropertyUpdaters() {
+		setupPositionWatcher((pos) -> {
+			String rname = pos.getRobotName();
+			Robot r = mission.getRobot(rname);
+			r.setPointComponentProperty("location", new Point(pos.getX(), pos.getY(), pos.getZ()));
+		});
+	}
+
+	public static ATLASCore getCore() {
+		return coreRef;
+	}
+
+	public static void setCore(ATLASCore core) {
+		if (coreRef == null) {
+			coreRef = core;
+		}
+	}
 	
 	public ATLASCore(Mission mission) {
 		this.mission = mission;
@@ -62,15 +81,32 @@ public abstract class ATLASCore {
 		fromCI = new CIEventQueue(this, mission, CI_QUEUE_CAPACITY);
 		queues.add(fromCI);
 		faultGen = new FaultGenerator(this,mission);
-		fuzzEngine = GeneratedFuzzingSpec.createFuzzingEngine(mission);
+		fuzzEngine = GeneratedFuzzingSpec.createFuzzingEngine(mission, true);
 		setupEnergyOnRobots();
 	}
+	
+	public ATLASCore(Mission mission, boolean includeCIQueue) {
+		this.mission = mission;
+		stopOnNoEnergy = mission.stopOnNoEnergy();
+		this.timeLimit = mission.getEndTime();
+		this.monitor = new MissionMonitor(this, mission);
+		if (includeCIQueue) {
+			fromCI = new CIEventQueue(this, mission, CI_QUEUE_CAPACITY);
+			queues.add(fromCI);
+		}
+		faultGen = new FaultGenerator(this, mission);
+		fuzzEngine = GeneratedFuzzingSpec.createFuzzingEngine(mission, true);
+		setCore(this);
+		setupEnergyOnRobots();
+		setupPositionPropertyUpdaters();
+	}
+
 	
 	public CARSTranslations getCARSTranslator() {
 		return carsOutput;
 	}
 	
-	protected void createGUI() {
+	public void createGUI() {
 		gui = new GUITest(this,mission, faultGen);
 	}
 	

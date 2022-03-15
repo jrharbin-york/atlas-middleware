@@ -16,7 +16,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 	Computer c1 = new Computer("shoreside");
 	mission.addComputer(c1);
 	
-		Robot rgilda = new Robot("gilda");
+		Robot rgilda = new Robot("tb3_0");
 		rgilda.setPointComponentProperty("startLocation", new Point(40.0,0.0,0.0));
 		rgilda.setDoubleComponentProperty("maxSpeed", 5.0);
 		rgilda.setDoubleComponentProperty("startSpeed", 1.5);
@@ -35,7 +35,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 			
 			
 		mission.addRobot(rgilda);
-		Robot rfrank = new Robot("frank");
+		Robot rfrank = new Robot("tb3_1");
 		rfrank.setPointComponentProperty("startLocation", new Point(-20.0,0.0,0.0));
 		rfrank.setDoubleComponentProperty("maxSpeed", 5.0);
 		rfrank.setDoubleComponentProperty("startSpeed", 1.5);
@@ -54,7 +54,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 			
 			
 		mission.addRobot(rfrank);
-		Robot rhenry = new Robot("henry");
+		Robot rhenry = new Robot("tb3_2");
 		rhenry.setPointComponentProperty("startLocation", new Point(0.0,0.0,0.0));
 		rhenry.setDoubleComponentProperty("maxSpeed", 5.0);
 		rhenry.setDoubleComponentProperty("startSpeed", 1.5);

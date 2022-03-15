@@ -20,7 +20,7 @@ public class GenMOOSCode {
 		Mission mission;
 		mission = dslloader.loadMission();
 		
-		FuzzingEngine fe = GeneratedFuzzingSpec.createFuzzingEngine(mission);
+		FuzzingEngine fe = GeneratedFuzzingSpec.createFuzzingEngine(mission, true);
 		MOOSCodeGen gen = new MOOSCodeGen(mission, Optional.of(fe));
 		
 		CollectiveIntGen javaCI = new JavaCollectiveIntGen(mission);		

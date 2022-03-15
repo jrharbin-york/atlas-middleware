@@ -47,6 +47,7 @@ public class GUITest {
     
     private PositionTrackingOutput ptPanel;
 	private String faultDefFile;
+	private String fuzzingDefFile;
 	
 	private class FaultChoiceListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
@@ -212,5 +213,10 @@ public class GUITest {
 	public void setFaultDefinitionFile(String filePath) {
 		this.faultDefFile = filePath;
 		f.setTitle("ATLAS Middleware - FAULTS DEFINED in " + faultDefFile);
+	}
+
+	public void setFuzzingDefinitionFile(String filename) {
+		this.fuzzingDefFile = filename;
+		f.setTitle("ATLAS Middleware - FUZZING FILE " + fuzzingDefFile);
 	}
 }

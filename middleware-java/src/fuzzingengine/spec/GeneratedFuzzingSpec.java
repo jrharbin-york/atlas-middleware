@@ -6,7 +6,7 @@ import atlasdsl.Mission;
 import fuzzingengine.*;
 public class GeneratedFuzzingSpec {
 
-	public static FuzzingEngine createFuzzingEngine(Mission m) {
+	public static FuzzingEngine createFuzzingEngine(Mission m, boolean b) {
 	FuzzingEngine fe = new FuzzingEngine(m);
 	FuzzingSimMapping simMapping = new FuzzingSimMapping();
 	
