@@ -7,8 +7,8 @@ public class ROSConnection {
 	private Ros ros;
 	private static ROSConnection conn;
 	
-	private static final String ROS_HOSTNAME = "localhost";
-	private static final int ROS_PORT = 8080;
+	private static final String DEFAULT_ROS_HOSTNAME = "localhost";
+	private static final int DEFAULT_ROS_PORT = 8080;
 	
 	private ROSConnection(String hostname, int port) {
 		ros = new Ros(hostname, port, JRosbridge.WebSocketType.ws);
@@ -23,7 +23,14 @@ public class ROSConnection {
 	
 	public static ROSConnection getConnection() {
 		if (conn == null) {
-			conn = new ROSConnection(ROS_HOSTNAME, ROS_PORT);
+			conn = new ROSConnection(DEFAULT_ROS_HOSTNAME, DEFAULT_ROS_PORT);
+		}
+		return conn;
+	}
+	
+	public static ROSConnection getConnection(String hostname, int port) {
+		if (conn == null) {
+			conn = new ROSConnection(hostname, port);
 		}
 		return conn;
 	}	

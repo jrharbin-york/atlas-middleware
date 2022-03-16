@@ -19,7 +19,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 		var computerNum = 0; 
 	%]
 	final double MISSION_END_TIME = [%= m.endTime %];
-	Mission mission = new Mission(MISSION_END_TIME);
+	Mission mission = new Mission(MISSION_END_TIME, [%= m.stopVehicleOnNoEnergy %]);
 	
 	[% for (c in m.computers) { %]
 	[% var computerName = "c" + computerNum++;	%]

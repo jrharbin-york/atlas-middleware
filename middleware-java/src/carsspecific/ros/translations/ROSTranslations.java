@@ -3,22 +3,34 @@ package carsspecific.ros.translations;
 import java.util.HashMap;
 import java.util.List;
 import atlassharedclasses.Point;
+import edu.wpi.rail.jrosbridge.Ros;
+import edu.wpi.rail.jrosbridge.Topic;
+import edu.wpi.rail.jrosbridge.messages.Message;
 import middleware.carstranslations.CARSTranslations;
 import middleware.core.ActiveMQProducer;
 
 public class ROSTranslations extends CARSTranslations {
 	HashMap<String,ActiveMQProducer> producers;
+	Ros ros;
 	
-	public ROSTranslations() {
-
+	public ROSTranslations(Ros ros) throws CARSTransationSetupFailed {
+		if (ros == null) {
+			throw new CARSTransationSetupFailed("ROS object reference is null");
+		} else {
+			this.ros = ros;
+		}
 	}
 	
 	public void setOutputProducers(HashMap<String,ActiveMQProducer> producers) {
 		this.producers = producers;
 	}
 	
-	public synchronized void sendCARSUpdate(String robotName, Object key, Object value) {
-		System.out.println("ROSTranslations: sendCARSUpdate unimplemented");
+	public synchronized void sendCARSUpdate(String robotName, Object topicName_o, Object value) {
+		// TODO: this only supports string messages!
+		String topicName = topicName_o.toString();
+		Topic tOut = new Topic(ros, topicName, "std_msgs/String");
+		Message toSend = new Message("{\"data\": \""+  value + "\"}");
+		tOut.publish(toSend);
 	}
 	
 	public synchronized void vehicleStatusChange(String robotName, boolean newStatus) { 
@@ -43,5 +55,15 @@ public class ROSTranslations extends CARSTranslations {
 
 	public void stopVehicle(String robotName) {
 		
+	}
+
+	public void simulatorVariableChange(String robotName, String key, String value, boolean vehicleSpecific) {
+		String topicName;
+		if (vehicleSpecific) {
+			topicName = robotName + "/" + key;
+		} else {
+			topicName = key;
+		}
+		sendCARSUpdate(robotName, topicName, value);
 	}
 }

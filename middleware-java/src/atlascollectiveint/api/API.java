@@ -116,4 +116,9 @@ public class API {
 		BehaviourCommand cmd = new ReturnHome();
 		sendOrIgnore(cmd, robotName);
 	}
+	
+	public static void sendSimulatorVariable(String robotName, String key, String value, boolean vehicleSpecific) {
+		BehaviourCommand cmd = new ChangeSimulatorVariable(robotName, key, value, vehicleSpecific);
+		sendOrIgnore(cmd, robotName);
+	}
 }

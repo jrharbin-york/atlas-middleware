@@ -17,6 +17,8 @@ public abstract class CARSTranslations {
 	public abstract void setCoordinates(String robotName, List<Point> coords);
 	public abstract void setCoordinates(String robotName, List<Point> coords, int repeatCount);
 	public abstract void setOutputProducers(HashMap<String,ActiveMQProducer> producers);
+	public abstract void returnHome(String robotName);
+	public abstract void simulatorVariableChange(String robotName, String key, String value, boolean vehicleSpecific);
 	
 	public void sendBackEvent(CARSVariableUpdate event, String reflectBackName) {
 		String vehicleName = event.getVehicleName();
@@ -24,6 +26,4 @@ public abstract class CARSTranslations {
 		String value = event.getValue();
 		sendCARSUpdate(vehicleName, key, value);
 	}
-	
-	public abstract void returnHome(String robotName);
 }

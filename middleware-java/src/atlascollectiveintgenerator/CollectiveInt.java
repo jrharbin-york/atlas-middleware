@@ -66,7 +66,7 @@ public class CollectiveInt {
 	}
 	
 	public void startCI() {
-		System.out.print("startCI beginning...");
+		System.out.print("startCI beginning...\n");
 		consumer.run();
 	}
 	
@@ -83,8 +83,12 @@ public class CollectiveInt {
 			mission = l.loadMission();
 			API.setCIReference(this);
 			
-			// TODO: fix, this port is hardcoded to just listen to shoreside
-			consumer = new CollectiveIntActiveMQConsumer(PortMappings.portForCI("shoreside"), mission, this);
+			List<Computer> cs = mission.getAllComputers();
+			if (cs.size() > 0) {
+				Computer c = cs.get(0);
+				String ciCompName = c.getName();
+				consumer = new CollectiveIntActiveMQConsumer(PortMappings.portForCI(ciCompName), mission, this);
+			}
 			
 			List<String> producerNames = new ArrayList<String>();
 			

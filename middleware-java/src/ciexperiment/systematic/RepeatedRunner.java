@@ -159,4 +159,26 @@ public class RepeatedRunner {
 		//runCIExperiment("experiment-models/casestudy2/mission-basis-threshold250.model", l, "casestudy2-threshold250", ciOptions);
 		
 	}
+	
+	public static void expt_caseStudyHealthcare() throws EolModelLoadingException, EglRuntimeException, URISyntaxException, IOException, InterruptedException {
+		List<Metrics> l = new ArrayList<Metrics>();
+		l.add(Metrics.OBSTACLE_AVOIDANCE_METRIC);
+		l.add(Metrics.AVOIDANCE_METRIC);
+		l.add(Metrics.TOTAL_ENERGY_AT_END);
+		l.add(Metrics.MEAN_ENERGY_AT_END);
+		l.add(Metrics.TOTAL_FINAL_DISTANCE_AT_END);
+		l.add(Metrics.MEAN_FINAL_DISTANCE_AT_END);
+		l.add(Metrics.TOTAL_WAYPOINT_SWITCH_COUNT);
+
+		String basisModel = "experiment-models/healthcare/missionHealthcare.model";
+		String standardCI = "atlascollectiveint.expt.healthcare.ComputerCIshoreside_healthcare";
+		
+		ArrayList<String> ciOptions = new ArrayList<String>();
+		ciOptions.add(standardCI);
+		
+		modelExecutor.executeEGL(basisModel, EMF_OUTPUT_PATH);
+		Thread.sleep(1000);
+		
+		runCIExperiment(basisModel, l, "casestudy-healthcare", ciOptions);
+	}
 }

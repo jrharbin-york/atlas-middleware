@@ -5,8 +5,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 
+import javax.jms.JMSException;
 import javax.json.*;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import atlasdsl.*;
+import atlassharedclasses.ATLASObjectMapper;
 import atlassharedclasses.GPSPositionReading;
 import atlassharedclasses.Point;
 import atlassharedclasses.SpeedReading;
@@ -28,10 +33,17 @@ public class ROSEventQueue_AMCL extends CARSLinkEventQueue<ROSEvent> {
 
 	private final boolean DEBUG_PRINT_RAW_MESSAGE = true;
 	private final boolean DEBUG_PRINT_CLOCK_MESSAGES = false;
+	
+	private final String USE_CLOCK_TOPIC = "/clock";
+	
 	private Mission mission;
 	private Ros ros;
 	private static final long serialVersionUID = 1L;
+
+	private static final boolean DEBUG_PRINT_DESERIALISED_MSGS = true;
 	private FuzzingEngine fuzzEngine;
+	
+	private ActiveMQProducer outputToCI;
 
 	private HashMap<String, Double> robotSpeeds = new HashMap<String, Double>();
 
@@ -40,12 +52,18 @@ public class ROSEventQueue_AMCL extends CARSLinkEventQueue<ROSEvent> {
 			robotSpeeds.put(r.getName(), 0.0);
 		}
 	}
+	
+	public Ros getROS() {
+		return ros;
+	}
 
 	public ROSEventQueue_AMCL(ATLASCore core, Mission mission, int queueCapacity, FuzzingEngine fuzzEngine) {
 		super(core, queueCapacity, '.');
 		this.mission = mission;
 		this.fuzzEngine = fuzzEngine;
 		setupSpeeds();
+		atlasOMapper = new ATLASObjectMapper();
+		outputToCI = core.getCIProducer();
 	}
 
 	public void run() {
@@ -61,7 +79,7 @@ public class ROSEventQueue_AMCL extends CARSLinkEventQueue<ROSEvent> {
 		if (e instanceof ROSTopicUpdate) {
 			ROSTopicUpdate rtu = (ROSTopicUpdate) e;
 			if (rtu.tagEquals(ATLASTag.SIMULATOR_GENERAL)) {
-				if (rtu.getTopicName().equals("/inspection_clock")) {
+				if (rtu.getTopicName().equals(USE_CLOCK_TOPIC)) {
 					if (DEBUG_PRINT_CLOCK_MESSAGES) {
 						System.out.println("Clock msg = " + rtu.getJSON());
 					}
@@ -90,6 +108,21 @@ public class ROSEventQueue_AMCL extends CARSLinkEventQueue<ROSEvent> {
 				System.out.println();
 				GPSPositionReading gps = new GPSPositionReading(p, rtu.getVehicleName());
 				core.notifyPositionUpdate(gps);
+				
+				try {
+					String msg = atlasOMapper.serialise(gps);
+
+					if (DEBUG_PRINT_DESERIALISED_MSGS) {
+						System.out.println("DEBUG: serialised message " + msg);
+					}
+					outputToCI.sendMessage(msg);
+				} catch (JsonProcessingException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (JMSException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 
 			if (rtu.tagEquals(ATLASTag.VELOCITY)) {
@@ -230,12 +263,13 @@ public class ROSEventQueue_AMCL extends CARSLinkEventQueue<ROSEvent> {
 	}
 
 	private void subscribeForSimulatorTopics() {
-		// Test the new inspection clock
-		standardSubscribe("/inspection_clock", "rosgraph_msgs/Clock", ATLASTag.SIMULATOR_GENERAL);
+		standardSubscribe(USE_CLOCK_TOPIC, "rosgraph_msgs/Clock", ATLASTag.SIMULATOR_GENERAL);
 	}
 
 	public void setup() {
-		ros = ROSConnection.getConnection().getROS();
+		final String AMCL_HEALTHCARE_HOST = "localhost";
+		final int AMCL_HEALTHCARE_PORT = 9090;
+		ros = ROSConnection.getConnection(AMCL_HEALTHCARE_HOST, AMCL_HEALTHCARE_PORT).getROS();
 
 		// Iterate over all the robots in the DSL, set up subscriptions for position and
 		// velocity

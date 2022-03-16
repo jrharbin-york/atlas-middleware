@@ -24,8 +24,8 @@ public class CollectiveIntActiveMQConsumer implements Runnable, ExceptionListene
 	
 	Mission mission;
 	
-	public CollectiveIntActiveMQConsumer(String vehicleName, Mission mission, CollectiveInt ci) {
-		this.vehicleName = vehicleName;
+	public CollectiveIntActiveMQConsumer(String portName, Mission mission, CollectiveInt ci) {
+		this.vehicleName = portName;
 		this.mission = mission;
 		this.ci = ci;
 		atlasObjMapper = new ATLASObjectMapper();
@@ -56,6 +56,7 @@ public class CollectiveIntActiveMQConsumer implements Runnable, ExceptionListene
             // Create a Connection
             Connection connection = connectionFactory.createConnection();
             connection.start();
+            System.out.println("CollectiveIntActiveMQConsumer listening on " + vehicleName);
 
             connection.setExceptionListener(this);
 

@@ -50,7 +50,7 @@ public class CollectiveIntActiveMQProducer {
 			// Create a Session
 			session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
-			System.out.println("queueName = " + queueName);
+			System.out.println("CollectiveIntActiveMQProducer queueName = " + queueName);
 			// Create the destination (Topic or Queue)
 			if (type == QueueOrTopic.QUEUE) 
 				destination = session.createQueue(queueName);

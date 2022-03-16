@@ -88,6 +88,15 @@ public class CIEventQueue extends ATLASEventQueue<CIEvent> {
 			core.getCARSTranslator().vehicleStatusChange(robotName, newStatus);
 		}
 		
+		if (ciCmd instanceof ChangeSimulatorVariable) {
+			ChangeSimulatorVariable changeCmd = (ChangeSimulatorVariable)ciCmd;
+			String key = changeCmd.getKey();
+			String value = changeCmd.getValue();
+			boolean vehicleSpecific = changeCmd.isVehicleSpecific();
+			System.out.println("CIEventQueue - ChangeSimulatorVariable received");
+			core.getCARSTranslator().simulatorVariableChange(robotName, key, value, vehicleSpecific);
+		}
+		
 		if (ciCmd instanceof SetCoordinates) {
 			SetCoordinates setCmd = (SetCoordinates)ciCmd;
 			// put the faults that impact the coordinate processing here

@@ -75,4 +75,8 @@ public class MOOSTranslations extends CARSTranslations {
 		sendCARSUpdate(robotName, "STATION_KEEP", "true");
 		
 	}
+
+	public void simulatorVariableChange(String robotName, String key, String value, boolean isVehicleSpecific) {
+		
+	}
 }
