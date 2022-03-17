@@ -68,7 +68,6 @@ class DeleteMessage extends MessageImpact {
 
 class SubFieldSpec {
 	attr boolean randomSelection;
-	// TODO: change this to allow min or max field numbers here
 	attr int fieldStartNum;
 	attr int fieldRangeLength;
 }
@@ -364,14 +363,25 @@ class Goal {
 	ref Behaviour[*] behaviours;
 }
 
-// TODO: change to SimulatorVariable
-class BehaviourVariable {
+enum VariableTag {
+	GENERIC=0;
+  	VELOCITY=1;
+  	POSITION=2;
+  	SET_VELOCITY=3;
+  	TIME = 4;
+}
+
+class SimulatorVariable {
 	attr String varName;
+	attr String simType;
+	attr VariableTag[1] tag;
+	attr boolean isVehicleSpecific;
+	attr boolean propagateToCI;
 }
 
 class Behaviour {
 	attr String className;
-	val BehaviourVariable[*] bvars;
+	ref SimulatorVariable[*] bvars;
 }
 
 class Mission {
@@ -381,6 +391,7 @@ class Mission {
 	val Region[*] regions;
 	val Goal[*] goals;
 	val Behaviour[*] behaviours;
+	val SimulatorVariable[*] simVariables;
 	val EnvironmentalObject[*] objects;
 	val EnvironmentalObstacle[*] obstacles;
 	val EnvironmentalObstacleRegion obstacleRegion;

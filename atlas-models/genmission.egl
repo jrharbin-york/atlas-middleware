@@ -21,6 +21,10 @@ public class GeneratedDSLLoader implements DSLLoader {
 	final double MISSION_END_TIME = [%= m.endTime %];
 	Mission mission = new Mission(MISSION_END_TIME, [%= m.stopVehicleOnNoEnergy %]);
 	
+	[% for (sv in m.simVariables) { %]
+	mission.addSimulatorVariable(new SimulatorVariable("[%= sv.varName %]", "[%= sv.simType %]", SimulatorVariable.VariableTag.[%= sv.tag %], [%= sv.isVehicleSpecific %], [%= sv.propagateToCI %]));
+	[% } %]
+	
 	[% for (c in m.computers) { %]
 	[% var computerName = "c" + computerNum++;	%]
 	Computer [%= computerName %] = new Computer("[%= c.name %]");
@@ -51,6 +55,13 @@ public class GeneratedDSLLoader implements DSLLoader {
 		[% for (subc in r.subcomponents) { %]
 			[% var subID = "s" + robotName + "_" + subCNum++; %] 
 			[% componentLookup.put(subc, subID); %]
+			
+			[% if (subc.isKindOf(Battery)) { %]
+			Battery [%= subID %] = new Battery([%= subc.totalEnergy %]); 
+			[%= subID %].setParent([%= robotName %]);
+			[%= robotName %].addSubcomponent([%= subID %]);
+			[% } %]
+			
 			[% if (subc.isKindOf(Sensor)) { %]
 		Sensor [%= subID %] = new Sensor(SensorType.[%= subc.type %]);
 		[%= subID %].setParent([%= robotName %]);
@@ -69,7 +80,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 			
 			[* TODO: properties for these subcomponent types *]
 			[% if (subc.isKindOf(MotionSource)) { %]
-			MotionSource [%= subID %] = new MotionSource();
+			MotionSource [%= subID %] = new MotionSource([%= subc.energyPerDistance %]);
 			[%= robotName %].addSubcomponent([%= subID %]);
 			[% } %]
 			[% if (subc.isKindOf(Actuator)) { %]

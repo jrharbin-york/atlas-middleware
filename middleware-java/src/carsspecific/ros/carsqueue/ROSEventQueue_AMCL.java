@@ -3,14 +3,13 @@ package carsspecific.ros.carsqueue;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Random;
-
 import javax.jms.JMSException;
 import javax.json.*;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import atlasdsl.*;
+import atlasdsl.SimulatorVariable.VariableTag;
 import atlassharedclasses.ATLASObjectMapper;
 import atlassharedclasses.GPSPositionReading;
 import atlassharedclasses.Point;
@@ -34,7 +33,15 @@ public class ROSEventQueue_AMCL extends CARSLinkEventQueue<ROSEvent> {
 	private final boolean DEBUG_PRINT_RAW_MESSAGE = true;
 	private final boolean DEBUG_PRINT_CLOCK_MESSAGES = false;
 	
-	private final String USE_CLOCK_TOPIC = "/clock";
+	private final String DEFAULT_CLOCK_TOPIC = "/clock";
+	
+	private final String DEFAULT_POS_TOPIC = "/ground_truth/state";
+	private final String DEFAULT_POS_TYPE = "nav_msgs/Odometry";
+	
+	private final String DEFAULT_VEL_TOPIC = "/ual/velocity";
+	private final String DEFAULT_VEL_TYPE = "geometry_msgs/TwistStamped";
+	
+	private String velTopicType = DEFAULT_VEL_TYPE;
 	
 	private Mission mission;
 	private Ros ros;
@@ -79,7 +86,7 @@ public class ROSEventQueue_AMCL extends CARSLinkEventQueue<ROSEvent> {
 		if (e instanceof ROSTopicUpdate) {
 			ROSTopicUpdate rtu = (ROSTopicUpdate) e;
 			if (rtu.tagEquals(ATLASTag.SIMULATOR_GENERAL)) {
-				if (rtu.getTopicName().equals(USE_CLOCK_TOPIC)) {
+				if (rtu.getTopicName().equals(DEFAULT_CLOCK_TOPIC)) {
 					if (DEBUG_PRINT_CLOCK_MESSAGES) {
 						System.out.println("Clock msg = " + rtu.getJSON());
 					}
@@ -107,7 +114,9 @@ public class ROSEventQueue_AMCL extends CARSLinkEventQueue<ROSEvent> {
 				System.out.println("ODometry Point:" + p.toString());
 				System.out.println();
 				GPSPositionReading gps = new GPSPositionReading(p, rtu.getVehicleName());
+				core.registerEnergyUsage(mission.getRobot(rtu.getVehicleName()), p);
 				core.notifyPositionUpdate(gps);
+				
 				
 				try {
 					String msg = atlasOMapper.serialise(gps);
@@ -128,17 +137,20 @@ public class ROSEventQueue_AMCL extends CARSLinkEventQueue<ROSEvent> {
 			if (rtu.tagEquals(ATLASTag.VELOCITY)) {
 				JsonObject j = rtu.getJSON();
 				JsonObject tw = j.getJsonObject("twist");
-//				JsonObject linear = tw.getJsonObject("linear");
-//				JsonNumber jx = linear.getJsonNumber("x");
-//				JsonNumber jy = linear.getJsonNumber("y");
-//				JsonNumber jz = linear.getJsonNumber("z");
-//				Point vel = new Point(jx.doubleValue(), jy.doubleValue(), jz.doubleValue());
-//
-//				double s = vel.absLength();
-//				SpeedReading sr = new SpeedReading(s, rtu.getVehicleName());
-//				core.notifySpeedUpdate(sr);
+				if (velTopicType.equals("geometry_msgs/TwistStamped")) {
+					JsonObject linear = tw.getJsonObject("linear");
+					JsonNumber jx = linear.getJsonNumber("x");
+					JsonNumber jy = linear.getJsonNumber("y");
+					JsonNumber jz = linear.getJsonNumber("z");
+					Point vel = new Point(jx.doubleValue(), jy.doubleValue(), jz.doubleValue());
+
+					double s = vel.absLength();
+					SpeedReading sr = new SpeedReading(s, rtu.getVehicleName());
+					core.notifySpeedUpdate(sr);
+					//System.out.println("Vel:" + vel.toString());
+				}
 				
-				//System.out.println("Vel:" + vel.toString());
+				// TODO: other types for handling velocity
 			}
 		}
 	}
@@ -188,26 +200,30 @@ public class ROSEventQueue_AMCL extends CARSLinkEventQueue<ROSEvent> {
 		}
 	}
 
-//	private void subscribeForStandardVehicleTopics(String vehicleName) {
-//		// We always require the position and velocity of vehicles for the middleware
-//		// state
-//		String velTopicName = "/ual/velocity";
-//		String posTopicName = "/ual/pose";
-//		String velType = "geometry_msgs/TwistStamped";
-//		String posType = "geometry_msgs/PoseStamped";
-//		standardSubscribeVehicle(vehicleName, ATLASTag.VELOCITY, velTopicName, velType);
-//		standardSubscribeVehicle(vehicleName, ATLASTag.POSE, posTopicName, posType);
-//	}
-
 	private void subscribeForStandardVehicleTopics(String vehicleName) {
 		// We always require the position and velocity of vehicles for the middleware
 		// state
-		String velTopicName = "/cmd_vel";
-		String posTopicName = "/amcl_pose";
-		String velType = "geometry_msgs/Twist";
-		String posType = "geometry_msgs/PoseWithCovarianceStamped";
-		standardSubscribeVehicle(vehicleName, ATLASTag.VELOCITY, velTopicName, velType);
-		standardSubscribeVehicle(vehicleName, ATLASTag.ODOMETRY, posTopicName, posType);
+
+		String posTopicName = DEFAULT_POS_TOPIC;
+		String posTopicType = DEFAULT_POS_TYPE;
+		Optional<SimulatorVariable> posTopicName_o = mission.getSimulatorVariableByTag(VariableTag.POSITION);
+		if (posTopicName_o.isPresent()) {
+			posTopicName = posTopicName_o.get().getVarName();
+			posTopicType = posTopicName_o.get().getSimType();
+			System.out.println("posTopicName = " + posTopicName);
+			System.out.println("posTopicType = " + posTopicName);
+		}
+		
+		String velTopicName = DEFAULT_VEL_TOPIC;
+
+		Optional<SimulatorVariable> velTopicName_o = mission.getSimulatorVariableByTag(VariableTag.VELOCITY);
+		if (velTopicName_o.isPresent()) {
+			velTopicName = velTopicName_o.get().getVarName();
+			velTopicType = velTopicName_o.get().getSimType();
+		}
+		
+		standardSubscribeVehicle(vehicleName, ATLASTag.VELOCITY, velTopicName, velTopicType);
+		standardSubscribeVehicle(vehicleName, ATLASTag.ODOMETRY, posTopicName, posTopicType);
 	}
 
 	private void subscribeForFuzzingTopics() {
@@ -263,7 +279,7 @@ public class ROSEventQueue_AMCL extends CARSLinkEventQueue<ROSEvent> {
 	}
 
 	private void subscribeForSimulatorTopics() {
-		standardSubscribe(USE_CLOCK_TOPIC, "rosgraph_msgs/Clock", ATLASTag.SIMULATOR_GENERAL);
+		standardSubscribe(DEFAULT_CLOCK_TOPIC, "rosgraph_msgs/Clock", ATLASTag.SIMULATOR_GENERAL);
 	}
 
 	public void setup() {

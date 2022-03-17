@@ -292,13 +292,24 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="behaviours" upperBound="-1"
         eType="#//Behaviour"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="BehaviourVariable">
+  <eClassifiers xsi:type="ecore:EEnum" name="VariableTag">
+    <eLiterals name="GENERIC"/>
+    <eLiterals name="VELOCITY" value="1"/>
+    <eLiterals name="POSITION" value="2"/>
+    <eLiterals name="SET_VELOCITY" value="3"/>
+    <eLiterals name="TIME" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SimulatorVariable">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="varName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="simType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tag" lowerBound="1" eType="#//VariableTag"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isVehicleSpecific" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="propagateToCI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Behaviour">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="className" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="bvars" upperBound="-1"
-        eType="#//BehaviourVariable" containment="true"/>
+        eType="#//SimulatorVariable"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Mission">
     <eStructuralFeatures xsi:type="ecore:EReference" name="mutProgram" lowerBound="1"
@@ -313,6 +324,8 @@
         eType="#//Goal" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="behaviours" upperBound="-1"
         eType="#//Behaviour" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="simVariables" upperBound="-1"
+        eType="#//SimulatorVariable" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="objects" upperBound="-1"
         eType="#//EnvironmentalObject" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="obstacles" upperBound="-1"

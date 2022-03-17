@@ -2,17 +2,31 @@ package atlascollectiveint.expt.healthcare;
 
 import atlascollectiveint.api.*;
 import atlascollectiveint.logging.CollectiveIntLog;
+import atlasdsl.DiscoverObjects;
+import atlasdsl.Goal;
+import atlasdsl.GoalAction;
+import atlasdsl.GoalRegion;
+import atlasdsl.MissingProperty;
+import atlasdsl.Mission;
+import atlasdsl.Robot;
+import atlasdsl.loader.DSLLoadFailed;
+import atlasdsl.loader.DSLLoader;
+import atlasdsl.loader.GeneratedDSLLoader;
 import atlassharedclasses.*;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.Double;
 import java.lang.String;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class ComputerCIshoreside_healthcare {
+public class ComputerCIshoreside_healthcare_backup {
 
 	private static Map<String,List<Integer>> workassignments = new HashMap<String,List<Integer>>(); 
 	private static Map<String,Point> robotLocations = new HashMap<String,Point>(); 
@@ -20,16 +34,16 @@ public class ComputerCIshoreside_healthcare {
 	public static Map<String,List<Integer>> fixedWorkAssignments() {
 		List<Integer> rooms_tb0 = new ArrayList<Integer>();
 		rooms_tb0.add(1);
-		rooms_tb0.add(3);
-		rooms_tb0.add(7);
+		rooms_tb0.add(2);
+		rooms_tb0.add(6);
 		
 		List<Integer> rooms_tb1 = new ArrayList<Integer>();
-		rooms_tb1.add(1);
-		rooms_tb1.add(4);
-		rooms_tb1.add(6);
+		rooms_tb1.add(3);
+		rooms_tb1.add(5);
+		rooms_tb1.add(7);
 		
 		List<Integer> rooms_tb2 = new ArrayList<Integer>();
-		rooms_tb2.add(5);
+		rooms_tb2.add(4);
 		rooms_tb2.add(8);
 		rooms_tb2.add(9);
 		

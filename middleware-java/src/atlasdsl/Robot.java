@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import atlassharedclasses.Point;
 
 public class Robot extends Component {
-	private static final boolean ROBOT_ENERGY_DEBUGGING = false;
+	private static final boolean ROBOT_ENERGY_DEBUGGING = true;
 	private String robotname;
 	private VehicleType vtype;
 	private List<Subcomponent> contains = new ArrayList<Subcomponent>();
