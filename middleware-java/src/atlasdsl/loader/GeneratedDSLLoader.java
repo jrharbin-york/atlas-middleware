@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class GeneratedDSLLoader implements DSLLoader {
 	public Mission loadMission() throws DSLLoadFailed {
 	final double MISSION_END_TIME = 500.0;
-	Mission mission = new Mission(MISSION_END_TIME, false);
+	Mission mission = new Mission(MISSION_END_TIME, true);
 	
 	mission.addSimulatorVariable(new SimulatorVariable("/clock", "rosgraph_msgs/Clock", SimulatorVariable.VariableTag.TIME, false, false));
 	mission.addSimulatorVariable(new SimulatorVariable("/amcl_pose", "geometry_msgs/PoseWithCovarianceStamped", SimulatorVariable.VariableTag.POSITION, true, true));
@@ -41,7 +41,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 			
  
 			
-			Battery srtb3_0_3 = new Battery(10000); 
+			Battery srtb3_0_3 = new Battery(100); 
 			srtb3_0_3.setParent(rtb3_0);
 			rtb3_0.addSubcomponent(srtb3_0_3);
 			
@@ -71,7 +71,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 			
  
 			
-			Battery srtb3_1_3 = new Battery(10000); 
+			Battery srtb3_1_3 = new Battery(100); 
 			srtb3_1_3.setParent(rtb3_1);
 			rtb3_1.addSubcomponent(srtb3_1_3);
 			
@@ -101,7 +101,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 			
  
 			
-			Battery srtb3_2_3 = new Battery(10000); 
+			Battery srtb3_2_3 = new Battery(100); 
 			srtb3_2_3.setParent(rtb3_2);
 			rtb3_2.addSubcomponent(srtb3_2_3);
 			

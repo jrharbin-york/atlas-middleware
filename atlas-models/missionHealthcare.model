@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ASCII"?>
-<atlas:Mission xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:atlas="http://www.github.com/jrharbin-york/atlas-middleware/dsl/atlas" xmi:id="_8OLx8HP4Eeqc6cv9mBHIKw" endTime="500.0">
+<atlas:Mission xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:atlas="http://www.github.com/jrharbin-york/atlas-middleware/dsl/atlas" xmi:id="_8OLx8HP4Eeqc6cv9mBHIKw" endTime="500.0" stopVehicleOnNoEnergy="true">
   <robots xmi:id="_gx4mIHP-Eeqc6cv9mBHIKw" name="tb3_0">
     <componentProperties xsi:type="atlas:PointProperty" xmi:id="_C4ey0HQREeqc6cv9mBHIKw" name="startLocation">
       <value xmi:id="_G0D3kHQREeqc6cv9mBHIKw" x="3.46" y="-3.6"/>
@@ -14,7 +14,7 @@
       <params>SPEED</params>
       <params>COURSE</params>
     </subcomponents>
-    <subcomponents xsi:type="atlas:Battery" xmi:id="_XdRiAKWWEeyG79PXMexeYw" name="STANDARD" totalEnergy="10000"/>
+    <subcomponents xsi:type="atlas:Battery" xmi:id="_XdRiAKWWEeyG79PXMexeYw" name="STANDARD" totalEnergy="100"/>
   </robots>
   <robots xmi:id="_hNarkHP-Eeqc6cv9mBHIKw" name="tb3_1">
     <componentProperties xsi:type="atlas:PointProperty" xmi:id="_FOiEMHQREeqc6cv9mBHIKw" name="startLocation">
@@ -30,7 +30,7 @@
       <params>SPEED</params>
       <params>COURSE</params>
     </subcomponents>
-    <subcomponents xsi:type="atlas:Battery" xmi:id="_aaycAKWWEeyG79PXMexeYw" name="STANDARD" totalEnergy="10000"/>
+    <subcomponents xsi:type="atlas:Battery" xmi:id="_aaycAKWWEeyG79PXMexeYw" name="STANDARD" totalEnergy="100"/>
   </robots>
   <robots xmi:id="_hkfHwHP-Eeqc6cv9mBHIKw" name="tb3_2">
     <componentProperties xsi:type="atlas:PointProperty" xmi:id="_Jyhz0HQREeqc6cv9mBHIKw" name="startLocation">
@@ -46,7 +46,7 @@
       <params>SPEED</params>
       <params>COURSE</params>
     </subcomponents>
-    <subcomponents xsi:type="atlas:Battery" xmi:id="_eoB4gKWWEeyG79PXMexeYw" name="STANDARD" totalEnergy="10000"/>
+    <subcomponents xsi:type="atlas:Battery" xmi:id="_eoB4gKWWEeyG79PXMexeYw" name="STANDARD" totalEnergy="100"/>
   </robots>
   <computers xmi:id="_fXV6wHP-Eeqc6cv9mBHIKw" name="controller"/>
   <goals xmi:id="_kwYOQHP5Eeqc6cv9mBHIKw" name="mutualAvoidance">

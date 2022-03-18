@@ -54,7 +54,8 @@ public class ROSTranslations extends CARSTranslations {
 	}
 
 	public void stopVehicle(String robotName) {
-		
+		// TODO: this is hardcoded for the current healthcare case study
+		sendCARSUpdate(robotName, robotName + "/battery_empty_stop", "STOP");
 	}
 
 	public void simulatorVariableChange(String robotName, String key, String value, boolean vehicleSpecific) {

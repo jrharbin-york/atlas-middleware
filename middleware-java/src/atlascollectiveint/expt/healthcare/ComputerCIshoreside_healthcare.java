@@ -20,16 +20,16 @@ public class ComputerCIshoreside_healthcare {
 	public static Map<String,List<Integer>> fixedWorkAssignments() {
 		List<Integer> rooms_tb0 = new ArrayList<Integer>();
 		rooms_tb0.add(1);
-		rooms_tb0.add(3);
-		rooms_tb0.add(7);
+		rooms_tb0.add(2);
+		rooms_tb0.add(6);
 		
 		List<Integer> rooms_tb1 = new ArrayList<Integer>();
-		rooms_tb1.add(1);
-		rooms_tb1.add(4);
-		rooms_tb1.add(6);
+		rooms_tb1.add(3);
+		rooms_tb1.add(5);
+		rooms_tb1.add(7);
 		
 		List<Integer> rooms_tb2 = new ArrayList<Integer>();
-		rooms_tb2.add(5);
+		rooms_tb2.add(4);
 		rooms_tb2.add(8);
 		rooms_tb2.add(9);
 		

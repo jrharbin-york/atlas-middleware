@@ -35,4 +35,12 @@ public class SimulatorVariable {
 	public String getSimType() {
 		return simType;
 	}
+	
+	public boolean isVehicleSpecific() {
+		return isVehicleSpecific;
+	}
+	
+	public boolean propagateToCI() {
+		return propagateToCI;
+	}
 }

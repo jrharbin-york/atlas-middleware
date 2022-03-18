@@ -49,6 +49,11 @@ public abstract class ATLASCore {
 	protected List<FaultInstance> activeFaults = new ArrayList<FaultInstance>();
 	protected List<SensorDetectionLambda> sensorWatchers = new ArrayList<SensorDetectionLambda>();
 	protected List<PositionUpdateLambda> positionWatchers = new ArrayList<PositionUpdateLambda>();
+	
+	// If the string matches the given topic, the lambda will be called when the given simulator variable 
+	// is updated
+	protected Map<String,List<SimVarUpdateLambda>> simVarWatchers = new HashMap<String,List<SimVarUpdateLambda>>();
+	
 	protected List<SpeedUpdateLambda> speedWatchers = new ArrayList<SpeedUpdateLambda>();
 	
 	private FaultGenerator faultGen;	
@@ -265,6 +270,20 @@ public abstract class ATLASCore {
 	public Object getGoalVariable(String vehicleName, String topicName) {
 		return goalVariables.get(vehicleName + "-_-" + topicName);
 	}
+
+	public void setupSimVarWatcher(String topic, SimVarUpdateLambda lambda) {
+		List<SimVarUpdateLambda> current = simVarWatchers.get(topic);
+		if (current == null) {
+			current = new ArrayList<SimVarUpdateLambda>();
+		}
+		current.add(lambda);
+		simVarWatchers.put(topic, current);
+	}
 	
-	
+	public void notifySimVarUpdate(SimulatorVariable sv, String robotName, Object value) {
+		List<SimVarUpdateLambda> lambdas =  simVarWatchers.get(sv.getVarName());
+		for (SimVarUpdateLambda l : lambdas) {
+			l.op(sv, robotName, value);
+		}
+	}
 }

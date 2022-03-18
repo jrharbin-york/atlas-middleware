@@ -234,6 +234,18 @@ public class Mission {
 		return simulatorVariables.values().stream().map(sv -> sv.getVarName()).collect(Collectors.toList());
 	}
 	
+	public Optional<SimulatorVariable> getSimulatorVariableByName(String name) {
+		if (simulatorVariables.containsKey(name)) {
+			return Optional.of(simulatorVariables.get(name));
+		} else {
+			return Optional.empty();
+		}
+	}
+	
+	public List<SimulatorVariable> getSimulatorVariables() {
+		return new ArrayList<SimulatorVariable>(simulatorVariables.values());
+	}
+	
 	public List<String> getBehaviourVariableNames() {
 		return new ArrayList<String>();
 		

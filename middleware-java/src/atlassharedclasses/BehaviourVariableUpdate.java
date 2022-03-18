@@ -3,13 +3,13 @@ package atlassharedclasses;
 public class BehaviourVariableUpdate {
 	private String vehicleName;
 	private String variableName;
-	private String variableValue;
+	private Object variableValue;
 	
 	BehaviourVariableUpdate() {
 		
 	}
 	
-	public BehaviourVariableUpdate(String vehicleName, String variableName, String variableValue) {
+	public BehaviourVariableUpdate(String vehicleName, String variableName, Object variableValue) {
 		this.vehicleName = vehicleName;
 		this.variableName = variableName;
 		this.variableValue = variableValue;
@@ -19,7 +19,11 @@ public class BehaviourVariableUpdate {
 		return variableName;
 	}
 	
-	public String getVariableValue() {
+	public String getVariableValueAsString() {
+		return variableValue.toString();
+	}
+	
+	public Object getVariableValue() {
 		return variableValue;
 	}
 	

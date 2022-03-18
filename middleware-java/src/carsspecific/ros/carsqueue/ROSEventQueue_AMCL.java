@@ -11,6 +11,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import atlasdsl.*;
 import atlasdsl.SimulatorVariable.VariableTag;
 import atlassharedclasses.ATLASObjectMapper;
+import atlassharedclasses.BehaviourVariableUpdate;
+import atlassharedclasses.EnergyUpdate;
 import atlassharedclasses.GPSPositionReading;
 import atlassharedclasses.Point;
 import atlassharedclasses.SpeedReading;
@@ -82,7 +84,7 @@ public class ROSEventQueue_AMCL extends CARSLinkEventQueue<ROSEvent> {
 	}
 
 	public void handleEventSpecifically(ROSEvent e) {
-		System.out.println("EventClass=" + e.getClass().getSimpleName());
+		//System.out.println("EventClass=" + e.getClass().getSimpleName());
 		if (e instanceof ROSTopicUpdate) {
 			ROSTopicUpdate rtu = (ROSTopicUpdate) e;
 			if (rtu.tagEquals(ATLASTag.SIMULATOR_GENERAL)) {
@@ -99,6 +101,36 @@ public class ROSEventQueue_AMCL extends CARSLinkEventQueue<ROSEvent> {
 					} catch (CausalityException e1) {
 						e1.printStackTrace();
 					}
+				} else {
+					// Non-clock simulator general variable
+					String tname = rtu.getTopicName();
+					Optional<SimulatorVariable> sv_o = mission.getSimulatorVariableByName(tname);
+					if (sv_o.isPresent()) {
+						SimulatorVariable sv = sv_o.get();
+						if (sv.propagateToCI()) {
+							Object contents;
+							// TODO: we are currently using the behaviour variables, change to SimulatorVariableUpdate
+							// TODO: only a few types are handled here
+							contents = rtu.getJSON().get("data").toString();				
+							BehaviourVariableUpdate bup = new BehaviourVariableUpdate(rtu.getVehicleName(), sv.getVarName(), contents);
+							try {
+								String msg = atlasOMapper.serialise(bup);
+								System.out.println("behaviour variable: sending " + msg);
+								outputToCI.sendMessage(msg);
+							} catch (JsonProcessingException e1) {
+								e1.printStackTrace();
+							} catch (JMSException e1) {
+								e1.printStackTrace();
+							}
+						}
+					} else {
+						System.out.println("Simulator variable for " + tname + " not present in handleEventSpecifically") ;
+					}
+					
+						
+				
+					
+					
 				}
 			}
 
@@ -117,9 +149,26 @@ public class ROSEventQueue_AMCL extends CARSLinkEventQueue<ROSEvent> {
 				core.registerEnergyUsage(mission.getRobot(rtu.getVehicleName()), p);
 				core.notifyPositionUpdate(gps);
 				
-				
 				try {
 					String msg = atlasOMapper.serialise(gps);
+
+					if (DEBUG_PRINT_DESERIALISED_MSGS) {
+						System.out.println("DEBUG: serialised message " + msg);
+					}
+					outputToCI.sendMessage(msg);
+				} catch (JsonProcessingException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (JMSException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				// Send out an energy update to the CI
+				Robot r = mission.getRobot(rtu.getVehicleName());
+				EnergyUpdate eu = new EnergyUpdate(core.getRobotEnergyRemaining(r), r.getName());
+				try {
+					String msg = atlasOMapper.serialise(eu);
 
 					if (DEBUG_PRINT_DESERIALISED_MSGS) {
 						System.out.println("DEBUG: serialised message " + msg);
@@ -279,7 +328,18 @@ public class ROSEventQueue_AMCL extends CARSLinkEventQueue<ROSEvent> {
 	}
 
 	private void subscribeForSimulatorTopics() {
+		// TODO: setting the clock topic name from the simulator variable set
 		standardSubscribe(DEFAULT_CLOCK_TOPIC, "rosgraph_msgs/Clock", ATLASTag.SIMULATOR_GENERAL);
+		for (SimulatorVariable sv : mission.getSimulatorVariables()) {
+			if (sv.getTag() == SimulatorVariable.VariableTag.GENERIC) {
+				if (sv.isVehicleSpecific()) {
+					for (Robot r : mission.getAllRobots()) {
+						standardSubscribeVehicle(r.getName(), ATLASTag.SIMULATOR_GENERAL, sv.getVarName(), sv.getSimType());
+					}
+				}
+			}
+		}
+		
 	}
 
 	public void setup() {
