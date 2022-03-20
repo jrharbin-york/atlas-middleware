@@ -22,7 +22,7 @@ public class ModelEGLExecutor {
 		EglTemplateFactoryModuleAdapter eglModule = new EglTemplateFactoryModuleAdapter(factory);
 		eglModule.getContext().getModelRepository().addModel(sourceModelForEGL);
 
-		java.net.URI EglFile = new java.net.URI("file:///home/atlas/atlas/atlas-middleware/middleware-java/ecore-metamodels/genmission.egl");
+		java.net.URI EglFile = new java.net.URI("file:////home/jharbin/academic/atlas/atlas-middleware/middleware-java/ecore-metamodels/genmission.egl");
 		System.out.println(EglFile);
 		
 		EglFileGeneratingTemplate template = (EglFileGeneratingTemplate)factory.load(EglFile);
@@ -31,6 +31,7 @@ public class ModelEGLExecutor {
 		// Set the target file, ie. where the results will be generated to.
 		// TODO: replace the path for the Java generated DSL here
 		File target = new File(eglOutput);
+		System.out.println("target= " + target.toString());
 		target.createNewFile();
 		template.generate(target.toURI().toString());
 	}
@@ -38,6 +39,7 @@ public class ModelEGLExecutor {
 	private EmfModel loadModel(String metaModelFilePath, String modelFilePath, String modelName) throws EolModelLoadingException {
 	    EmfModel model =  new EmfModel();
 		ArrayList<String> metamodelFilesTarget = new ArrayList<String>();
+		System.out.println("Metamodel file path = " + new File(metaModelFilePath).getAbsolutePath());
 		metamodelFilesTarget.add(new File(metaModelFilePath).getAbsolutePath());
 		model.setMetamodelFiles(metamodelFilesTarget);
 		model.setName("Target");

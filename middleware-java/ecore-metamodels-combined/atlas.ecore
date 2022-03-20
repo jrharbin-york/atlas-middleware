@@ -220,6 +220,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="Visit" eSuperTypes="#//GoalAction"/>
   <eClassifiers xsi:type="ecore:EClass" name="Patrol" eSuperTypes="#//GoalAction"/>
   <eClassifiers xsi:type="ecore:EClass" name="Cover" eSuperTypes="#//GoalAction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CheckRoomsCompleted" eSuperTypes="#//GoalAction"/>
   <eClassifiers xsi:type="ecore:EClass" name="Avoid" eSuperTypes="#//GoalAction"/>
   <eClassifiers xsi:type="ecore:EClass" name="TrackDistances" eSuperTypes="#//GoalAction"/>
   <eClassifiers xsi:type="ecore:EClass" name="ReturnOnLowEnergy" eSuperTypes="#//GoalAction">

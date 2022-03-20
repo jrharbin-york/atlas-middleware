@@ -13,10 +13,12 @@ public class CheckRoomsCompleted extends GoalAction {
 
 	private Map<String,List<Integer>> roomsPending = new HashMap<String,List<Integer>>();
 	
-	private void registerRoomCompleted(String robotName, Integer val) {
+	private void registerRoomCompleted(String robotName, Integer room) {
 		List<Integer> roomsForRobot = roomsPending.get(robotName);
-		roomsForRobot.remove(val);
+		roomsForRobot.remove(room);
 		roomsPending.put(robotName, roomsForRobot);
+		System.out.println("registerRoomCompleted: robot " + robotName + " completed room " + room);
+		System.out.println("roomsPending for robot " + robotName + " is " + roomsPending.toString());
 	}
 	
 	protected Optional<GoalResult> test(Mission mission, GoalParticipants participants) {
@@ -31,7 +33,7 @@ public class CheckRoomsCompleted extends GoalAction {
 		if (isEmpty) {
 			return Optional.of(new GoalResult(GoalResultStatus.COMPLETED));
 		} else {
-			return null;
+			return Optional.empty();
 		}
 	}
 
@@ -57,10 +59,15 @@ public class CheckRoomsCompleted extends GoalAction {
 		roomsPending.put("tb3_2", rooms_tb2);
 		
 		// Set up watcher that will be triggered on this simulator variable
-		core.setupSimVarWatcher("/roomsCompleted", (svar, robotName, val) -> 
+		core.setupSimVarWatcher("/roomCompleted", (svar, robotName, val) -> 
 		{
 			if (val instanceof Integer) {
 				registerRoomCompleted(robotName, (Integer)val);
+			}
+			if (val instanceof String) {
+				System.out.println("registerRoom debugging: string is " + (String)val);
+				Integer i = Integer.parseInt((String)val);
+				registerRoomCompleted(robotName, i);
 			}
 		});
 	}

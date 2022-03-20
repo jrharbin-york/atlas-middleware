@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class GeneratedDSLLoader implements DSLLoader {
 	public Mission loadMission() throws DSLLoadFailed {
-	final double MISSION_END_TIME = 500.0;
+	final double MISSION_END_TIME = 1500.0;
 	Mission mission = new Mission(MISSION_END_TIME, true);
 	
 	mission.addSimulatorVariable(new SimulatorVariable("/clock", "rosgraph_msgs/Clock", SimulatorVariable.VariableTag.TIME, false, false));
@@ -41,7 +41,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 			
  
 			
-			Battery srtb3_0_3 = new Battery(100); 
+			Battery srtb3_0_3 = new Battery(200); 
 			srtb3_0_3.setParent(rtb3_0);
 			rtb3_0.addSubcomponent(srtb3_0_3);
 			
@@ -130,6 +130,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 		
 		
 		
+		
 		GoalRegion grmutualAvoidance = new StaticGoalRegion(
 			new Region(new Point(0.0, 0.0, 0.0),
 			           new Point(1000.0, 1000.0, 0.0)));
@@ -156,6 +157,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 		
 		
 		
+		
 		GoalRegion grtrackDistances = new StaticGoalRegion(
 			new Region(new Point(-150.0, -260.0, -40.0),
 			           new Point(245.0, 20.0, 100.0)));
@@ -165,6 +167,33 @@ public class GeneratedDSLLoader implements DSLLoader {
 		
 		
 		mission.addGoal("trackDistances", trackDistances);
+ 
+ 
+ 
+		
+		Robot [] grp3 = {rtb3_0,rtb3_1,rtb3_2}; 
+		GoalParticipants gpcheckRoomsCompleted = new StaticParticipants(grp3, mission);
+		
+		
+		
+		GoalTemporalConstraints gt3 = new GoalTemporalConstraints(0.0, 1500.0);
+		
+		
+		
+		
+		GoalAction ga3 = new CheckRoomsCompleted();
+		
+		
+		
+		GoalRegion grcheckRoomsCompleted = new StaticGoalRegion(
+			new Region(new Point(0.0, 0.0, 0.0),
+			           new Point(1000.0, 1000.0, 0.0)));
+		
+		
+		Goal checkRoomsCompleted = new Goal("checkRoomsCompleted", mission, gt3, gpcheckRoomsCompleted, Optional.of(grcheckRoomsCompleted), ga3);
+		
+		
+		mission.addGoal("checkRoomsCompleted", checkRoomsCompleted);
 	
 
 	

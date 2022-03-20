@@ -1,3 +1,4 @@
+[* [% out.setContentType("Java"); %] *]
 [* componentLookup is used for resolving the name assigned in the Java
 DSL to everything that is a subclass of component *]
 [% var componentLookup = new Map(); %]
@@ -18,8 +19,11 @@ public class GeneratedDSLLoader implements DSLLoader {
 		var computerNum = 0; 
 	%]
 	final double MISSION_END_TIME = [%= m.endTime %];
-	final boolean STOP_ON_NO_ENERGY = [%= m.stopVehicleOnNoEnergy %];
-	Mission mission = new Mission(MISSION_END_TIME, STOP_ON_NO_ENERGY);
+	Mission mission = new Mission(MISSION_END_TIME, [%= m.stopVehicleOnNoEnergy %]);
+	
+	[% for (sv in m.simVariables) { %]
+	mission.addSimulatorVariable(new SimulatorVariable("[%= sv.varName %]", "[%= sv.simType %]", SimulatorVariable.VariableTag.[%= sv.tag %], [%= sv.isVehicleSpecific %], [%= sv.propagateToCI %]));
+	[% } %]
 	
 	[% for (c in m.computers) { %]
 	[% var computerName = "c" + computerNum++;	%]
@@ -51,8 +55,14 @@ public class GeneratedDSLLoader implements DSLLoader {
 		[% for (subc in r.subcomponents) { %]
 			[% var subID = "s" + robotName + "_" + subCNum++; %] 
 			[% componentLookup.put(subc, subID); %]
+			
+			[% if (subc.isKindOf(Battery)) { %]
+			Battery [%= subID %] = new Battery([%= subc.totalEnergy %]); 
+			[%= subID %].setParent([%= robotName %]);
+			[%= robotName %].addSubcomponent([%= subID %]);
+			[% } %]
+			
 			[% if (subc.isKindOf(Sensor)) { %]
-		// SENSORNAME=[%= subc.name %]
 		Sensor [%= subID %] = new Sensor(SensorType.[%= subc.type %]);
 		[%= subID %].setParent([%= robotName %]);
 				[* set subcomponent properties here *]
@@ -73,12 +83,6 @@ public class GeneratedDSLLoader implements DSLLoader {
 			MotionSource [%= subID %] = new MotionSource([%= subc.energyPerDistance %]);
 			[%= robotName %].addSubcomponent([%= subID %]);
 			[% } %]
-			
-			[% if (subc.isKindOf(Battery)) { %]
-			Battery [%= subID %] = new Battery([%= subc.totalEnergy %]);
-			[%= robotName %].addSubcomponent([%= subID %]);
-			[% } %]
-			
 			[% if (subc.isKindOf(Actuator)) { %]
 			Actuator [%= subID %] = new Actuator();
 			[%= robotName %].addSubcomponent([%= subID %]);
@@ -113,16 +117,6 @@ public class GeneratedDSLLoader implements DSLLoader {
 	[% obstacleID++; %]
 	[% } %]
 	[* End environmental obstacles *]
-	
-	[* Obstacle region *]
-	[% var regs = EnvironmentalObstacleRegion.allInstances();
-	   for (r in regs) { %]
-	Region eregion = new Region(new Point([%= r.region.corner1.x %], [%= r.region.corner1.y %], [%= r.region.corner1.z %]),
-								new Point([%= r.region.corner2.x %], [%= r.region.corner2.y %], [%= r.region.corner2.z %]));
-	mission.setObstacleRegion(eregion);
-	[% } %]
-	[* *]
-	
 	
 	[% var goalnum = 0; %]
 	[% for (g in m.goals) { %]
@@ -159,19 +153,19 @@ public class GeneratedDSLLoader implements DSLLoader {
 		[* Goal actions *]
 		[% var goalAction = g.action; %]
 		[% if (goalAction.isKindOf(SensorCover)) { %]
-		GoalAction ga[%= goalnum %] = new SensorCover([%= goalAction.density %], [%= goalAction.samplesPerUnit %], SensorType.[%= goalAction.sensortype %]);
+		GoalAction ga[%= goalnum %] = new SensorCover([%= goalAction.density %], [%= goalAction.samplesPerUnit %], SensorType.[%= goalAction.sensortype %], [%= goalAction.verificationsMalicious %], [%= goalAction.verificationsBenign %]);
 		[% } %]
 		
 		[% if (goalAction.isKindOf(AvoidOthers)) { %]
 		GoalAction ga[%= goalnum %] = new AvoidOthers([%= goalAction.clearance %]);
 		[% } %]
 		
-		[% if (goalAction.isKindOf(ReturnOnLowEnergy)) { %]
-		GoalAction ga[%= goalnum %] = new ReturnOnLowEnergy([%= goalAction.energyThreshold %]);
-		[% } %]
-		
 		[% if (goalAction.isKindOf(TrackDistances)) { %]
 		GoalAction ga[%= goalnum %] = new TrackDistances();
+		[% } %]
+		
+		[% if (goalAction.isKindOf(CheckRoomsCompleted)) { %]
+		GoalAction ga[%= goalnum %] = new CheckRoomsCompleted();
 		[% } %]
 		
 		[% if (goalAction.isKindOf(StayInRegion)) { %]
@@ -184,7 +178,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 		[% for (eo in goalAction.objects) { %]
 		ga[%= goalnum %]Objs.add(eo[%= EObjectLookup.get(eo) %]);
 		[% } %]
-		GoalAction ga[%= goalnum %] = new DiscoverObjects(ga[%= goalnum %]Objs, [%= goalAction.verificationsBenign %], [%= goalAction.verificationsMalicious %]);
+		GoalAction ga[%= goalnum %] = new DiscoverObjects(ga[%= goalnum %]Objs, [%= goalAction.robotsNeededPerObject %]);
 		
 		[% } %]
 		
@@ -288,10 +282,6 @@ public class GeneratedDSLLoader implements DSLLoader {
 	mission.addFault(f[%= faultNum %]);
 	[% } %]
 	
-	[% for (bv in BehaviourVariable.allInstances()) { %]
-	 	mission.addBehaviourVariable("[%= bv.varName %]");
-	[% } %]
-		
 	[%} %] [* end Mission loop *]
 	return mission;
 	}

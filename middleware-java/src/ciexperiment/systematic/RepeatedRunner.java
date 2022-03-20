@@ -23,7 +23,7 @@ import ciexperiment.runner.RunExperiment;
 import faultgen.InvalidFaultFormat;
 
 public class RepeatedRunner {
-	private static final String EMF_OUTPUT_PATH = "/home/atlas/atlas/atlas-middleware/middleware-java/src/atlasdsl/loader/GeneratedDSLLoader.java";
+	private static final String EMF_OUTPUT_PATH = "/home/jharbin/academic/atlas/atlas-middleware/middleware-java/src/atlasdsl/loader/GeneratedDSLLoader.java";
 	
 	public static ModelsTransformer modelTransformer = new ModelsTransformer();
 	public static ModelEGLExecutor modelExecutor = new ModelEGLExecutor();
@@ -162,19 +162,24 @@ public class RepeatedRunner {
 	
 	public static void expt_caseStudyHealthcare() throws EolModelLoadingException, EglRuntimeException, URISyntaxException, IOException, InterruptedException {
 		List<Metrics> l = new ArrayList<Metrics>();
-		l.add(Metrics.OBSTACLE_AVOIDANCE_METRIC);
-		l.add(Metrics.AVOIDANCE_METRIC);
-		l.add(Metrics.TOTAL_ENERGY_AT_END);
-		l.add(Metrics.MEAN_ENERGY_AT_END);
-		l.add(Metrics.TOTAL_FINAL_DISTANCE_AT_END);
-		l.add(Metrics.MEAN_FINAL_DISTANCE_AT_END);
-		l.add(Metrics.TOTAL_WAYPOINT_SWITCH_COUNT);
-
-		String basisModel = "experiment-models/healthcare/missionHealthcare.model";
+//		l.add(Metrics.OBSTACLE_AVOIDANCE_METRIC);
+//		l.add(Metrics.AVOIDANCE_METRIC);
+//		l.add(Metrics.TOTAL_ENERGY_AT_END);
+//		l.add(Metrics.MEAN_ENERGY_AT_END);
+//		l.add(Metrics.TOTAL_FINAL_DISTANCE_AT_END);
+//		l.add(Metrics.MEAN_FINAL_DISTANCE_AT_END);
+//		l.add(Metrics.TOTAL_WAYPOINT_SWITCH_COUNT);
+		
+		// TODO: need to setup metrics from the goals
+				
+		String basisModel = "experiment-models/healthcare/missionHealthcare-basis.model";
 		String standardCI = "atlascollectiveint.expt.healthcare.ComputerCIshoreside_healthcare";
+		String randomCI = "atlascollectiveint.expt.healthcare.ComputerCIshoreside_healthcare_random";
 		
 		ArrayList<String> ciOptions = new ArrayList<String>();
 		ciOptions.add(standardCI);
+		ciOptions.add(randomCI);
+		// TODO: more advanced CIs here
 		
 		modelExecutor.executeEGL(basisModel, EMF_OUTPUT_PATH);
 		Thread.sleep(1000);

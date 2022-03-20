@@ -278,6 +278,10 @@ class Cover extends GoalAction {
 	
 }
 
+class CheckRoomsCompleted extends GoalAction {
+	
+}
+
 class Avoid extends GoalAction {
 	
 }
@@ -383,6 +387,8 @@ class Behaviour {
 	attr String className;
 	ref SimulatorVariable[*] bvars;
 }
+
+// Use rooms as environmental object
 
 class Mission {
 	val MutationProgram[1] mutProgram;

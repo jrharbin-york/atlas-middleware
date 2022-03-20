@@ -282,8 +282,10 @@ public abstract class ATLASCore {
 	
 	public void notifySimVarUpdate(SimulatorVariable sv, String robotName, Object value) {
 		List<SimVarUpdateLambda> lambdas =  simVarWatchers.get(sv.getVarName());
-		for (SimVarUpdateLambda l : lambdas) {
-			l.op(sv, robotName, value);
+		if (lambdas != null) {
+			for (SimVarUpdateLambda l : lambdas) {
+				l.op(sv, robotName, value);
+			}
 		}
 	}
 }

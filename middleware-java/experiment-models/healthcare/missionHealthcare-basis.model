@@ -2,7 +2,9 @@
 <atlas:Mission xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:atlas="http://www.github.com/jrharbin-york/atlas-middleware/dsl/atlas" xmi:id="_8OLx8HP4Eeqc6cv9mBHIKw" endTime="1500.0" stopVehicleOnNoEnergy="true">
   <mutProgram xmi:id="_J543gKfxEeyth8kMdDG_FA">
     <mutationGroups xmi:id="_KpnrUKfxEeyth8kMdDG_FA" minRequiredFromGroup="2" maxRequiredFromGroup="3" members="_gx4mIHP-Eeqc6cv9mBHIKw _hNarkHP-Eeqc6cv9mBHIKw _hkfHwHP-Eeqc6cv9mBHIKw"/>
-    <mutationGroups xmi:id="_Oo2hAKfxEeyth8kMdDG_FA"/>
+    <mutationGroups xmi:id="_Oo2hAKfxEeyth8kMdDG_FA" minRequiredFromGroup="1" maxRequiredFromGroup="1" members="_X79rIKfxEeyth8kMdDG_FA _XdRiAKWWEeyG79PXMexeYw"/>
+    <mutationGroups xmi:id="_a5BnQKfzEeyth8kMdDG_FA" minRequiredFromGroup="1" maxRequiredFromGroup="1" members="_t28UsKfxEeyth8kMdDG_FA _aaycAKWWEeyG79PXMexeYw"/>
+    <mutationGroups xmi:id="_eBEWQKfzEeyth8kMdDG_FA" minRequiredFromGroup="1" maxRequiredFromGroup="1" members="_6tdUIKfxEeyth8kMdDG_FA _eoB4gKWWEeyG79PXMexeYw"/>
   </mutProgram>
   <robots xmi:id="_gx4mIHP-Eeqc6cv9mBHIKw" name="tb3_0" mutable="true">
     <componentProperties xsi:type="atlas:PointProperty" xmi:id="_C4ey0HQREeqc6cv9mBHIKw" name="startLocation">
