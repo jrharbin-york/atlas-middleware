@@ -218,7 +218,6 @@ class ProcessingUnit extends Component {
 }
 
 class MotionSource extends Component {
- 	attr double energyPerDistance;
  	attr String[0..*] params;
 }
 
@@ -290,6 +289,12 @@ class TrackDistances extends GoalAction {
 	
 }
 
+class TrackEnergyConsumption extends GoalAction {
+	attr double energyPerDistance;
+	attr double energyPerTime;
+	attr double energyPerRoom;
+}
+
 class ReturnOnLowEnergy extends GoalAction {
 	attr double energyThreshold;
 }
@@ -357,6 +362,11 @@ class DynamicGoalRegion extends GoalRegion {
 	attr double relativeRange;
 }
 
+class Metric {
+	attr String name;
+	attr boolean computeOnline;
+}
+
 class Goal {
 	attr String name;
 	attr int priority;
@@ -365,6 +375,7 @@ class Goal {
 	val GoalAction action;
 	val GoalRegion[0..1] region;
 	ref Behaviour[*] behaviours;
+	val Metric[*] metrics;
 }
 
 enum VariableTag {

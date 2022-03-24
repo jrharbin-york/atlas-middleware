@@ -4,18 +4,22 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+
+import utils.ExptHelper;
 import utils.ExptHelperOld;
 
-public class RunExperiment {
+public class RunExperimentROS {
 
 	// TODO: no more fixed paths
 	private final static String ABS_SCRIPT_PATH = "/home/jharbin/academic/atlas/atlas-middleware/bash-scripts/";
-	private final static String ABS_WORKING_PATH = "/home/jharbin/academic/atlas/atlas-middleware/expt-working/";
+	private final static String ABS_WORKING_PATH = "/home/jharbin/academic/atlas/atlas-middleware/expt-working/healthcare";
 	public final static String ABS_MIDDLEWARE_PATH = "/home/jharbin/academic/atlas/atlas-middleware/expt-working/";
 	private final static String ABS_MOOS_PATH_BASE = "/home/jharbin//academic/atlas/atlas-middleware/middleware-java/moos-sim/";
 
 	private final static boolean CLEAR_MOOS_LOGS_EACH_TIME = true;
+	private static final boolean CLEAR_ROS_LOGS_EACH_TIME = false;
 
 	// This is an emergency time cutout if the failsafe is not operating normally
 	private static double failsafeTimeLimit = 300;
@@ -59,71 +63,71 @@ public class RunExperiment {
 			}
 		}
 	}
+	
+	public static void sleepHandlingInterruption(long timeMillisecs) {
+		try {
+			TimeUnit.MILLISECONDS.sleep(timeMillisecs);
+		} catch (InterruptedException e) {
+			System.out.println("Cancelling sleep after interruption");
+		}
+	}
 
-	public static double doExperimentFromFile(String exptTag, boolean actuallyRun, double timeLimit, String ciClass)
-			throws InterruptedException, IOException {
-		Process middleware;
-
+	public static double doExperimentFromFile(String exptTag, boolean actuallyRun, double timeLimit, String ciClass) throws InterruptedException, IOException {
 		double returnValue = 0;
-		String absATLASJAR;
-		String absMOOSPATH;
-		String ciRunner;
-
-		exptLog("Using custom generated mission");
-		absATLASJAR = "/home/jharbin/academic/atlas/atlas-middleware/expt-jar/atlas-6robot-case.jar";
-		absMOOSPATH = ABS_MOOS_PATH_BASE;
-		ciRunner = "run-ci-6robot.sh";
-
-		if (actuallyRun) {
-			exptLog("Generating MOOS code");
-			ExptHelperOld.startScript(ABS_WORKING_PATH, "build_moos_files.sh");
-			// Add a wait until it it ready
-			Thread.sleep(3000);
-			exptLog("Starting MOOS launch scripts");
-			ExptHelperOld.startScript(ABS_WORKING_PATH, "launch_moos_sim.sh");
-			// Sleep until MOOS is ready
-			TimeUnit.MILLISECONDS.sleep(1000);
-
+		
+		if (actuallyRun) {	
+			exptLog("Starting ROS/SAFEMUV launch scripts");
+			String launchBashScript = "./auto_launch_healthcare.sh";
+			ExptHelperOld.startScript(ABS_WORKING_PATH, launchBashScript);
+			
+			sleepHandlingInterruption(30000);
+			
+			System.out.println("Running middleware");
+			ExptHelper.runScriptNew(ABS_WORKING_PATH, "./start_middleware.sh", "");
 			String[] middlewareOpts = { "nofault", "nogui" };
 
-			ExptHelperOld.startScript(ABS_WORKING_PATH, "start_middleware.sh");
-			// middleware = ExptHelper.startNewJavaProcess("-jar", absATLASJAR,
-			// middlewareOpts, ABS_WORKING_PATH);
+			// This assumes that the mission time is at least 20 seconds, and gives time for
+			// the middleware to start
+			sleepHandlingInterruption(20000);		
+			
+			ExptHelper.runScriptNew(ABS_WORKING_PATH, "./start_middleware.sh", "");
 
-			// Sleep until the middleware is ready, then start the CI
-			TimeUnit.MILLISECONDS.sleep(1000);
-
-			// CI not starting properly as a process, so call it via a script
-			exptLog("Starting CI");
-			ExptHelperOld.startScript(ABS_WORKING_PATH, "start_ci.sh " + ciClass);
-
-			TimeUnit.MILLISECONDS.sleep(3000);
+			sleepHandlingInterruption(3000);
+			ExptHelper.runScriptNew(ABS_WORKING_PATH, "./start_ci.sh", ciClass);
+			
 			// Wait until the end condition for the middleware
 			waitUntilMiddlewareTime(timeLimit, failsafeTimeLimit);
 			exptLog("Middleware end time reached");
+			
+			
 
-			if (CLEAR_MOOS_LOGS_EACH_TIME) {
-				ExptHelperOld.startCmd(ABS_SCRIPT_PATH, "terminate_clear_logs.sh");
+			// TODO: ensure simulation/SAFEMUV state is properly cleared
+			if (CLEAR_ROS_LOGS_EACH_TIME) {
+				ExptHelperOld.startCmd(ABS_WORKING_PATH, "terminate_clear_logs.sh");
 			} else {
-				ExptHelperOld.startCmd(ABS_SCRIPT_PATH, "terminate.sh");
+				ExptHelperOld.startCmd(ABS_WORKING_PATH, "terminate.sh");
 			}
-
 			exptLog("Kill MOOS / Java processes command sent");
+			sleepHandlingInterruption(40000);
 			exptLog("Destroy commands completed");
 		}
 
-		// Read and process the result files from the experiment
-		returnValue = extractResults(ABS_WORKING_PATH + "logs");
+		returnValue = 0;
 
 		if (actuallyRun) {
 			exptLog("Waiting to restart experiment");
 			// Wait 10 seconds before ending
-			TimeUnit.MILLISECONDS.sleep(10000);
+			try {
+				TimeUnit.MILLISECONDS.sleep(10000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		return returnValue;
 	}
-
+	
 	private static double extractResults(String string) {
 		return 0;
 	}

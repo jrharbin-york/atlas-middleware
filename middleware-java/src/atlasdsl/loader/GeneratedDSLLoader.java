@@ -36,7 +36,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 			
 			
 			
-			MotionSource srtb3_0_2 = new MotionSource(10.0);
+			MotionSource srtb3_0_2 = new MotionSource();
 			rtb3_0.addSubcomponent(srtb3_0_2);
 			
  
@@ -66,7 +66,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 			
 			
 			
-			MotionSource srtb3_1_2 = new MotionSource(10.0);
+			MotionSource srtb3_1_2 = new MotionSource();
 			rtb3_1.addSubcomponent(srtb3_1_2);
 			
  
@@ -96,7 +96,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 			
 			
 			
-			MotionSource srtb3_2_2 = new MotionSource(10.0);
+			MotionSource srtb3_2_2 = new MotionSource();
 			rtb3_2.addSubcomponent(srtb3_2_2);
 			
  
@@ -131,6 +131,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 		
 		
 		
+		
 		GoalRegion grmutualAvoidance = new StaticGoalRegion(
 			new Region(new Point(0.0, 0.0, 0.0),
 			           new Point(1000.0, 1000.0, 0.0)));
@@ -158,6 +159,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 		
 		
 		
+		
 		GoalRegion grtrackDistances = new StaticGoalRegion(
 			new Region(new Point(-150.0, -260.0, -40.0),
 			           new Point(245.0, 20.0, 100.0)));
@@ -181,6 +183,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 		
 		
 		
+		
 		GoalAction ga3 = new CheckRoomsCompleted();
 		
 		
@@ -194,6 +197,34 @@ public class GeneratedDSLLoader implements DSLLoader {
 		
 		
 		mission.addGoal("checkRoomsCompleted", checkRoomsCompleted);
+ 
+ 
+ 
+		
+		Robot [] grp4 = {rtb3_0,rtb3_1,rtb3_2}; 
+		GoalParticipants gptrackEnergyHealthcare = new StaticParticipants(grp4, mission);
+		
+		
+		
+		GoalTemporalConstraints gt4 = new GoalTemporalConstraints(0.0, 1500.0);
+		
+		
+		
+		
+		GoalAction ga4 = new TrackEnergyConsumption(10.0, 0.1, 100.0);
+		
+		
+		
+		
+		GoalRegion grtrackEnergyHealthcare = new StaticGoalRegion(
+			new Region(new Point(0.0, 0.0, 0.0),
+			           new Point(10.0, 10.0, 2.0)));
+		
+		
+		Goal trackEnergyHealthcare = new Goal("trackEnergyHealthcare", mission, gt4, gptrackEnergyHealthcare, Optional.of(grtrackEnergyHealthcare), ga4);
+		
+		
+		mission.addGoal("trackEnergyHealthcare", trackEnergyHealthcare);
 	
 
 	

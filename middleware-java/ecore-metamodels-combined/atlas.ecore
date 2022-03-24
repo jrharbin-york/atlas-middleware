@@ -187,7 +187,6 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ProcessingUnit" eSuperTypes="#//Component"/>
   <eClassifiers xsi:type="ecore:EClass" name="MotionSource" eSuperTypes="#//Component">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="energyPerDistance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="params" upperBound="-1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
@@ -223,6 +222,11 @@
   <eClassifiers xsi:type="ecore:EClass" name="CheckRoomsCompleted" eSuperTypes="#//GoalAction"/>
   <eClassifiers xsi:type="ecore:EClass" name="Avoid" eSuperTypes="#//GoalAction"/>
   <eClassifiers xsi:type="ecore:EClass" name="TrackDistances" eSuperTypes="#//GoalAction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TrackEnergyConsumption" eSuperTypes="#//GoalAction">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="energyPerDistance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="energyPerTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="energyPerRoom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ReturnOnLowEnergy" eSuperTypes="#//GoalAction">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="energyThreshold" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
   </eClassifiers>
@@ -279,6 +283,10 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="relativeToGoalField" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="relativeRange" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Metric">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="computeOnline" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Goal">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="priority" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
@@ -292,6 +300,8 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="behaviours" upperBound="-1"
         eType="#//Behaviour"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="metrics" upperBound="-1"
+        eType="#//Metric" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="VariableTag">
     <eLiterals name="GENERIC"/>

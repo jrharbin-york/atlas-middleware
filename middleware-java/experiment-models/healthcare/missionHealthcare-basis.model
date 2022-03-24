@@ -15,7 +15,7 @@
     <subcomponents xsi:type="atlas:Sensor" xmi:id="_2LNaIH2AEeqRdcV7Ed4ZKQ" type="GPS_POSITION">
       <detections>POS</detections>
     </subcomponents>
-    <subcomponents xsi:type="atlas:MotionSource" xmi:id="_txN7cH2jEeqRdcV7Ed4ZKQ" energyPerDistance="10.0">
+    <subcomponents xsi:type="atlas:MotionSource" xmi:id="_txN7cH2jEeqRdcV7Ed4ZKQ">
       <params>HEADING</params>
       <params>SPEED</params>
       <params>COURSE</params>
@@ -32,7 +32,7 @@
     <subcomponents xsi:type="atlas:Sensor" xmi:id="_4KLoQH2AEeqRdcV7Ed4ZKQ" type="GPS_POSITION">
       <detections>POS</detections>
     </subcomponents>
-    <subcomponents xsi:type="atlas:MotionSource" xmi:id="_zWcekH2jEeqRdcV7Ed4ZKQ" energyPerDistance="10.0">
+    <subcomponents xsi:type="atlas:MotionSource" xmi:id="_zWcekH2jEeqRdcV7Ed4ZKQ">
       <params>HEADING</params>
       <params>SPEED</params>
       <params>COURSE</params>
@@ -49,7 +49,7 @@
     <subcomponents xsi:type="atlas:Sensor" xmi:id="_52jDcH2AEeqRdcV7Ed4ZKQ" type="GPS_POSITION">
       <detections>POS</detections>
     </subcomponents>
-    <subcomponents xsi:type="atlas:MotionSource" xmi:id="_3bj50H2jEeqRdcV7Ed4ZKQ" energyPerDistance="10.0">
+    <subcomponents xsi:type="atlas:MotionSource" xmi:id="_3bj50H2jEeqRdcV7Ed4ZKQ">
       <params>HEADING</params>
       <params>SPEED</params>
       <params>COURSE</params>
@@ -88,6 +88,17 @@
       <staticRegion xmi:id="_42NHA6bSEeyQXZHshd3NIw">
         <corner1 xmi:id="_42NHBKbSEeyQXZHshd3NIw"/>
         <corner2 xmi:id="_42NHBabSEeyQXZHshd3NIw" x="1000.0" y="1000.0"/>
+      </staticRegion>
+    </region>
+  </goals>
+  <goals xmi:id="_SlcFAKqnEeyzD4i5VcA_4Q" name="trackEnergyHealthcare">
+    <requirements xmi:id="_ZWjzgKqnEeyzD4i5VcA_4Q" latestFinishTime="1500.0"/>
+    <participants xsi:type="atlas:StaticParticipants" xmi:id="_XVMYsKqnEeyzD4i5VcA_4Q" participants="_gx4mIHP-Eeqc6cv9mBHIKw _hNarkHP-Eeqc6cv9mBHIKw _hkfHwHP-Eeqc6cv9mBHIKw"/>
+    <action xsi:type="atlas:TrackEnergyConsumption" xmi:id="_gqYmcKqnEeyzD4i5VcA_4Q" energyPerDistance="10.0" energyPerTime="0.1" energyPerRoom="100.0"/>
+    <region xsi:type="atlas:StaticGoalRegion" xmi:id="_OUXk4KsJEeyLetgpoq5lEQ">
+      <staticRegion xmi:id="_O4zusKsJEeyLetgpoq5lEQ">
+        <corner1 xmi:id="_P4S1wKsJEeyLetgpoq5lEQ"/>
+        <corner2 xmi:id="_QQfTUKsJEeyLetgpoq5lEQ" x="10.0" y="10.0" z="2.0"/>
       </staticRegion>
     </region>
   </goals>

@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import atlasdsl.*;
 import atlasdsl.loader.*;
-import utils.ExptHelper;
+import utils.ExptHelperOld;
 
 public class Loader {
 	private final static String ABS_MOOS_PATH_BASE = "/home/jharbin//academic/atlas/atlas-middleware/middleware-java/moos-sim/";
@@ -17,12 +17,12 @@ public class Loader {
 
 			for (Computer c : mission.getAllComputers()) {
 				String launchScriptName = "launch_" + c.getName() + ".sh";
-				ExptHelper.startScript(ABS_MOOS_PATH_BASE, launchScriptName);
+				ExptHelperOld.startScript(ABS_MOOS_PATH_BASE, launchScriptName);
 			}
 
 			for (Robot r : mission.getAllRobots()) {
 				String launchScriptName = "launch_" + r.getName() + ".sh";
-				ExptHelper.startScript(ABS_MOOS_PATH_BASE, launchScriptName);
+				ExptHelperOld.startScript(ABS_MOOS_PATH_BASE, launchScriptName);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import exptrunner.jmetal.FuzzingSelectionsSolution;
-import utils.ExptHelper;
+import utils.ExptHelperOld;
 import atlasdsl.*;
 
 public class RunExperiment {
@@ -89,15 +89,15 @@ public class RunExperiment {
 		if (actuallyRun) {
 				// Launch the MOOS code, middleware and CI as separate subprocesses
 				// Always start the robots that are featured in both case studies
-				ExptHelper.startScript(absMOOSPATH, "launch_shoreside.sh");
-				ExptHelper.startScript(absMOOSPATH, "launch_gilda.sh");
-				ExptHelper.startScript(absMOOSPATH, "launch_henry.sh");
+				ExptHelperOld.startScript(absMOOSPATH, "launch_shoreside.sh");
+				ExptHelperOld.startScript(absMOOSPATH, "launch_gilda.sh");
+				ExptHelperOld.startScript(absMOOSPATH, "launch_henry.sh");
 
 				if (startAllRobots) {
-					ExptHelper.startScript(absMOOSPATH, "launch_ella.sh");
-					ExptHelper.startScript(absMOOSPATH, "launch_frank.sh");
-					ExptHelper.startScript(absMOOSPATH, "launch_brian.sh");
-					ExptHelper.startScript(absMOOSPATH, "launch_linda.sh");
+					ExptHelperOld.startScript(absMOOSPATH, "launch_ella.sh");
+					ExptHelperOld.startScript(absMOOSPATH, "launch_frank.sh");
+					ExptHelperOld.startScript(absMOOSPATH, "launch_brian.sh");
+					ExptHelperOld.startScript(absMOOSPATH, "launch_linda.sh");
 				}
 
 				exptLog("Started MOOS launch scripts");
@@ -105,14 +105,14 @@ public class RunExperiment {
 				TimeUnit.MILLISECONDS.sleep(800);
 
 				String[] middlewareOpts = { "nofault", "nogui" };
-				middleware = ExptHelper.startNewJavaProcess("-jar", absATLASJAR, middlewareOpts, ABS_WORKING_PATH);
+				middleware = ExptHelperOld.startNewJavaProcess("-jar", absATLASJAR, middlewareOpts, ABS_WORKING_PATH);
 
 				// Sleep until the middleware is ready, then start the CI
 				TimeUnit.MILLISECONDS.sleep(1000);
 
 				// CI not starting properly as a process, so call it via a script
 				exptLog("Starting CI");
-				ExptHelper.startScript(ABS_MIDDLEWARE_PATH, ciRunner);
+				ExptHelperOld.startScript(ABS_MIDDLEWARE_PATH, ciRunner);
 			
 				TimeUnit.MILLISECONDS.sleep(3000);
 				// Wait until the end condition for the middleware
@@ -122,9 +122,9 @@ public class RunExperiment {
 				middleware.destroy();
 
 				if (CLEAR_MOOS_LOGS_EACH_TIME) {
-					ExptHelper.startCmd(ABS_SCRIPT_PATH, "terminate_clear_logs.sh");
+					ExptHelperOld.startCmd(ABS_SCRIPT_PATH, "terminate_clear_logs.sh");
 				} else {
-					ExptHelper.startCmd(ABS_SCRIPT_PATH, "terminate.sh");
+					ExptHelperOld.startCmd(ABS_SCRIPT_PATH, "terminate.sh");
 				}
 
 				exptLog("Kill MOOS / Java processes command sent");

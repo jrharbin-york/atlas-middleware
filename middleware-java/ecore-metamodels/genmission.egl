@@ -80,7 +80,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 			
 			[* TODO: properties for these subcomponent types *]
 			[% if (subc.isKindOf(MotionSource)) { %]
-			MotionSource [%= subID %] = new MotionSource([%= subc.energyPerDistance %]);
+			MotionSource [%= subID %] = new MotionSource();
 			[%= robotName %].addSubcomponent([%= subID %]);
 			[% } %]
 			[% if (subc.isKindOf(Actuator)) { %]
@@ -162,6 +162,10 @@ public class GeneratedDSLLoader implements DSLLoader {
 		
 		[% if (goalAction.isKindOf(TrackDistances)) { %]
 		GoalAction ga[%= goalnum %] = new TrackDistances();
+		[% } %]
+		
+		[% if (goalAction.isKindOf(TrackEnergyConsumption)) { %]
+		GoalAction ga[%= goalnum %] = new TrackEnergyConsumption([%= goalAction.energyPerDistance %], [%= goalAction.energyPerTime %], [%= goalAction.energyPerRoom %]);
 		[% } %]
 		
 		[% if (goalAction.isKindOf(CheckRoomsCompleted)) { %]

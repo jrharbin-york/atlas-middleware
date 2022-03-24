@@ -105,33 +105,6 @@ public class Robot extends Component {
 		}
 	}
 	
-	public void registerEnergyUsage(Point newLocation) {
-		// Get the current location and the MotionSource
-		Optional<MotionSource> ms_o = getMotionSource();
-		if (ms_o.isPresent()) {
-			try {
-				Point currentLocation = getPointComponentProperty("location");
-				double distanceTravelled = currentLocation.distanceTo(newLocation);
-				MotionSource ms = ms_o.get();
-				double energyConsumed = ms.getEnergyPerDistance() * distanceTravelled;
-				currentEnergy -= energyConsumed;
-				currentEnergy = Math.max(currentEnergy, 0.0);
-				if (ROBOT_ENERGY_DEBUGGING) {
-					System.out.println("Robot " + getName() + " distanceTravelled = " + distanceTravelled +",energyConsumed = " + energyConsumed + ",currentEnergy = " + currentEnergy);
-				}
-				
-			} catch (MissingProperty e) {
-				System.out.println("Missing properties in registerEnergyUsage - location for robot " + getName());
-				e.printStackTrace();
-			}
-		
-		} else {
-			if (ROBOT_ENERGY_DEBUGGING) {
-				System.out.println("No Motion source - energy update ignored");
-			}
-		}
-	}
-	
 	public double getEnergyProportionRemaining() {
 		return ((double)currentEnergy) / ((double)startingEnergy);
 	}
@@ -143,6 +116,10 @@ public class Robot extends Component {
 	public void depleteEnergy(double fixedEnergyLoss) {
 		currentEnergy -= fixedEnergyLoss;
 		System.out.println("depleteEnergy: robot " + getName() + " experienced energy loss of " + fixedEnergyLoss + ",currentEnergy = " + currentEnergy);
+	}
+	
+	public void setEnergyRemaining(double newEnergy) {
+		currentEnergy = newEnergy;
 	}
 	
 	public boolean noEnergyRemaining() {

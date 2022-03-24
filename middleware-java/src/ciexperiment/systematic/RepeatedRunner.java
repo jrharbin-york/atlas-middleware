@@ -20,6 +20,7 @@ import exptrunner.metrics.Metrics;
 import exptrunner.metrics.MetricsProcessing;
 import exptrunner.metrics.MetricsProcessing.MetricStateKeys;
 import ciexperiment.runner.RunExperiment;
+import ciexperiment.runner.RunExperimentROS;
 import faultgen.InvalidFaultFormat;
 
 public class RepeatedRunner {
@@ -28,7 +29,7 @@ public class RepeatedRunner {
 	public static ModelsTransformer modelTransformer = new ModelsTransformer();
 	public static ModelEGLExecutor modelExecutor = new ModelEGLExecutor();
 
-	public static void runCIExptLoop(ExptParams eparams, String exptTag, boolean actuallyRun, double timeLimit, List<String> ciOptions) throws InterruptedException, IOException {
+	public static void runCIExptLoop(ExptParams eparams, String exptTag, boolean actuallyRun, double timeLimit, List<String> ciOptions, String simulatorType) throws InterruptedException, IOException {
 		// The core logic for the loop
 		while (!eparams.completed()) {
 			eparams.printState();
@@ -44,12 +45,17 @@ public class RepeatedRunner {
 						modelExecutor.executeEGL(file, EMF_OUTPUT_PATH);
 						System.out.println("Recompiling loader");
 						RunExperiment.compileLoader();
-						
 						// The newly recompiled loader is not used by this process, only by subprocesses
 						// So they see all the changes to the mission
 						Thread.sleep(3000);
 						System.out.println("Loader recompilation done");
-						RunExperiment.doExperimentFromFile(exptTag, actuallyRun, timeLimit, ciOption);
+						if (simulatorType.equals("MOOS")) {
+							RunExperiment.doExperimentFromFile(exptTag, actuallyRun, timeLimit, ciOption);
+						} 
+						
+						if (simulatorType.equals("ROS")) {
+							RunExperimentROS.doExperimentFromFile(exptTag, actuallyRun, timeLimit, ciOption);
+						}
 						eparams.logResults("/home/jharbin/academic/atlas/atlas-middleware/expt-working/logs", file, ciOption);
 					}
 					
@@ -77,7 +83,7 @@ public class RepeatedRunner {
 		return dl.loadMission();
 	}
 
-	public static void runCIExperiment(String sourceModelFile, List<Metrics> metricList, String fileTag, List<String> ciOptions) {
+	public static void runCIExperiment(String sourceModelFile, List<Metrics> metricList, String fileTag, List<String> ciOptions, String simulatorType) {
 		DSLLoader loader = new GeneratedDSLLoader();
 
 		try {
@@ -91,13 +97,13 @@ public class RepeatedRunner {
 			System.out.println("Model generation beginning for " + sourceModelFile);
 			List<String> missionFiles = modelTransformer.retriveAllModels(sourceModelFile);
 			
-			// TODO: add model filteration according to the EVL constraints here
+			// TODO: add model filteration according to the EVL constraints here?
 			
 			System.out.println("Model generation completed successfully!");
 			Thread.sleep(10000);
 			System.out.println("Starting experiment set");
 			ExptParams ep = new RunOnSetOfModels(mp, runTime, missionFiles, resFileName);
-			runCIExptLoop(ep, resFileName, true, runTime, ciOptions);
+			runCIExptLoop(ep, resFileName, true, runTime, ciOptions, simulatorType);
 			
 			System.out.println("Done");
 		} catch (DSLLoadFailed e) {
@@ -129,7 +135,7 @@ public class RepeatedRunner {
 		// Need to recompile the basis models - this is just to ensure e.g. the mission completion times are set properly
 		modelExecutor.executeEGL(sourceModelFile, EMF_OUTPUT_PATH);
 		Thread.sleep(1000);
-		runCIExperiment(sourceModelFile, l, "casestudy1", ciOptions);
+		runCIExperiment(sourceModelFile, l, "casestudy1", ciOptions, "MOOS");
 	}
 	
 	public static void expt_caseStudy2() throws EolModelLoadingException, EglRuntimeException, URISyntaxException, IOException, InterruptedException {
@@ -154,7 +160,7 @@ public class RepeatedRunner {
 		Thread.sleep(1000);
 		
 		// Standard is threshold of 750 mAh for return
-		runCIExperiment(basisModel, l, "casestudy2-threshold", ciOptions);
+		runCIExperiment(basisModel, l, "casestudy2-threshold", ciOptions, "MOOS");
 		//runCIExperiment("experiment-models/casestudy2/mission-basis-threshold500.model", l, "casestudy2-threshold500", ciOptions);
 		//runCIExperiment("experiment-models/casestudy2/mission-basis-threshold250.model", l, "casestudy2-threshold250", ciOptions);
 		
@@ -184,6 +190,6 @@ public class RepeatedRunner {
 		modelExecutor.executeEGL(basisModel, EMF_OUTPUT_PATH);
 		Thread.sleep(1000);
 		
-		runCIExperiment(basisModel, l, "casestudy-healthcare", ciOptions);
+		runCIExperiment(basisModel, l, "casestudy-healthcare", ciOptions, "ROS");
 	}
 }

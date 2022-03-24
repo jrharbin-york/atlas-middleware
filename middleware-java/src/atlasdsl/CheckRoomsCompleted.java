@@ -1,5 +1,7 @@
 package atlasdsl;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,11 +11,45 @@ import java.util.Optional;
 import atlasdsl.GoalResult.GoalResultStatus;
 import middleware.core.ATLASCore;
 
+// This goal needs to log the final rooms completed - so a metric can read the count
+
 public class CheckRoomsCompleted extends GoalAction {
 
 	private Map<String,List<Integer>> roomsPending = new HashMap<String,List<Integer>>();
+	Map<String,List<RoomServicedRecord>> roomsServicedByRobots = new HashMap<String,List<RoomServicedRecord>>();
 	
-	private void registerRoomCompleted(String robotName, Integer room) {
+	FileWriter roomsOutput;
+	
+	public class RoomServicedRecord {
+		private String robotName;
+		private Integer room;
+		private double time;
+		
+		public RoomServicedRecord(String robotName, Integer room, double time) {
+			this.robotName = robotName;
+			this.room = room;
+			this.time = time;
+		}
+		
+		public String toFileLine() {
+			return this.robotName + "," + this.room + "," + this.time; 
+		}
+	}
+	
+	private void logToFile(RoomServicedRecord rsr) {
+		try {
+			roomsOutput.write(rsr.toFileLine());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void registerRoomCompleted(String robotName, Integer room, double time) {
+		RoomServicedRecord rsr = new RoomServicedRecord(robotName, room, time);
+		logToFile(rsr);		
+		List<RoomServicedRecord> servicedByRobot = roomsServicedByRobots.get(robotName);
+		servicedByRobot.add(rsr);
+		
 		List<Integer> roomsForRobot = roomsPending.get(robotName);
 		roomsForRobot.remove(room);
 		roomsPending.put(robotName, roomsForRobot);
@@ -38,7 +74,16 @@ public class CheckRoomsCompleted extends GoalAction {
 	}
 
 	protected void setup(ATLASCore core, Mission mission, Goal g) throws GoalActionSetupFailure {
+		
+		try {
+			roomsOutput = new FileWriter("logs/roomsCompleted.log");
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new GoalActionSetupFailure(this, "Log file for roomsCompleted not set up");
+		}
+		
 		// TODO Encode all rooms in roomsPending from the DSL - here they are hardcoded
+		
 		List<Integer> rooms_tb0 = new ArrayList<Integer>();
 		rooms_tb0.add(1);
 		rooms_tb0.add(2);
@@ -61,13 +106,14 @@ public class CheckRoomsCompleted extends GoalAction {
 		// Set up watcher that will be triggered on this simulator variable
 		core.setupSimVarWatcher("/roomCompleted", (svar, robotName, val) -> 
 		{
+			double time = core.getTime();
 			if (val instanceof Integer) {
-				registerRoomCompleted(robotName, (Integer)val);
+				registerRoomCompleted(robotName, (Integer)val, time);
 			}
 			if (val instanceof String) {
 				System.out.println("registerRoom debugging: string is " + (String)val);
 				Integer i = Integer.parseInt((String)val);
-				registerRoomCompleted(robotName, i);
+				registerRoomCompleted(robotName, i, time);
 			}
 		});
 	}

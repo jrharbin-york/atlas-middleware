@@ -152,7 +152,6 @@ public class MOOSEventQueue extends CARSLinkEventQueue<MOOSEvent> {
 					Robot r = mission.getRobot(entityName);
 					if (r != null) {
 						Point newLocation = new Point(x,y);
-						core.registerEnergyUsage(r, newLocation);
 						r.setPointComponentProperty("location", new Point(x, y));
 						
 						// Send out an energy update to the CI

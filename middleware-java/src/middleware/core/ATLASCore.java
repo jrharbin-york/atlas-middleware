@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 import atlasdsl.*;
 import atlasdsl.faults.*;
 import atlassharedclasses.*;
-import edu.wpi.rail.jrosbridge.messages.Message;
 import faultgen.FaultGenerator;
 import middleware.carstranslations.CARSTranslations;
 import middleware.gui.GUITest;
@@ -234,18 +233,6 @@ public abstract class ATLASCore {
 	
 	public double getTimeLimit() {
 		return timeLimit;
-	}
-
-	public void registerEnergyUsage(Robot r, Point newLocation) {
-		r.registerEnergyUsage(newLocation);
-		if (stopOnNoEnergy) {
-			String robotName = r.getName();
-			if (r.noEnergyRemaining() && !vehicleBatteryFlat.containsKey(robotName)) {
-				vehicleBatteryFlat.put(robotName, true);
-				getCARSTranslator().stopVehicle(r.getName());
-				System.out.println("STOPPING VEHICLE " + r.getName() + " due to no energy remaining");
-			}
-		}
 	}
 
 	public double getRobotEnergyRemaining(Robot r) {

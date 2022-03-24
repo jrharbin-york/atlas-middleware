@@ -127,11 +127,6 @@ public class ROSEventQueue_AMCL extends CARSLinkEventQueue<ROSEvent> {
 					} else {
 						System.out.println("Simulator variable for " + tname + " not present in handleEventSpecifically") ;
 					}
-					
-						
-				
-					
-					
 				}
 			}
 
@@ -147,7 +142,7 @@ public class ROSEventQueue_AMCL extends CARSLinkEventQueue<ROSEvent> {
 				System.out.println("ODometry Point:" + p.toString());
 				System.out.println();
 				GPSPositionReading gps = new GPSPositionReading(p, rtu.getVehicleName());
-				core.registerEnergyUsage(mission.getRobot(rtu.getVehicleName()), p);
+				//core.registerEnergyUsage(mission.getRobot(rtu.getVehicleName()), p);
 				core.notifyPositionUpdate(gps);
 				
 				try {
