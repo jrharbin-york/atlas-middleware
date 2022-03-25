@@ -29,7 +29,7 @@ public class RepeatedRunnerSingleModel {
 	public static ModelsTransformer modelTransformer = new ModelsTransformer();
 	public static ModelEGLExecutor modelExecutor = new ModelEGLExecutor();
 
-	public static void runCIRepeatedModel(RunSameModel eparams, String exptTag, boolean actuallyRun, double timeLimit,
+	public static void runCIRepeatedModel(Mission baseMission, RunSameModel eparams, String exptTag, boolean actuallyRun, double timeLimit,
 			List<String> ciOptions) throws InterruptedException, IOException {
 		// The core logic for the loop
 		String modelFile = eparams.getModelFile();
@@ -42,7 +42,7 @@ public class RepeatedRunnerSingleModel {
 					Thread.sleep(1000);
 					RunExperiment.doExperimentFromFile(exptTag, actuallyRun, timeLimit, ciOption);
 					eparams.logResults("/home/jharbin/academic/atlas/atlas-middleware/expt-working/logs", modelFile,
-							ciOption);
+							ciOption, baseMission);
 				}
 				eparams.advance();
 			} catch (InterruptedException e) {
@@ -58,7 +58,7 @@ public class RepeatedRunnerSingleModel {
 		DSLLoader loader = new GeneratedDSLLoader();
 
 		try {
-			//Mission baseMission = loader.loadMission();
+			Mission baseMission = loader.loadMission();
 			//double runTime = baseMission.getEndTime();
 			String fileName = new SimpleDateFormat("yyyyMMddHHmm").format(new Date());
 			FileWriter tempLog = new FileWriter("tempLog-" + fileName + ".res");
@@ -75,7 +75,7 @@ public class RepeatedRunnerSingleModel {
 			Thread.sleep(3000);
 			RunExperiment.compileLoader();
 			
-			runCIRepeatedModel(ep, resFileName, true, runTime, ciOptions);
+			runCIRepeatedModel(baseMission, ep, resFileName, true, runTime, ciOptions);
 
 			System.out.println("Done");
 		} catch (IOException e) {

@@ -28,3 +28,7 @@ killall -9 move_base
 killall -9 amcl
 killall -9 map_server
 killall -9 map_navigation_corridor_white.py
+
+kill $(ps aux | grep '[c]ore.ATLASMain' | awk '{print $2}')
+kill $(ps aux | grep 'ROSLauncher' | awk '{print $2}')
+kill $(ps aux | grep 'CollectiveIntRunner' | awk '{print $2}')

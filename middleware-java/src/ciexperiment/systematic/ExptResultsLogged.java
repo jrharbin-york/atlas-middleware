@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import atlasdsl.Mission;
 import exptrunner.jmetal.InvalidMetrics;
 import exptrunner.metrics.Metrics;
 import exptrunner.metrics.MetricsProcessing;
@@ -18,7 +19,7 @@ public abstract class ExptResultsLogged extends ExptParams {
 		super(runtime);
 	}
 	
-	private String ciClassLastName(String ciClassFull) {
+	protected String ciClassLastName(String ciClassFull) {
 		String [] fields = ciClassFull.split(".");
 		if (fields.length > 0) {
 			return fields[fields.length-1];
@@ -27,7 +28,7 @@ public abstract class ExptResultsLogged extends ExptParams {
 		}	
 	}
 	
-	public void logResults(String logDir, String modelFile, String ciClass) {
+	public void logResults(String logDir, String modelFile, String ciClass, Mission mission) {
 		System.out.println("Writing results to result file: " + resFileName);
 		try {
 			Map<Metrics,Object> metricRes = metricsProcessing.readMetricsFromLogFiles(logDir);

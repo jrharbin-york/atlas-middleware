@@ -49,6 +49,10 @@ public class GPSPositionReading extends SensorInfo {
 		return z;
 	}
 	
+	public Point getPoint() {
+		return new Point(x,y,z);
+	}
+	
 	public String getRobotName() {
 		return robotName;
 	}

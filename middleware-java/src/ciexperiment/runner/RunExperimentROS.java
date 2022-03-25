@@ -15,7 +15,7 @@ public class RunExperimentROS {
 	// TODO: no more fixed paths
 	private final static String ABS_SCRIPT_PATH = "/home/jharbin/academic/atlas/atlas-middleware/bash-scripts/";
 	private final static String ABS_WORKING_PATH = "/home/jharbin/academic/atlas/atlas-middleware/expt-working/healthcare";
-	public final static String ABS_MIDDLEWARE_PATH = "/home/jharbin/academic/atlas/atlas-middleware/expt-working/";
+	public final static String ABS_MIDDLEWARE_PATH = ABS_WORKING_PATH;
 	private final static String ABS_MOOS_PATH_BASE = "/home/jharbin//academic/atlas/atlas-middleware/middleware-java/moos-sim/";
 
 	private final static boolean CLEAR_MOOS_LOGS_EACH_TIME = true;
@@ -72,35 +72,29 @@ public class RunExperimentROS {
 		}
 	}
 
-	public static double doExperimentFromFile(String exptTag, boolean actuallyRun, double timeLimit, String ciClass) throws InterruptedException, IOException {
-		double returnValue = 0;
+	public static String doExperimentFromFile(String exptTag, boolean actuallyRun, double timeLimit, String ciClass) throws InterruptedException, IOException {
 		
 		if (actuallyRun) {	
 			exptLog("Starting ROS/SAFEMUV launch scripts");
 			String launchBashScript = "./auto_launch_healthcare.sh";
 			ExptHelperOld.startScript(ABS_WORKING_PATH, launchBashScript);
 			
-			sleepHandlingInterruption(30000);
+			sleepHandlingInterruption(10000);
 			
 			System.out.println("Running middleware");
-			ExptHelper.runScriptNew(ABS_WORKING_PATH, "./start_middleware.sh", "");
+			ExptHelper.runScriptNew(ABS_WORKING_PATH, "./start_middleware.sh", "nofault");
 			String[] middlewareOpts = { "nofault", "nogui" };
 
-			// This assumes that the mission time is at least 20 seconds, and gives time for
+			// This assumes that the mission time is at least 30 seconds, and gives time for
 			// the middleware to start
-			sleepHandlingInterruption(20000);		
-			
-			ExptHelper.runScriptNew(ABS_WORKING_PATH, "./start_middleware.sh", "");
-
-			sleepHandlingInterruption(3000);
+			sleepHandlingInterruption(5000);
 			ExptHelper.runScriptNew(ABS_WORKING_PATH, "./start_ci.sh", ciClass);
+			sleepHandlingInterruption(1000);
 			
 			// Wait until the end condition for the middleware
 			waitUntilMiddlewareTime(timeLimit, failsafeTimeLimit);
 			exptLog("Middleware end time reached");
 			
-			
-
 			// TODO: ensure simulation/SAFEMUV state is properly cleared
 			if (CLEAR_ROS_LOGS_EACH_TIME) {
 				ExptHelperOld.startCmd(ABS_WORKING_PATH, "terminate_clear_logs.sh");
@@ -108,11 +102,9 @@ public class RunExperimentROS {
 				ExptHelperOld.startCmd(ABS_WORKING_PATH, "terminate.sh");
 			}
 			exptLog("Kill MOOS / Java processes command sent");
-			sleepHandlingInterruption(40000);
+			sleepHandlingInterruption(10000);
 			exptLog("Destroy commands completed");
 		}
-
-		returnValue = 0;
 
 		if (actuallyRun) {
 			exptLog("Waiting to restart experiment");
@@ -125,7 +117,7 @@ public class RunExperimentROS {
 			}
 		}
 
-		return returnValue;
+		return ABS_WORKING_PATH;
 	}
 	
 	private static double extractResults(String string) {

@@ -165,7 +165,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 		[% } %]
 		
 		[% if (goalAction.isKindOf(TrackEnergyConsumption)) { %]
-		GoalAction ga[%= goalnum %] = new TrackEnergyConsumption([%= goalAction.energyPerDistance %], [%= goalAction.energyPerTime %], [%= goalAction.energyPerRoom %]);
+		GoalAction ga[%= goalnum %] = new TrackEnergyConsumption([%= goalAction.energyPerDistance %], [%= goalAction.energyPerRoom %], [%= goalAction.energyPerTime %]);
 		[% } %]
 		
 		[% if (goalAction.isKindOf(CheckRoomsCompleted)) { %]

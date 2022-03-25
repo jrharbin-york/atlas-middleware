@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class GeneratedDSLLoader implements DSLLoader {
 	public Mission loadMission() throws DSLLoadFailed {
-	final double MISSION_END_TIME = 1500.0;
+	final double MISSION_END_TIME = 400.0;
 	Mission mission = new Mission(MISSION_END_TIME, true);
 	
 	mission.addSimulatorVariable(new SimulatorVariable("/clock", "rosgraph_msgs/Clock", SimulatorVariable.VariableTag.TIME, false, false));
@@ -41,7 +41,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 			
  
 			
-			Battery srtb3_0_3 = new Battery(200); 
+			Battery srtb3_0_3 = new Battery(800); 
 			srtb3_0_3.setParent(rtb3_0);
 			rtb3_0.addSubcomponent(srtb3_0_3);
 			
@@ -71,7 +71,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 			
  
 			
-			Battery srtb3_1_3 = new Battery(100); 
+			Battery srtb3_1_3 = new Battery(400); 
 			srtb3_1_3.setParent(rtb3_1);
 			rtb3_1.addSubcomponent(srtb3_1_3);
 			
@@ -101,7 +101,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 			
  
 			
-			Battery srtb3_2_3 = new Battery(100); 
+			Battery srtb3_2_3 = new Battery(800); 
 			srtb3_2_3.setParent(rtb3_2);
 			rtb3_2.addSubcomponent(srtb3_2_3);
 			
@@ -125,7 +125,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 		GoalTemporalConstraints gt1 = new GoalTemporalConstraints(0.0, 500.0);
 		
 		
-		GoalAction ga1 = new AvoidOthers(0.3);
+		GoalAction ga1 = new AvoidOthers(0.2);
 		
 		
 		
@@ -211,7 +211,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 		
 		
 		
-		GoalAction ga4 = new TrackEnergyConsumption(10.0, 0.1, 100.0);
+		GoalAction ga4 = new TrackEnergyConsumption(10.0, 100.0, 0.1);
 		
 		
 		

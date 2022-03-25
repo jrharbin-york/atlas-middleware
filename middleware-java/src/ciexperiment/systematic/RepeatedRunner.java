@@ -16,9 +16,10 @@ import atlasdsl.Mission;
 import atlasdsl.loader.DSLLoadFailed;
 import atlasdsl.loader.DSLLoader;
 import atlasdsl.loader.GeneratedDSLLoader;
-import exptrunner.metrics.Metrics;
-import exptrunner.metrics.MetricsProcessing;
+import exptrunner.metrics.CompletedRoomsCount;
 import exptrunner.metrics.MetricsProcessing.MetricStateKeys;
+import exptrunner.metrics.*;
+
 import ciexperiment.runner.RunExperiment;
 import ciexperiment.runner.RunExperimentROS;
 import faultgen.InvalidFaultFormat;
@@ -29,7 +30,7 @@ public class RepeatedRunner {
 	public static ModelsTransformer modelTransformer = new ModelsTransformer();
 	public static ModelEGLExecutor modelExecutor = new ModelEGLExecutor();
 
-	public static void runCIExptLoop(ExptParams eparams, String exptTag, boolean actuallyRun, double timeLimit, List<String> ciOptions, String simulatorType) throws InterruptedException, IOException {
+	public static void runCIExptLoop(Mission baseMission, ExptParams eparams, String exptTag, boolean actuallyRun, double timeLimit, List<String> ciOptions, String simulatorType) throws InterruptedException, IOException {
 		// The core logic for the loop
 		while (!eparams.completed()) {
 			eparams.printState();
@@ -38,6 +39,7 @@ public class RepeatedRunner {
 				Optional<String> nextFile_o = eparams.getNextFileName();
 				if (nextFile_o.isPresent()) {
 					String file = nextFile_o.get();
+					String workingDir = "";
 					
 					for (String ciOption : ciOptions) {
 						System.out.println("Running experiments for model file " + file + " and CI class " + ciOption);
@@ -45,18 +47,23 @@ public class RepeatedRunner {
 						modelExecutor.executeEGL(file, EMF_OUTPUT_PATH);
 						System.out.println("Recompiling loader");
 						RunExperiment.compileLoader();
+						
 						// The newly recompiled loader is not used by this process, only by subprocesses
 						// So they see all the changes to the mission
 						Thread.sleep(3000);
 						System.out.println("Loader recompilation done");
 						if (simulatorType.equals("MOOS")) {
-							RunExperiment.doExperimentFromFile(exptTag, actuallyRun, timeLimit, ciOption);
+							workingDir = RunExperiment.doExperimentFromFile(exptTag, actuallyRun, timeLimit, ciOption);
 						} 
 						
 						if (simulatorType.equals("ROS")) {
-							RunExperimentROS.doExperimentFromFile(exptTag, actuallyRun, timeLimit, ciOption);
+							workingDir = RunExperimentROS.doExperimentFromFile(exptTag, actuallyRun, timeLimit, ciOption);
 						}
-						eparams.logResults("/home/jharbin/academic/atlas/atlas-middleware/expt-working/logs", file, ciOption);
+						// Currently, any metrics will be computed using the state of the 
+						// parent mission - metrics cannot depend on the recompiled mission!
+						String logDir = workingDir + "/logs";
+						eparams.logResults(logDir, file, ciOption, baseMission);
+						
 					}
 					
 					eparams.advance();
@@ -83,7 +90,7 @@ public class RepeatedRunner {
 		return dl.loadMission();
 	}
 
-	public static void runCIExperiment(String sourceModelFile, List<Metrics> metricList, String fileTag, List<String> ciOptions, String simulatorType) {
+	public static void runCIExperiment(String sourceModelFile, List<Metrics> oldMetricList, List<OfflineMetric> newMetricList, String fileTag, List<String> ciOptions, String simulatorType) {
 		DSLLoader loader = new GeneratedDSLLoader();
 
 		try {
@@ -91,8 +98,7 @@ public class RepeatedRunner {
 			double runTime = baseMission.getEndTime();
 			String fileName = new SimpleDateFormat("yyyyMMddHHmm").format(new Date());
 			FileWriter tempLog = new FileWriter("tempLog-" + fileName + ".res");
-			MetricsProcessing mp = new MetricsProcessing(metricList, tempLog);
-			mp.setMetricState(MetricStateKeys.MISSION_END_TIME, baseMission.getEndTime());
+			
 			String resFileName = "ciexpt-"+fileTag+".res";
 			System.out.println("Model generation beginning for " + sourceModelFile);
 			List<String> missionFiles = modelTransformer.retriveAllModels(sourceModelFile);
@@ -102,8 +108,18 @@ public class RepeatedRunner {
 			System.out.println("Model generation completed successfully!");
 			Thread.sleep(10000);
 			System.out.println("Starting experiment set");
-			ExptParams ep = new RunOnSetOfModels(mp, runTime, missionFiles, resFileName);
-			runCIExptLoop(ep, resFileName, true, runTime, ciOptions, simulatorType);
+			
+			ExptParams ep;
+			if (newMetricList.size() > 0) {
+				System.out.println("Using NEW metric infrastructure");
+				MetricHandler mh = new MetricHandler(newMetricList, resFileName);
+				ep = new RunOnSetOfModelsNewMetrics(mh, runTime, missionFiles, resFileName);
+				runCIExptLoop(baseMission, ep, resFileName, true, runTime, ciOptions, simulatorType);
+			} else {
+				//ep = new RunOnSetOfModels(mp, runTime, missionFiles, resFileName);
+			}
+			
+			
 			
 			System.out.println("Done");
 		} catch (DSLLoadFailed e) {
@@ -135,7 +151,8 @@ public class RepeatedRunner {
 		// Need to recompile the basis models - this is just to ensure e.g. the mission completion times are set properly
 		modelExecutor.executeEGL(sourceModelFile, EMF_OUTPUT_PATH);
 		Thread.sleep(1000);
-		runCIExperiment(sourceModelFile, l, "casestudy1", ciOptions, "MOOS");
+		// TODO: convert this to new Metrics infrastructure
+		runCIExperiment(sourceModelFile, l, new ArrayList<OfflineMetric>(), "casestudy1", ciOptions, "MOOS");
 	}
 	
 	public static void expt_caseStudy2() throws EolModelLoadingException, EglRuntimeException, URISyntaxException, IOException, InterruptedException {
@@ -160,36 +177,34 @@ public class RepeatedRunner {
 		Thread.sleep(1000);
 		
 		// Standard is threshold of 750 mAh for return
-		runCIExperiment(basisModel, l, "casestudy2-threshold", ciOptions, "MOOS");
+		
+		// TODO: convert this to new Metrics infrastructure
+		runCIExperiment(basisModel, l, new ArrayList<OfflineMetric>(), "casestudy2-threshold", ciOptions, "MOOS");
 		//runCIExperiment("experiment-models/casestudy2/mission-basis-threshold500.model", l, "casestudy2-threshold500", ciOptions);
 		//runCIExperiment("experiment-models/casestudy2/mission-basis-threshold250.model", l, "casestudy2-threshold250", ciOptions);
 		
 	}
 	
 	public static void expt_caseStudyHealthcare() throws EolModelLoadingException, EglRuntimeException, URISyntaxException, IOException, InterruptedException {
-		List<Metrics> l = new ArrayList<Metrics>();
-//		l.add(Metrics.OBSTACLE_AVOIDANCE_METRIC);
-//		l.add(Metrics.AVOIDANCE_METRIC);
-//		l.add(Metrics.TOTAL_ENERGY_AT_END);
-//		l.add(Metrics.MEAN_ENERGY_AT_END);
-//		l.add(Metrics.TOTAL_FINAL_DISTANCE_AT_END);
-//		l.add(Metrics.MEAN_FINAL_DISTANCE_AT_END);
-//		l.add(Metrics.TOTAL_WAYPOINT_SWITCH_COUNT);
+		List<OfflineMetric> newMetrics = new ArrayList<OfflineMetric>();
+
+		// TODO: add the metrics from the DSL
+		newMetrics.add(new CompletedRoomsCount());
+		newMetrics.add(new TotalRobotEnergyAtEnd());
 		
 		// TODO: need to setup metrics from the goals
 				
 		String basisModel = "experiment-models/healthcare/missionHealthcare-basis.model";
 		String standardCI = "atlascollectiveint.expt.healthcare.ComputerCIshoreside_healthcare";
-		String randomCI = "atlascollectiveint.expt.healthcare.ComputerCIshoreside_healthcare_random";
+		//String randomCI = "atlascollectiveint.expt.healthcare.ComputerCIshoreside_healthcare_random";
 		
 		ArrayList<String> ciOptions = new ArrayList<String>();
 		ciOptions.add(standardCI);
-		ciOptions.add(randomCI);
-		// TODO: more advanced CIs here
+		// TODO: implement more advanced CI, add it here
 		
 		modelExecutor.executeEGL(basisModel, EMF_OUTPUT_PATH);
 		Thread.sleep(1000);
 		
-		runCIExperiment(basisModel, l, "casestudy-healthcare", ciOptions, "ROS");
+		runCIExperiment(basisModel, new ArrayList<Metrics>(), newMetrics, "casestudy-healthcare", ciOptions, "ROS");
 	}
 }

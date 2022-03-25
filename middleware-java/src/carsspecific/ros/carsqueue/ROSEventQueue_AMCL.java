@@ -142,7 +142,6 @@ public class ROSEventQueue_AMCL extends CARSLinkEventQueue<ROSEvent> {
 				System.out.println("ODometry Point:" + p.toString());
 				System.out.println();
 				GPSPositionReading gps = new GPSPositionReading(p, rtu.getVehicleName());
-				//core.registerEnergyUsage(mission.getRobot(rtu.getVehicleName()), p);
 				core.notifyPositionUpdate(gps);
 				
 				try {
@@ -160,23 +159,7 @@ public class ROSEventQueue_AMCL extends CARSLinkEventQueue<ROSEvent> {
 					e1.printStackTrace();
 				}
 				
-				// Send out an energy update to the CI
-				Robot r = mission.getRobot(rtu.getVehicleName());
-				EnergyUpdate eu = new EnergyUpdate(core.getRobotEnergyRemaining(r), r.getName());
-				try {
-					String msg = atlasOMapper.serialise(eu);
 
-					if (DEBUG_PRINT_DESERIALISED_MSGS) {
-						System.out.println("DEBUG: serialised message " + msg);
-					}
-					outputToCI.sendMessage(msg);
-				} catch (JsonProcessingException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (JMSException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
 			}
 
 			if (rtu.tagEquals(ATLASTag.VELOCITY)) {

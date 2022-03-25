@@ -38,7 +38,7 @@ public class TrackEnergyConsumption extends GoalAction {
 		previousTime = time;
 		double energyDrop = timeGap * energyPerTime;
 		for (Robot r : mission.getAllRobots()) {
-			r.depleteEnergy(energyDrop);
+			core.depleteEnergyOnRobot(r.getName(), energyDrop);
 		}
 		
 		// If completion time is exceeded, write the results file
@@ -70,10 +70,12 @@ public class TrackEnergyConsumption extends GoalAction {
 			double energyPercent = r.getEnergyProportionRemaining();
 			System.out.println("Robot " + r.getName() + " distanceTravelled = " + distanceTravelled +",energyConsumed = " + energyConsumed + ",newEnergy = " + newEnergy + "[" + (energyPercent * 100) + "%]");
 		}
+		core.depleteEnergyOnRobot(r.getName(), energyConsumed);
 	}
 
 	protected void setup(ATLASCore core, Mission mission, Goal g) throws GoalActionSetupFailure {
 		this.core = core;
+		this.previousTime = core.getTime();
 		this.completionTime = core.getTimeLimit();
 		this.mission = mission;
 
@@ -86,9 +88,8 @@ public class TrackEnergyConsumption extends GoalAction {
 				String rname = gps.getRobotName();
 				Point newLocation = new Point(x, y, z);
 				Robot r = mission.getRobot(rname);
-				Point currentLocation;
 				try {
-					currentLocation = r.getPointComponentProperty("location");
+					Point currentLocation = r.getPointComponentProperty("location");
 					linearEnergyModel(r,currentLocation, newLocation);
 				} catch (MissingProperty e) {
 					e.printStackTrace();
@@ -96,9 +97,11 @@ public class TrackEnergyConsumption extends GoalAction {
 		}});
 		
 		// use a watcher on the /roomsCompleted - deplete energy by fixed value
-		core.setupSimVarWatcher("/roomsCompleted", (svar, robotName, val) -> {
-			Robot r = mission.getRobot(robotName);
-			r.depleteEnergy(energyPerRoom);
+		// for every room visited
+		core.setupSimVarWatcher("/roomCompleted", (svar, robotName, val) -> {
+			if (g.isReady(core.getTime())) {
+				core.depleteEnergyOnRobot(robotName, energyPerRoom);
+			}
 		});
 	}
 }

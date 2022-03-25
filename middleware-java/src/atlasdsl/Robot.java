@@ -113,8 +113,13 @@ public class Robot extends Component {
 		return currentEnergy;
 	}
 
-	public void depleteEnergy(double fixedEnergyLoss) {
+	/** This should only be called by the core as it does 
+	 * not handle sending out an energy update or stop the robot 
+	 * if energy is exhausted 
+	 * **/  
+	public void _depleteEnergy(double fixedEnergyLoss) {
 		currentEnergy -= fixedEnergyLoss;
+		currentEnergy = Math.max(currentEnergy, 0.0);
 		System.out.println("depleteEnergy: robot " + getName() + " experienced energy loss of " + fixedEnergyLoss + ",currentEnergy = " + currentEnergy);
 	}
 	

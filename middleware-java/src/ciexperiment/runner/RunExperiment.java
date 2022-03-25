@@ -60,11 +60,10 @@ public class RunExperiment {
 		}
 	}
 
-	public static double doExperimentFromFile(String exptTag, boolean actuallyRun, double timeLimit, String ciClass)
+	public static String doExperimentFromFile(String exptTag, boolean actuallyRun, double timeLimit, String ciClass)
 			throws InterruptedException, IOException {
 		Process middleware;
 
-		double returnValue = 0;
 		String absATLASJAR;
 		String absMOOSPATH;
 		String ciRunner;
@@ -112,16 +111,13 @@ public class RunExperiment {
 			exptLog("Destroy commands completed");
 		}
 
-		// Read and process the result files from the experiment
-		returnValue = extractResults(ABS_WORKING_PATH + "logs");
-
 		if (actuallyRun) {
 			exptLog("Waiting to restart experiment");
 			// Wait 10 seconds before ending
 			TimeUnit.MILLISECONDS.sleep(10000);
 		}
 
-		return returnValue;
+		return ABS_WORKING_PATH;
 	}
 
 	private static double extractResults(String string) {

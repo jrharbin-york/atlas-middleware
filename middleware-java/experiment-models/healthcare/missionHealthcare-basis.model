@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ASCII"?>
-<atlas:Mission xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:atlas="http://www.github.com/jrharbin-york/atlas-middleware/dsl/atlas" xmi:id="_8OLx8HP4Eeqc6cv9mBHIKw" endTime="1500.0" stopVehicleOnNoEnergy="true">
+<atlas:Mission xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:atlas="http://www.github.com/jrharbin-york/atlas-middleware/dsl/atlas" xmi:id="_8OLx8HP4Eeqc6cv9mBHIKw" endTime="400.0" stopVehicleOnNoEnergy="true">
   <mutProgram xmi:id="_J543gKfxEeyth8kMdDG_FA">
     <mutationGroups xmi:id="_KpnrUKfxEeyth8kMdDG_FA" minRequiredFromGroup="2" maxRequiredFromGroup="3" members="_gx4mIHP-Eeqc6cv9mBHIKw _hNarkHP-Eeqc6cv9mBHIKw _hkfHwHP-Eeqc6cv9mBHIKw"/>
     <mutationGroups xmi:id="_Oo2hAKfxEeyth8kMdDG_FA" minRequiredFromGroup="1" maxRequiredFromGroup="1" members="_X79rIKfxEeyth8kMdDG_FA _XdRiAKWWEeyG79PXMexeYw"/>
@@ -20,8 +20,8 @@
       <params>SPEED</params>
       <params>COURSE</params>
     </subcomponents>
-    <subcomponents xsi:type="atlas:Battery" xmi:id="_XdRiAKWWEeyG79PXMexeYw" name="STANDARD-0" mutable="true" totalEnergy="100"/>
-    <subcomponents xsi:type="atlas:Battery" xmi:id="_X79rIKfxEeyth8kMdDG_FA" name="HIGH-0" mutable="true" totalEnergy="200"/>
+    <subcomponents xsi:type="atlas:Battery" xmi:id="_XdRiAKWWEeyG79PXMexeYw" name="STANDARD-0" mutable="true" totalEnergy="400"/>
+    <subcomponents xsi:type="atlas:Battery" xmi:id="_X79rIKfxEeyth8kMdDG_FA" name="HIGH-0" mutable="true" totalEnergy="800"/>
   </robots>
   <robots xmi:id="_hNarkHP-Eeqc6cv9mBHIKw" name="tb3_1" mutable="true">
     <componentProperties xsi:type="atlas:PointProperty" xmi:id="_FOiEMHQREeqc6cv9mBHIKw" name="startLocation">
@@ -37,8 +37,8 @@
       <params>SPEED</params>
       <params>COURSE</params>
     </subcomponents>
-    <subcomponents xsi:type="atlas:Battery" xmi:id="_aaycAKWWEeyG79PXMexeYw" name="STANDARD-1" mutable="true" totalEnergy="100"/>
-    <subcomponents xsi:type="atlas:Battery" xmi:id="_t28UsKfxEeyth8kMdDG_FA" name="HIGH-1" mutable="true" totalEnergy="200"/>
+    <subcomponents xsi:type="atlas:Battery" xmi:id="_aaycAKWWEeyG79PXMexeYw" name="STANDARD-1" mutable="true" totalEnergy="400"/>
+    <subcomponents xsi:type="atlas:Battery" xmi:id="_t28UsKfxEeyth8kMdDG_FA" name="HIGH-1" mutable="true" totalEnergy="800"/>
   </robots>
   <robots xmi:id="_hkfHwHP-Eeqc6cv9mBHIKw" name="tb3_2" mutable="true">
     <componentProperties xsi:type="atlas:PointProperty" xmi:id="_Jyhz0HQREeqc6cv9mBHIKw" name="startLocation">
@@ -54,14 +54,14 @@
       <params>SPEED</params>
       <params>COURSE</params>
     </subcomponents>
-    <subcomponents xsi:type="atlas:Battery" xmi:id="_eoB4gKWWEeyG79PXMexeYw" name="STANDARD-2" mutable="true" totalEnergy="100"/>
-    <subcomponents xsi:type="atlas:Battery" xmi:id="_6tdUIKfxEeyth8kMdDG_FA" name="HIGH-2" mutable="true" totalEnergy="200"/>
+    <subcomponents xsi:type="atlas:Battery" xmi:id="_eoB4gKWWEeyG79PXMexeYw" name="STANDARD-2" mutable="true" totalEnergy="400"/>
+    <subcomponents xsi:type="atlas:Battery" xmi:id="_6tdUIKfxEeyth8kMdDG_FA" name="HIGH-2" mutable="true" totalEnergy="800"/>
   </robots>
   <computers xmi:id="_fXV6wHP-Eeqc6cv9mBHIKw" name="controller"/>
   <goals xmi:id="_kwYOQHP5Eeqc6cv9mBHIKw" name="mutualAvoidance">
     <requirements xmi:id="_LWQjUHQEEeqc6cv9mBHIKw" latestFinishTime="500.0"/>
     <participants xsi:type="atlas:StaticParticipants" xmi:id="_zbOjAHQCEeqc6cv9mBHIKw" participants="_gx4mIHP-Eeqc6cv9mBHIKw _hNarkHP-Eeqc6cv9mBHIKw _hkfHwHP-Eeqc6cv9mBHIKw"/>
-    <action xsi:type="atlas:AvoidOthers" xmi:id="_kqonEHQDEeqc6cv9mBHIKw" clearance="0.3"/>
+    <action xsi:type="atlas:AvoidOthers" xmi:id="_kqonEHQDEeqc6cv9mBHIKw" clearance="0.2"/>
     <region xsi:type="atlas:StaticGoalRegion" xmi:id="_l2ZbIHP5Eeqc6cv9mBHIKw">
       <staticRegion xmi:id="_mgPpYHP5Eeqc6cv9mBHIKw">
         <corner1 xmi:id="_nGbfoHP5Eeqc6cv9mBHIKw"/>

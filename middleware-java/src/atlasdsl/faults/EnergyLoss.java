@@ -25,7 +25,7 @@ public class EnergyLoss extends ComponentImpact {
 		
 		if (b.getParent() instanceof Robot) {
 			Robot r = (Robot)b.getParent();
-			r.depleteEnergy(fixedEnergyLoss);
+			core.depleteEnergyOnRobot(r.getName(), (double)fixedEnergyLoss);
 		}
 	}
 
