@@ -41,7 +41,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 			
  
 			
-			Battery srtb3_0_3 = new Battery(800); 
+			Battery srtb3_0_3 = new Battery(400); 
 			srtb3_0_3.setParent(rtb3_0);
 			rtb3_0.addSubcomponent(srtb3_0_3);
 			
@@ -71,7 +71,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 			
  
 			
-			Battery srtb3_1_3 = new Battery(400); 
+			Battery srtb3_1_3 = new Battery(800); 
 			srtb3_1_3.setParent(rtb3_1);
 			rtb3_1.addSubcomponent(srtb3_1_3);
 			
@@ -79,45 +79,14 @@ public class GeneratedDSLLoader implements DSLLoader {
 			
 			
 		mission.addRobot(rtb3_1);
-		Robot rtb3_2 = new Robot("tb3_2");
-		rtb3_2.setPointComponentProperty("startLocation", new Point(-5.59,-3.23,0.0));
-		rtb3_2.setDoubleComponentProperty("maxSpeed", 5.0);
-		rtb3_2.setDoubleComponentProperty("startSpeed", 1.5);
-		
- 
-			
-			
-		Sensor srtb3_2_1 = new Sensor(SensorType.GPS_POSITION);
-		srtb3_2_1.setParent(rtb3_2);
-		rtb3_2.addSubcomponent(srtb3_2_1);
-			
-			
- 
-			
-			
-			
-			MotionSource srtb3_2_2 = new MotionSource();
-			rtb3_2.addSubcomponent(srtb3_2_2);
-			
- 
-			
-			Battery srtb3_2_3 = new Battery(800); 
-			srtb3_2_3.setParent(rtb3_2);
-			rtb3_2.addSubcomponent(srtb3_2_3);
-			
-			
-			
-			
-		mission.addRobot(rtb3_2);
 	
 	
 	
 	
- 
  
  
 		
-		Robot [] grp1 = {rtb3_0,rtb3_1,rtb3_2}; 
+		Robot [] grp1 = {rtb3_0,rtb3_1}; 
 		GoalParticipants gpmutualAvoidance = new StaticParticipants(grp1, mission);
 		
 		
@@ -143,9 +112,8 @@ public class GeneratedDSLLoader implements DSLLoader {
 		mission.addGoal("mutualAvoidance", mutualAvoidance);
  
  
- 
 		
-		Robot [] grp2 = {rtb3_0,rtb3_1,rtb3_2}; 
+		Robot [] grp2 = {rtb3_0,rtb3_1}; 
 		GoalParticipants gptrackDistances = new StaticParticipants(grp2, mission);
 		
 		
@@ -171,9 +139,8 @@ public class GeneratedDSLLoader implements DSLLoader {
 		mission.addGoal("trackDistances", trackDistances);
  
  
- 
 		
-		Robot [] grp3 = {rtb3_0,rtb3_1,rtb3_2}; 
+		Robot [] grp3 = {rtb3_0,rtb3_1}; 
 		GoalParticipants gpcheckRoomsCompleted = new StaticParticipants(grp3, mission);
 		
 		
@@ -199,9 +166,8 @@ public class GeneratedDSLLoader implements DSLLoader {
 		mission.addGoal("checkRoomsCompleted", checkRoomsCompleted);
  
  
- 
 		
-		Robot [] grp4 = {rtb3_0,rtb3_1,rtb3_2}; 
+		Robot [] grp4 = {rtb3_0,rtb3_1}; 
 		GoalParticipants gptrackEnergyHealthcare = new StaticParticipants(grp4, mission);
 		
 		

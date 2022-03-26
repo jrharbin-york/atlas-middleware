@@ -196,11 +196,11 @@ public class RepeatedRunner {
 				
 		String basisModel = "experiment-models/healthcare/missionHealthcare-basis.model";
 		String standardCI = "atlascollectiveint.expt.healthcare.ComputerCIshoreside_healthcare";
-		//String randomCI = "atlascollectiveint.expt.healthcare.ComputerCIshoreside_healthcare_random";
+		String dynamicCI = "atlascollectiveint.expt.healthcare.ComputerCIshoreside_healthcare_dynamicenergy";
 		
 		ArrayList<String> ciOptions = new ArrayList<String>();
 		ciOptions.add(standardCI);
-		// TODO: implement more advanced CI, add it here
+		ciOptions.add(dynamicCI);
 		
 		modelExecutor.executeEGL(basisModel, EMF_OUTPUT_PATH);
 		Thread.sleep(1000);
