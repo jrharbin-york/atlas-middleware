@@ -191,6 +191,7 @@ public class RepeatedRunner {
 		// TODO: add the metrics from the DSL
 		newMetrics.add(new CompletedRoomsCount());
 		newMetrics.add(new TotalRobotEnergyAtEnd());
+		newMetrics.add(new MissionCompletionTime());
 		
 		// TODO: need to setup metrics from the goals
 				

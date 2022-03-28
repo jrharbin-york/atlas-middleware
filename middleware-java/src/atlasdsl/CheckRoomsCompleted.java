@@ -16,7 +16,7 @@ import middleware.core.ATLASCore;
 
 public class CheckRoomsCompleted extends GoalAction {
 
-	private static final double RETURN_HOME_DIST_THRESHOLD = 0.1;
+	private static final double RETURN_HOME_DIST_THRESHOLD = 0.5;
 
 	private Mission mission;
 	private double completionTime;
@@ -24,6 +24,7 @@ public class CheckRoomsCompleted extends GoalAction {
 	private Map<String, List<Integer>> roomsPending = new HashMap<String, List<Integer>>();
 	Map<String, List<RoomServicedRecord>> roomsServicedByRobots = new HashMap<String, List<RoomServicedRecord>>();
 
+	private HashMap<String, Double> workAssignedTime = new HashMap<String, Double>();
 	private HashMap<String, Double> checkReturnHomeTime = new HashMap<String, Double>();
 
 	FileWriter roomsOutput;
@@ -75,7 +76,7 @@ public class CheckRoomsCompleted extends GoalAction {
 		roomsForRobot.remove(room);
 		roomsPending.put(robotName, roomsForRobot);
 		System.out.println("CheckRoomsCompleted: registerRoomCompleted: robot " + robotName + " completed room " + room);
-		System.out.println("CheckRoomsCompleted: roomsPending for robot " + robotName + " is " + roomsPending.toString());
+		System.out.println("CheckRoomsCompleted: roomsForRobot " + robotName + " is " + roomsForRobot.toString());
 	}
 
 	protected Optional<GoalResult> test(Mission mission, GoalParticipants participants) {
@@ -111,12 +112,20 @@ public class CheckRoomsCompleted extends GoalAction {
 				if (checkReturnHomeTime.containsKey(robotName)) {
 					completionTimeForRobot = checkReturnHomeTime.get(robotName);
 				} 
-				output.write(robotName + "," + completionTimeForRobot);
+				output.write(robotName + "," + completionTimeForRobot + "\n");
 			}
 			output.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private String stripDoubleQuotes(String string) {
+		if (string.length() >= 2 && string.charAt(0) == '"' && string.charAt(string.length() - 1) == '"')
+		{
+			string = string.substring(1, string.length() - 1);
+		}
+		return string;
 	}
 
 	protected void setup(ATLASCore core, Mission mission, Goal g) throws GoalActionSetupFailure {
@@ -131,26 +140,7 @@ public class CheckRoomsCompleted extends GoalAction {
 			throw new GoalActionSetupFailure(this, "CheckRoomsCompleted: Log file for roomsCompleted not set up");
 		}
 
-		// TODO Encode all rooms in roomsPending from the DSL - here they are hardcoded
-
-		List<Integer> rooms_tb0 = new ArrayList<Integer>();
-		rooms_tb0.add(1);
-		rooms_tb0.add(2);
-		rooms_tb0.add(6);
-
-		List<Integer> rooms_tb1 = new ArrayList<Integer>();
-		rooms_tb1.add(3);
-		rooms_tb1.add(5);
-		rooms_tb1.add(7);
-
-		List<Integer> rooms_tb2 = new ArrayList<Integer>();
-		rooms_tb2.add(4);
-		rooms_tb2.add(8);
-		rooms_tb2.add(9);
-
-		roomsPending.put("tb3_0", rooms_tb0);
-		roomsPending.put("tb3_1", rooms_tb1);
-		roomsPending.put("tb3_2", rooms_tb2);
+		// Rooms now set to /rooms
 
 		// Set up watcher that will be triggered on this simulator variable
 		core.setupSimVarWatcher("/roomCompleted", (svar, robotName, val) -> {
@@ -164,9 +154,37 @@ public class CheckRoomsCompleted extends GoalAction {
 				registerRoomCompleted(robotName, i, time);
 			}
 		});
+		
+
+		
+		// Set up watcher that will be triggered on this simulator variable
+		core.setupSimVarWatcher("/rooms", (svar, robotName, val) -> {
+			if (!workAssignedTime.containsKey(robotName)) {
+				double time = core.getTime();
+				System.out.println("CheckRoomsCompleted: work assigned for robot at " + time);
+				workAssignedTime.put(robotName, time);
+			}
+			
+			List<Integer> roomsForRobot = roomsPending.get(robotName);
+			if (roomsForRobot == null) {
+				roomsForRobot = new ArrayList<Integer>();
+			}
+			
+			String roomString = stripDoubleQuotes((String)val);
+			System.out.println("CheckRoomsCompleted: /rooms for robot " + robotName + " is " + roomString);
+			
+			String [] roomStrs = roomString.split(",");
+			for (String roomStr : roomStrs) {
+				Integer i = Integer.parseInt(roomStr);
+				roomsForRobot.add(i);
+				System.out.println("CheckRoomsCompleted: adding room assignment for robot " + robotName + " - room " + i);
+			}
+			roomsPending.put(robotName,  roomsForRobot);
+			
+		});
 
 		core.setupPositionWatcher((gps) -> {
-			if (g.isReady(core.getTime())) {
+			if (g.isReady(core.getTime())) {		
 				String rname = gps.getRobotName();
 				checkMissionCompletedForRobot(rname, gps.getPoint(), core.getTime());
 			}
@@ -176,12 +194,12 @@ public class CheckRoomsCompleted extends GoalAction {
 	private void checkMissionCompletedForRobot(String robotName, Point newLoc, double time) {
 		List<Integer> roomsToDo = roomsPending.get(robotName);
 		// Only if all rooms are completed
-		if (roomsToDo != null && roomsToDo.size() == 0) {
+		if (workAssignedTime.containsKey(robotName) && roomsToDo != null && roomsToDo.size() == 0) {
 			if (!checkReturnHomeTime.containsKey(robotName)) {
 				try {
 					Point origLoc = mission.getRobot(robotName).getPointComponentProperty("startLocation");
 					if (newLoc.distanceTo(origLoc) < RETURN_HOME_DIST_THRESHOLD) {
-						System.out.println("CheckRoomsCompleted: Robot " + robotName + " registered ");
+						System.out.println("CheckRoomsCompleted: Robot " + robotName + " registered mission completed at " + time);
 						checkReturnHomeTime.put(robotName, time);
 						
 					}

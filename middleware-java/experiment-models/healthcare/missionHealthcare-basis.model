@@ -25,7 +25,7 @@
   </robots>
   <robots xmi:id="_hNarkHP-Eeqc6cv9mBHIKw" name="tb3_1" mutable="true">
     <componentProperties xsi:type="atlas:PointProperty" xmi:id="_FOiEMHQREeqc6cv9mBHIKw" name="startLocation">
-      <value xmi:id="_IfdpcHQREeqc6cv9mBHIKw" x="3.46" y="-3.6"/>
+      <value xmi:id="_IfdpcHQREeqc6cv9mBHIKw" x="3.45" y="-3.24"/>
     </componentProperties>
     <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_YsJTcHQREeqc6cv9mBHIKw" name="maxSpeed" value="5.0"/>
     <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_bPPiUHQREeqc6cv9mBHIKw" name="startSpeed" value="1.5"/>
@@ -105,4 +105,5 @@
   <simVariables xmi:id="_hdlOIKU6EeyM7Iq1FrTa_A" varName="/clock" simType="rosgraph_msgs/Clock" tag="TIME"/>
   <simVariables xmi:id="_AvocIKU4EeyM7Iq1FrTa_A" varName="/amcl_pose" simType="geometry_msgs/PoseWithCovarianceStamped" tag="POSITION" isVehicleSpecific="true" propagateToCI="true"/>
   <simVariables xmi:id="_e1KFQKU4EeyM7Iq1FrTa_A" varName="/roomCompleted" simType="std_msgs/Int32" isVehicleSpecific="true" propagateToCI="true"/>
+  <simVariables xmi:id="_kJcLYK3VEeyHdc0ODMoOCA" varName="/rooms" simType="std_msgs/String" isVehicleSpecific="true"/>
 </atlas:Mission>
