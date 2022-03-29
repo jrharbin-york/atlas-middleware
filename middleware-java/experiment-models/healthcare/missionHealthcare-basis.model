@@ -90,6 +90,8 @@
         <corner2 xmi:id="_42NHBabSEeyQXZHshd3NIw" x="1000.0" y="1000.0"/>
       </staticRegion>
     </region>
+    <metrics xmi:id="__RLxsK66EeyCnLjRHSqbCg" name="CompletedRoomsCount"/>
+    <metrics xmi:id="_JdRLMK67EeyCnLjRHSqbCg" name="MissionCompletionTime"/>
   </goals>
   <goals xmi:id="_SlcFAKqnEeyzD4i5VcA_4Q" name="trackEnergyHealthcare">
     <requirements xmi:id="_ZWjzgKqnEeyzD4i5VcA_4Q" latestFinishTime="1500.0"/>
@@ -101,9 +103,22 @@
         <corner2 xmi:id="_QQfTUKsJEeyLetgpoq5lEQ" x="10.0" y="10.0" z="2.0"/>
       </staticRegion>
     </region>
+    <metrics xmi:id="_DuzzkK67EeyCnLjRHSqbCg" name="TotalRobotEnergyAtEnd"/>
   </goals>
   <simVariables xmi:id="_hdlOIKU6EeyM7Iq1FrTa_A" varName="/clock" simType="rosgraph_msgs/Clock" tag="TIME"/>
   <simVariables xmi:id="_AvocIKU4EeyM7Iq1FrTa_A" varName="/amcl_pose" simType="geometry_msgs/PoseWithCovarianceStamped" tag="POSITION" isVehicleSpecific="true" propagateToCI="true"/>
   <simVariables xmi:id="_e1KFQKU4EeyM7Iq1FrTa_A" varName="/roomCompleted" simType="std_msgs/Int32" isVehicleSpecific="true" propagateToCI="true"/>
   <simVariables xmi:id="_kJcLYK3VEeyHdc0ODMoOCA" varName="/rooms" simType="std_msgs/String" isVehicleSpecific="true"/>
+  <objects xmi:id="_FPg74K68EeyCnLjRHSqbCg" x="3.01" y="-4.41" label="1"/>
+  <objects xmi:id="_05amoK78EeyCnLjRHSqbCg" x="2.13" y="-4.45" label="2"/>
+  <objects xmi:id="_05amoK78EeyCnLjRHSqbCg" x="1.21" y="-4.38" label="3"/>
+  <objects xmi:id="_05amoK78EeyCnLjRHSqbCg" x="0.32" y="-4.33" label="4"/>
+  <objects xmi:id="_05amoK78EeyCnLjRHSqbCg" x="-0.70" y="-4.40" label="5"/>
+  <objects xmi:id="_05amoK78EeyCnLjRHSqbCg" x="-1.65" y="-4.34" label="6"/>
+  <objects xmi:id="_05amoK78EeyCnLjRHSqbCg" x="-2.57" y="-4.30" label="7"/>
+  <objects xmi:id="_05amoK78EeyCnLjRHSqbCg" x="-3.58" y="-4.31" label="8"/>
+  <objects xmi:id="_05amoK78EeyCnLjRHSqbCg" x="-4.51" y="-4.23" label="9"/>
+  
+  
+  
 </atlas:Mission>

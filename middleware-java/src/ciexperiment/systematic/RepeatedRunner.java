@@ -193,6 +193,8 @@ public class RepeatedRunner {
 		newMetrics.add(new TotalRobotEnergyAtEnd());
 		newMetrics.add(new MissionCompletionTime());
 		
+		
+		
 		// TODO: need to setup metrics from the goals
 				
 		String basisModel = "experiment-models/healthcare/missionHealthcare-basis.model";

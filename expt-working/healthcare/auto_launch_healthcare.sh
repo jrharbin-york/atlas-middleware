@@ -14,6 +14,9 @@ sleep 5
 echo "Starting rosbridge"
 xterm -e /bin/bash -l -c "roslaunch --wait multiple_robots rosbridge.launch" &
 sleep 1
+#echo "Starting rviz"
+#xterm -e /bin/bash -l -c "rviz -d /home/jharbin/catkin_ws/src/multiple_robots/rviz/turtlebot3_navigationDos.rviz" &
+sleep 1
 echo "Starting the robots"
 xterm -e /bin/bash -l -c "ROS_NAMESPACE=tb3_0 roslaunch navigation_with_objective coordinates.launch" &
 sleep 1

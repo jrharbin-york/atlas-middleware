@@ -20,36 +20,35 @@ public class GeneratedDSLLoader implements DSLLoader {
 	Computer c1 = new Computer("controller");
 	mission.addComputer(c1);
 	
-		Robot rtb3_0 = new Robot("tb3_0");
-		rtb3_0.setPointComponentProperty("startLocation", new Point(3.46,-3.6,0.0));
-		rtb3_0.setDoubleComponentProperty("maxSpeed", 5.0);
-		rtb3_0.setDoubleComponentProperty("startSpeed", 1.5);
+		Robot rtb3_1 = new Robot("tb3_1");
+		rtb3_1.setPointComponentProperty("startLocation", new Point(3.45,-3.24,0.0));
+		rtb3_1.setDoubleComponentProperty("maxSpeed", 5.0);
+		rtb3_1.setDoubleComponentProperty("startSpeed", 1.5);
 		
  
 			
 			
-		Sensor srtb3_0_1 = new Sensor(SensorType.GPS_POSITION);
-		srtb3_0_1.setParent(rtb3_0);
-		rtb3_0.addSubcomponent(srtb3_0_1);
+		Sensor srtb3_1_1 = new Sensor(SensorType.GPS_POSITION);
+		srtb3_1_1.setParent(rtb3_1);
+		rtb3_1.addSubcomponent(srtb3_1_1);
 			
 			
  
 			
 			
 			
-			MotionSource srtb3_0_2 = new MotionSource();
-			rtb3_0.addSubcomponent(srtb3_0_2);
+			MotionSource srtb3_1_2 = new MotionSource();
+			rtb3_1.addSubcomponent(srtb3_1_2);
 			
  
 			
-			Battery srtb3_0_3 = new Battery(800); 
-			srtb3_0_3.setParent(rtb3_0);
-			rtb3_0.addSubcomponent(srtb3_0_3);
+			Battery srtb3_1_3 = new Battery(250); 
+			srtb3_1_3.setParent(rtb3_1);
+			rtb3_1.addSubcomponent(srtb3_1_3);
 			
 			
 			
-			
-		mission.addRobot(rtb3_0);
+		mission.addRobot(rtb3_1);
 		Robot rtb3_2 = new Robot("tb3_2");
 		rtb3_2.setPointComponentProperty("startLocation", new Point(-5.59,-3.23,0.0));
 		rtb3_2.setDoubleComponentProperty("maxSpeed", 5.0);
@@ -82,12 +81,30 @@ public class GeneratedDSLLoader implements DSLLoader {
 		mission.addRobot(rtb3_2);
 	
 	
+	EnvironmentalObject eo1 = new EnvironmentalObject(1, new Point(3.01,-4.41,0.0), false);
+	mission.addObject(eo1);
+	EnvironmentalObject eo2 = new EnvironmentalObject(2, new Point(2.13,-4.45,0.0), false);
+	mission.addObject(eo2);
+	EnvironmentalObject eo3 = new EnvironmentalObject(3, new Point(1.21,-4.38,0.0), false);
+	mission.addObject(eo3);
+	EnvironmentalObject eo4 = new EnvironmentalObject(4, new Point(0.32,-4.33,0.0), false);
+	mission.addObject(eo4);
+	EnvironmentalObject eo5 = new EnvironmentalObject(5, new Point(-0.7,-4.4,0.0), false);
+	mission.addObject(eo5);
+	EnvironmentalObject eo6 = new EnvironmentalObject(6, new Point(-1.65,-4.34,0.0), false);
+	mission.addObject(eo6);
+	EnvironmentalObject eo7 = new EnvironmentalObject(7, new Point(-2.57,-4.3,0.0), false);
+	mission.addObject(eo7);
+	EnvironmentalObject eo8 = new EnvironmentalObject(8, new Point(-3.58,-4.31,0.0), false);
+	mission.addObject(eo8);
+	EnvironmentalObject eo9 = new EnvironmentalObject(9, new Point(-4.51,-4.23,0.0), false);
+	mission.addObject(eo9);
 	
 	
  
  
 		
-		Robot [] grp1 = {rtb3_0,rtb3_2}; 
+		Robot [] grp1 = {rtb3_1,rtb3_2}; 
 		GoalParticipants gpmutualAvoidance = new StaticParticipants(grp1, mission);
 		
 		
@@ -114,7 +131,7 @@ public class GeneratedDSLLoader implements DSLLoader {
  
  
 		
-		Robot [] grp2 = {rtb3_0,rtb3_2}; 
+		Robot [] grp2 = {rtb3_1,rtb3_2}; 
 		GoalParticipants gptrackDistances = new StaticParticipants(grp2, mission);
 		
 		
@@ -141,7 +158,7 @@ public class GeneratedDSLLoader implements DSLLoader {
  
  
 		
-		Robot [] grp3 = {rtb3_0,rtb3_2}; 
+		Robot [] grp3 = {rtb3_1,rtb3_2}; 
 		GoalParticipants gpcheckRoomsCompleted = new StaticParticipants(grp3, mission);
 		
 		
@@ -168,7 +185,7 @@ public class GeneratedDSLLoader implements DSLLoader {
  
  
 		
-		Robot [] grp4 = {rtb3_0,rtb3_2}; 
+		Robot [] grp4 = {rtb3_1,rtb3_2}; 
 		GoalParticipants gptrackEnergyHealthcare = new StaticParticipants(grp4, mission);
 		
 		
