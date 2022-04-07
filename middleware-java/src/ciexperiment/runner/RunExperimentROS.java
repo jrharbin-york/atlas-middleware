@@ -22,7 +22,7 @@ public class RunExperimentROS {
 	private static final boolean CLEAR_ROS_LOGS_EACH_TIME = false;
 
 	// This is an emergency time cutout if the failsafe is not operating normally
-	private static double failsafeTimeLimit = 300;
+	private static double failsafeTimeLimit = 1000;
 
 	private static void exptLog(String s) {
 		System.out.println(s);

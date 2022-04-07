@@ -103,7 +103,7 @@ public class RepeatedRunner {
 			System.out.println("Model generation beginning for " + sourceModelFile);
 			List<String> missionFiles = modelTransformer.retriveAllModels(sourceModelFile);
 			
-			// TODO: add model filteration according to the EVL constraints here?
+			// TODO: add model filtration according to the EVL constraints here?
 			
 			System.out.println("Model generation completed successfully!");
 			Thread.sleep(10000);
@@ -192,8 +192,6 @@ public class RepeatedRunner {
 		newMetrics.add(new CompletedRoomsCount());
 		newMetrics.add(new TotalRobotEnergyAtEnd());
 		newMetrics.add(new MissionCompletionTime());
-		
-		
 		
 		// TODO: need to setup metrics from the goals
 				

@@ -52,4 +52,8 @@ public class RunOnSetOfModels extends ExptResultsLogged {
 			return Optional.empty();
 		}
 	}
+
+	protected String getModelFile() {
+		return "";
+	}
 }

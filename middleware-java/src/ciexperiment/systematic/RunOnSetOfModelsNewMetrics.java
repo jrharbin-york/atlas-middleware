@@ -73,5 +73,9 @@ public class RunOnSetOfModelsNewMetrics extends ExptResultsLogged {
 			e.printStackTrace();
 		}
 	}
+
+	protected String getModelFile() {
+		return null;
+	}
 	
 }

@@ -3,34 +3,31 @@ package ciexperiment.systematic;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
-
-import org.eclipse.epsilon.egl.exceptions.EglRuntimeException;
-import org.eclipse.epsilon.eol.exceptions.models.EolModelLoadingException;
 
 import atlasdsl.Mission;
-import atlasdsl.loader.DSLLoadFailed;
 import atlasdsl.loader.DSLLoader;
 import atlasdsl.loader.GeneratedDSLLoader;
+import exptrunner.metrics.CompletedRoomsCount;
 import exptrunner.metrics.Metrics;
-import exptrunner.metrics.MetricsProcessing;
-import exptrunner.metrics.MetricsProcessing.MetricStateKeys;
+import exptrunner.metrics.MissionCompletionTime;
+import exptrunner.metrics.OfflineMetric;
+import exptrunner.metrics.TotalRobotEnergyAtEnd;
 import ciexperiment.runner.RunExperiment;
-import faultgen.InvalidFaultFormat;
+import ciexperiment.runner.RunExperimentROS;
 
 public class RepeatedRunnerSingleModel {
-	private static final String EMF_OUTPUT_PATH = "/home/atlas/atlas/atlas-middleware/middleware-java/src/atlasdsl/loader/GeneratedDSLLoader.java";
-
+	private static final String EMF_OUTPUT_PATH = "/home/jharbin/academic/atlas/atlas-middleware/middleware-java/src/atlasdsl/loader/GeneratedDSLLoader.java";
+	private static final String HEALTHCARE_LOG_DIR = "/home/jharbin/academic/atlas/atlas-middleware/expt-working/healthcare/logs";
+	
 	public static ModelsTransformer modelTransformer = new ModelsTransformer();
 	public static ModelEGLExecutor modelExecutor = new ModelEGLExecutor();
 
-	public static void runCIRepeatedModel(Mission baseMission, RunSameModel eparams, String exptTag, boolean actuallyRun, double timeLimit,
-			List<String> ciOptions) throws InterruptedException, IOException {
+	public static void runCIRepeatedModel(Mission baseMission, ExptParams eparams, String exptTag, boolean actuallyRun, double timeLimit,
+			List<String> ciOptions, String simulatorType) throws InterruptedException, IOException {
 		// The core logic for the loop
 		String modelFile = eparams.getModelFile();
 		while (!eparams.completed()) {
@@ -40,9 +37,16 @@ public class RepeatedRunnerSingleModel {
 			try {
 				for (String ciOption : ciOptions) {
 					Thread.sleep(1000);
-					RunExperiment.doExperimentFromFile(exptTag, actuallyRun, timeLimit, ciOption);
-					eparams.logResults("/home/jharbin/academic/atlas/atlas-middleware/expt-working/logs", modelFile,
-							ciOption, baseMission);
+					
+					if (simulatorType.equals("MOOS")) {
+						RunExperiment.doExperimentFromFile(exptTag, actuallyRun, timeLimit, ciOption);
+					}
+					
+					if (simulatorType.equals("ROS")) {
+						RunExperimentROS.doExperimentFromFile(exptTag, actuallyRun, timeLimit, ciOption);
+					}
+					
+					eparams.logResults(HEALTHCARE_LOG_DIR, modelFile, ciOption, baseMission);
 				}
 				eparams.advance();
 			} catch (InterruptedException e) {
@@ -53,8 +57,8 @@ public class RepeatedRunnerSingleModel {
 		}
 	}
 
-	public static void runCIExperimentSingleModel(String sourceModelFile, List<Metrics> metricList, String fileTag,
-			List<String> ciOptions, int count, double runTime) {
+	public static void runCIExperimentSingleModel(String sourceModelFile, List<Metrics> oldMetricList, List<OfflineMetric> newMetricList, String fileTag,
+			List<String> ciOptions, int count, double runTime, String simulatorType) {
 		DSLLoader loader = new GeneratedDSLLoader();
 
 		try {
@@ -62,20 +66,26 @@ public class RepeatedRunnerSingleModel {
 			//double runTime = baseMission.getEndTime();
 			String fileName = new SimpleDateFormat("yyyyMMddHHmm").format(new Date());
 			FileWriter tempLog = new FileWriter("tempLog-" + fileName + ".res");
-			MetricsProcessing mp = new MetricsProcessing(metricList, tempLog);
-			mp.setMetricState(MetricStateKeys.MISSION_END_TIME, runTime);
-			String resFileName = "ciexpt-" + fileTag + ".res";
-			System.out.println("Starting experiment set - repeated run for " + sourceModelFile);
-			RunSameModel ep = new RunSameModel(mp, runTime, sourceModelFile, resFileName, count);
 			
-			System.out.println("Running repeated experiments for model file " + sourceModelFile + ": count " + count);
-			// Mission loader - recompile it
-			modelExecutor.executeEGL(sourceModelFile, EMF_OUTPUT_PATH);
-			System.out.println("Recompiling loader");
-			Thread.sleep(3000);
-			RunExperiment.compileLoader();
+			String resFileName = "ciexpt-"+fileTag+".res";
 			
-			runCIRepeatedModel(baseMission, ep, resFileName, true, runTime, ciOptions);
+			if (newMetricList.size() > 0) {
+				System.out.println("Running repeated experiments for model file " + sourceModelFile + ": count " + count);
+				// Mission loader - recompile it
+				modelExecutor.executeEGL(sourceModelFile, EMF_OUTPUT_PATH);
+				System.out.println("Recompiling loader");
+				Thread.sleep(3000);
+				RunExperiment.compileLoader();
+				
+				System.out.println("Using NEW metric infrastructure");
+				System.out.println("Starting experiment set - repeated run for " + sourceModelFile);
+				MetricHandler mh = new MetricHandler(newMetricList, resFileName);
+				ExptParams ep = new RunSameModelNewMetrics(mh, runTime, sourceModelFile, resFileName, count);
+				runCIRepeatedModel(baseMission, ep, resFileName, true, runTime, ciOptions, simulatorType);
+			} else {
+				//MetricsProcessing mp = new MetricsProcessing(oldMetricList, tempLog);
+				//ep = new RunOnSetOfModels(mp, runTime, missionFiles, resFileName);
+			}			
 
 			System.out.println("Done");
 		} catch (IOException e) {
@@ -94,6 +104,9 @@ public class RepeatedRunnerSingleModel {
 		l.add(Metrics.PURE_MISSED_DETECTIONS);
 		// l.add(Metrics.DETECTION_COMPLETION_TIME);
 		l.add(Metrics.WORST_CASE_WAYPOINT_COMPLETION_FROM_CI);
+		
+		List<OfflineMetric> m = new ArrayList<OfflineMetric>();
+		
 		String sourceModelFile = "experiment-models/casestudy1/mission-basis.model";
 		String standardCI = "atlascollectiveint.expt.casestudy1.ComputerCIshoreside_standard";
 		String advancedCI = "atlascollectiveint.expt.casestudy1.ComputerCIshoreside_advanced";
@@ -101,7 +114,38 @@ public class RepeatedRunnerSingleModel {
 		ArrayList<String> ciOptions = new ArrayList<String>();
 		ciOptions.add(standardCI);
 		ciOptions.add(advancedCI);
-		runCIExperimentSingleModel(sourceModelFile, l, "casestudy1", ciOptions, 1, runtime);
+		runCIExperimentSingleModel(sourceModelFile, l, m, "casestudy1", ciOptions, 1, runtime, "MOOS");
+	}
+	
+	public static void expt_caseStudyHealthcare() {
+		double runtime = 550.0;
+		System.out.println("Case study runtime is " + runtime);
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		List<OfflineMetric> newMetrics = new ArrayList<OfflineMetric>();
+		List<Metrics> l = new ArrayList<Metrics>();
+			
+		// TODO: read this from the file
+		newMetrics.add(new CompletedRoomsCount());
+		newMetrics.add(new TotalRobotEnergyAtEnd());
+		newMetrics.add(new MissionCompletionTime());
+			
+		//String sourceModelFile = "experiment-models/healthcare/missionHealthcare-basis.model-d045d342-4a3f-45e1-b7c0-c7e7c752aab2.model";
+		String sourceModelFile = "experiment-models/healthcare/missionHealthcare-basis.model-b6032518-c185-4b69-b177-35d3c8bac6f7.model";
+
+		String standardCI = "atlascollectiveint.expt.healthcare.ComputerCIshoreside_healthcare";
+		String dynamicCI = "atlascollectiveint.expt.healthcare.ComputerCIshoreside_healthcare_dynamicenergy";
+
+		ArrayList<String> ciOptions = new ArrayList<String>();
+		ciOptions.add(standardCI);
+		ciOptions.add(dynamicCI);
+		
+		runCIExperimentSingleModel(sourceModelFile, l, newMetrics, "casestudyHealthcare_repeated-b6032518", ciOptions, 10, runtime, "ROS");
 	}
 
 	public static void expt2_test(String modelFile, String output) {
@@ -123,7 +167,7 @@ public class RepeatedRunnerSingleModel {
 		ArrayList<String> ciOptions = new ArrayList<String>();
 		ciOptions.add(standardCI);
 		ciOptions.add(energyTrackingCI);
-		runCIExperimentSingleModel(modelFile, l, output, ciOptions, repeatCount, runtime);
+		//runCIExperimentSingleModel(modelFile, l, output, ciOptions, repeatCount, runtime, "MOOS");
 	}
 	
 	public static void expt1_test() {
@@ -139,9 +183,9 @@ public class RepeatedRunnerSingleModel {
 		ArrayList<String> ciOptions = new ArrayList<String>();
 		ciOptions.add(standardCI);
 		ciOptions.add(energyTrackingCI);
-		runCIExperimentSingleModel(
-				"/home/atlas/atlas/atlas-middleware/middleware-java/experiment-models/casestudy1/mission-basis.model-5274393d-ed7c-4f48-92f4-e4ad56cdaf22.model", l,
-				"casestudy1-optimal-repeated", ciOptions, repeatCount, runtime);
+		//runCIExperimentSingleModel(
+		//		"/home/atlas/atlas/atlas-middleware/middleware-java/experiment-models/casestudy1/mission-basis.model-5274393d-ed7c-4f48-92f4-e4ad56cdaf22.model", l,
+		//		"casestudy1-optimal-repeated", ciOptions, repeatCount, runtime, "MOOS");
 	}
 	
 	public static void run1() {

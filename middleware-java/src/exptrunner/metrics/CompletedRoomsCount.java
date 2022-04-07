@@ -3,7 +3,9 @@ package exptrunner.metrics;
 //protected region customHeaders on begin
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import atlasdsl.Mission;
@@ -18,7 +20,11 @@ public class CompletedRoomsCount extends OfflineMetric {
 			throws MetricComputeFailure {
 		// Implement the metric here
 		// protected region userCode on begin
-		int completedRooms = 0;
+		
+		// The key is the room, the value the first robot to examine it
+		Map<Integer,String> roomsRobot = new HashMap<Integer,String>();
+		int completedRooms = -1;
+		
 		String filename = logDir + "/roomsCompleted.log";
 		System.out.println("CompletedRoomsCount metric filename = " + filename);
 		Scanner reader;
@@ -26,16 +32,25 @@ public class CompletedRoomsCount extends OfflineMetric {
 			reader = new Scanner(new File(filename));
 			while (reader.hasNextLine()) {
 				String line = reader.nextLine();
-				completedRooms++;
+				String [] fields = line.split(",");
+				String robotName = fields[0];
+				Integer room = Integer.parseInt(fields[1]);
+				Double time = Double.parseDouble(fields[2]);
+				
+				if (!roomsRobot.containsKey(room) && time < mission.getEndTime()) {
+					roomsRobot.put(room, robotName);
+				}
 			}
 			reader.close();
+			
+			completedRooms = roomsRobot.size();
 			System.out.println("completedRooms = " + completedRooms);
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 
-		return Double.valueOf(completedRooms);
+		return (double)completedRooms;
 		// protected region userCode end
 	}
 

@@ -8,6 +8,8 @@ echo "Sourcing"
 export TURTLEBOT3_MODEL=burger
 echo $PATH
 
+rm logs/*
+
 echo "Starting the healthcare simulation"
 xterm -e /bin/bash -l -c "roslaunch multiple_robots multi_burgersCorridor.launch" &
 sleep 5

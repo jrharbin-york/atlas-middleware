@@ -29,4 +29,6 @@ public abstract class ExptParams {
 	}
 	
 	public abstract Optional<String> getNextFileName();
+
+	protected abstract String getModelFile();
 }

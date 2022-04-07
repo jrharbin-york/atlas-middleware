@@ -20,7 +20,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -34,9 +33,9 @@ public class ComputerCIshoreside_healthcare_dynamicenergy {
 	private static Map<String, Double> emptyRobots = new HashMap<String, Double>();
 
 	private static Mission mission;
-	// TODO: get MIN_BATTERY from the DSL info
-	private static double MIN_BATTERY = 400;
-	// private static Random rng;
+
+	// 	This is reset from the DSL
+	private static double MIN_BATTERY;
 
 	private static void loadRoomLocationsFromDSL() throws MissingProperty {
 		for (EnvironmentalObject e : mission.getEnvironmentalObjects()) {
@@ -104,6 +103,21 @@ public class ComputerCIshoreside_healthcare_dynamicenergy {
 			return 0;
 		}
 	}
+	
+	private static double findMinimalBatteryEnergy() {
+		double minBattery = Double.MAX_VALUE;
+		for (Robot r : mission.getAllRobots()) {
+			if (r != null) {
+				List<Battery> bats = r.getBatteries();
+				double totalEnergy = bats.stream().mapToDouble(b -> b.getMaxEnergy()).sum();
+				if (totalEnergy < minBattery) {
+					minBattery = totalEnergy;
+				}
+			}
+		}
+		System.out.println("Found minimal battery: " + minBattery);
+		return minBattery;
+	}
 
 	public static Map<String, List<Integer>> workAssignmentsByEnergy(Set<Integer> pendingRooms) {
 		Map<String, List<Integer>> assignments = new HashMap<String, List<Integer>>();
@@ -168,8 +182,11 @@ public class ComputerCIshoreside_healthcare_dynamicenergy {
 	private static void sendAllWorkAssignments(Map<String, List<Integer>> allRooms) {
 		for (Map.Entry<String, List<Integer>> e : allRooms.entrySet()) {
 			String robotName = e.getKey();
-			List<Integer> thisRobotRooms = e.getValue();
-			sendRobotWork(robotName, thisRobotRooms);
+			// Do not try to reassign work to an empty robot
+			if (!emptyRobots.containsKey(robotName)) {
+				List<Integer> thisRobotRooms = e.getValue();
+				sendRobotWork(robotName, thisRobotRooms);
+			}
 		}
 	}
 
@@ -177,6 +194,7 @@ public class ComputerCIshoreside_healthcare_dynamicenergy {
 		DSLLoader dslloader = new GeneratedDSLLoader();
 		mission = dslloader.loadMission();
 		loadRoomLocationsFromDSL();
+		MIN_BATTERY = findMinimalBatteryEnergy();
 	}
 
 	public static void init() {
@@ -225,8 +243,7 @@ public class ComputerCIshoreside_healthcare_dynamicenergy {
 			Set<Integer> newPendingRooms = new HashSet<>(outstandingWork.get(robotName));
 			if (newPendingRooms.size() > 0) {
 				closestExtraWorkAssignments(newPendingRooms, emptyRobots.keySet());
-				workassignments.put(robotName, new ArrayList<>());
-				outstandingWork.put(robotName, new ArrayList<>());
+				sendAllWorkAssignments(outstandingWork);
 			}
 		} else {
 			CollectiveIntLog.logCI("No work for " + robotName + " to reassign");
