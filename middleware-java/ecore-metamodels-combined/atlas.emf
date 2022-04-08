@@ -28,9 +28,14 @@ class Polygon extends Region {
 	val Point[3..*] points;
 }
 
-class EnvironmentalObject extends Point {
+class EnvironmentalObject {
 	attr boolean isHazard;
 	attr int label;
+	val Point location;
+}
+
+class EnvironmentalObjectGrouping extends Component {
+	val EnvironmentalObject[*] objects;
 }
 
 class EnvironmentalObstacleRegion {
@@ -183,6 +188,7 @@ class MutationGroup {
 }
 
 enum MutationAlgorithm {
+	EXHAUSTIVE_SEARCH;
 	RANDOM_SEARCH;
 	GA_SEARCH;
 }
@@ -409,7 +415,7 @@ class Mission {
 	val Goal[*] goals;
 	val Behaviour[*] behaviours;
 	val SimulatorVariable[*] simVariables;
-	val EnvironmentalObject[*] objects;
+	val EnvironmentalObjectGrouping[*] objectGroupings;
 	val EnvironmentalObstacle[*] obstacles;
 	val EnvironmentalObstacleRegion obstacleRegion;
 	val Message[*] messages;
