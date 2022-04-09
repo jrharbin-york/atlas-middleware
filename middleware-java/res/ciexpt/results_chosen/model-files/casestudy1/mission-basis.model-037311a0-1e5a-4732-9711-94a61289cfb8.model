@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="ASCII"?>
+<atlas:Mission xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:atlas="http://www.github.com/jrharbin-york/atlas-middleware/dsl/atlas" xmi:id="_8OLx8HP4Eeqc6cv9mBHIKw" endTime="2400.0">
+  <mutProgram xmi:id="_xHiP8JxZEeuXP_f35b_qpg">
+    <mutationGroups xmi:id="_7HP2YJzSEeun4sDYCEayRA" minRequiredFromGroup="3" maxRequiredFromGroup="4" members="_I_DTsJzTEeun4sDYCEayRA _MGfmMJxZEeuXP_f35b_qpg _KOUjMJzTEeun4sDYCEayRA"/>
+    <mutationGroups xmi:id="_U5CeAJ0WEeuIzfTA-1Y_Kw" minRequiredFromGroup="1" maxRequiredFromGroup="1"/>
+    <mutationGroups xmi:id="_Xw-7gJ0WEeuIzfTA-1Y_Kw" minRequiredFromGroup="1" maxRequiredFromGroup="1" members="_I_DTtZzTEeun4sDYCEayRA"/>
+    <mutationGroups xmi:id="_akascJ0WEeuIzfTA-1Y_Kw" minRequiredFromGroup="1" maxRequiredFromGroup="1" members="_O1hYQJxZEeuXP_f35b_qpg"/>
+    <mutationGroups xmi:id="_dpzwEJ0WEeuIzfTA-1Y_Kw" minRequiredFromGroup="1" maxRequiredFromGroup="1" members="_KOUjOJzTEeun4sDYCEayRA"/>
+  </mutProgram>
+  <robots xmi:id="_MGfmMJxZEeuXP_f35b_qpg" name="gilda" mutable="true">
+    <componentProperties xsi:type="atlas:PointProperty" xmi:id="_W24moJxZEeuXP_f35b_qpg" name="startLocation">
+      <value xmi:id="_X6QvMJxZEeuXP_f35b_qpg" x="40.0"/>
+    </componentProperties>
+    <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_aQj4MJxZEeuXP_f35b_qpg" name="maxSpeed" value="5.0"/>
+    <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_bngdAJxZEeuXP_f35b_qpg" name="startSpeed" value="1.5"/>
+    <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_cbhSwJ3sEeuOjqnXTp4IGg" name="maxDepth"/>
+    <subcomponents xsi:type="atlas:Sensor" xmi:id="_O1hYQJxZEeuXP_f35b_qpg" name="gilda-narrow" mutable="true">
+      <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_RvFmYJxZEeuXP_f35b_qpg" name="swathWidth" value="10.0"/>
+      <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_TaL2QJxZEeuXP_f35b_qpg" name="detectionProb" value="0.99"/>
+    </subcomponents>
+  </robots>
+  <robots xmi:id="_I_DTsJzTEeun4sDYCEayRA" name="frank" mutable="true">
+    <componentProperties xsi:type="atlas:PointProperty" xmi:id="_I_DTsZzTEeun4sDYCEayRA" name="startLocation">
+      <value xmi:id="_I_DTspzTEeun4sDYCEayRA" x="-20.0"/>
+    </componentProperties>
+    <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_I_DTs5zTEeun4sDYCEayRA" name="maxSpeed" value="5.0"/>
+    <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_I_DTtJzTEeun4sDYCEayRA" name="startSpeed" value="1.5"/>
+    <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_eJxkUJ3sEeuOjqnXTp4IGg" name="maxDepth"/>
+    <subcomponents xsi:type="atlas:Sensor" xmi:id="_I_DTtZzTEeun4sDYCEayRA" name="frank-narrow" mutable="true">
+      <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_I_DTtpzTEeun4sDYCEayRA" name="swathWidth" value="10.0"/>
+      <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_I_DTt5zTEeun4sDYCEayRA" name="detectionProb" value="0.99"/>
+    </subcomponents>
+  </robots>
+  <robots xmi:id="_KOUjMJzTEeun4sDYCEayRA" name="henry" mutable="true">
+    <componentProperties xsi:type="atlas:PointProperty" xmi:id="_KOUjMZzTEeun4sDYCEayRA" name="startLocation">
+      <value xmi:id="_KOUjMpzTEeun4sDYCEayRA"/>
+    </componentProperties>
+    <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_KOUjM5zTEeun4sDYCEayRA" name="maxSpeed" value="5.0"/>
+    <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_KOUjNJzTEeun4sDYCEayRA" name="startSpeed" value="1.5"/>
+    <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_fYWQQJ3sEeuOjqnXTp4IGg" name="maxDepth"/>
+    <subcomponents xsi:type="atlas:Sensor" xmi:id="_KOUjOJzTEeun4sDYCEayRA" name="henry-wide" mutable="true">
+      <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_KOUjOZzTEeun4sDYCEayRA" name="swathWidth" value="20.0"/>
+      <componentProperties xsi:type="atlas:DoubleProperty" xmi:id="_KOUjOpzTEeun4sDYCEayRA" name="detectionProb" value="0.95"/>
+    </subcomponents>
+  </robots>
+  <computers xmi:id="_vmC9UJyAEeuni_WJaXBVWw" name="shoreside"/>
+  <goals xmi:id="_kwYOQHP5Eeqc6cv9mBHIKw" name="mutualAvoidance">
+    <requirements xmi:id="_LWQjUHQEEeqc6cv9mBHIKw" latestFinishTime="1200.0"/>
+    <participants xsi:type="atlas:StaticParticipants" xmi:id="_zbOjAHQCEeqc6cv9mBHIKw" participants="_I_DTsJzTEeun4sDYCEayRA _MGfmMJxZEeuXP_f35b_qpg _KOUjMJzTEeun4sDYCEayRA"/>
+    <action xsi:type="atlas:AvoidOthers" xmi:id="_kqonEHQDEeqc6cv9mBHIKw" clearance="4.0"/>
+    <region xsi:type="atlas:StaticGoalRegion" xmi:id="_l2ZbIHP5Eeqc6cv9mBHIKw">
+      <staticRegion xmi:id="_mgPpYHP5Eeqc6cv9mBHIKw">
+        <corner1 xmi:id="_nGbfoHP5Eeqc6cv9mBHIKw"/>
+        <corner2 xmi:id="_nao1EHP5Eeqc6cv9mBHIKw" x="1000.0" y="1000.0"/>
+      </staticRegion>
+    </region>
+  </goals>
+  <goals xmi:id="_iULp4HP_Eeqc6cv9mBHIKw" name="primarySensorSweep">
+    <requirements xmi:id="_Lw1mgHQEEeqc6cv9mBHIKw" latestFinishTime="1200.0"/>
+    <participants xsi:type="atlas:StaticParticipants" xmi:id="_04o8MHQCEeqc6cv9mBHIKw" participants="_I_DTsJzTEeun4sDYCEayRA _MGfmMJxZEeuXP_f35b_qpg _KOUjMJzTEeun4sDYCEayRA"/>
+    <action xsi:type="atlas:SensorCover" xmi:id="_mTgCUHQDEeqc6cv9mBHIKw" density="10.0" samplesPerUnit="1" collective="true"/>
+    <region xsi:type="atlas:StaticGoalRegion" xmi:id="_kLrXAHP_Eeqc6cv9mBHIKw">
+      <staticRegion xmi:id="_eJ7agHQAEeqc6cv9mBHIKw">
+        <corner1 xmi:id="_f1fkcHQAEeqc6cv9mBHIKw" x="-50.0" y="-230.0"/>
+        <corner2 xmi:id="_h159AHQAEeqc6cv9mBHIKw" x="200.0" y="-30.0"/>
+      </staticRegion>
+    </region>
+  </goals>
+  <goals xmi:id="_isDXUHP_Eeqc6cv9mBHIKw" name="verifySensorDetections">
+    <requirements xmi:id="_MLuLsHQEEeqc6cv9mBHIKw" dependencies="_iULp4HP_Eeqc6cv9mBHIKw" latestFinishTime="1200.0"/>
+    <participants xsi:type="atlas:RelativeParticipants" xmi:id="_KVVR0HQEEeqc6cv9mBHIKw" parentGoal="_iULp4HP_Eeqc6cv9mBHIKw" staticRobots="_zbOjAHQCEeqc6cv9mBHIKw" setOperation="SUBTRACT" fieldName="UUV_NAME" participantLimit="1"/>
+    <action xsi:type="atlas:SensorCover" xmi:id="_D37MsHQIEeqc6cv9mBHIKw" density="5.0" samplesPerUnit="1"/>
+    <region xsi:type="atlas:DynamicGoalRegion" xmi:id="_klx5EHP_Eeqc6cv9mBHIKw" relativeToGoal="_iULp4HP_Eeqc6cv9mBHIKw" relativeToGoalField="UUV_DETECTION_COORD" relativeRange="30.0"/>
+  </goals>
+  <goals xmi:id="_D87cEIiOEeqQioZ_JAeWZg" name="findTestObjects">
+    <requirements xmi:id="_LL8yQIi0EeqQioZ_JAeWZg" latestFinishTime="1200.0"/>
+    <participants xsi:type="atlas:StaticParticipants" xmi:id="_tn8sYIi0EeqQioZ_JAeWZg" participants="_I_DTsJzTEeun4sDYCEayRA _MGfmMJxZEeuXP_f35b_qpg _KOUjMJzTEeun4sDYCEayRA"/>
+    <action xsi:type="atlas:DiscoverObjects" xmi:id="_S0efIIiOEeqQioZ_JAeWZg" objects="_DXIVsHRpEeqNXdfjikxLMQ _EPx08HRpEeqNXdfjikxLMQ _D2ADAHRpEeqNXdfjikxLMQ" verificationsMalicious="2" verificationsBenign="1"/>
+    <region xsi:type="atlas:StaticGoalRegion" xmi:id="_vcl50Ii0EeqQioZ_JAeWZg">
+      <staticRegion xmi:id="_wBWMsIi0EeqQioZ_JAeWZg">
+        <corner1 xmi:id="_xmjP8Ii0EeqQioZ_JAeWZg"/>
+        <corner2 xmi:id="_yH9T4Ii0EeqQioZ_JAeWZg"/>
+      </staticRegion>
+    </region>
+  </goals>
+  <goals xmi:id="_aXwhkGmyEeut-7Jtw0RIUA" name="stayInRegion">
+    <requirements xmi:id="_pitBwGmyEeut-7Jtw0RIUA" latestFinishTime="1200.0"/>
+    <participants xsi:type="atlas:StaticParticipants" xmi:id="_cuSUEGmyEeut-7Jtw0RIUA" participants="_I_DTsJzTEeun4sDYCEayRA _MGfmMJxZEeuXP_f35b_qpg _KOUjMJzTEeun4sDYCEayRA"/>
+    <action xsi:type="atlas:StayInRegion" xmi:id="_b51_YGmyEeut-7Jtw0RIUA"/>
+    <region xsi:type="atlas:StaticGoalRegion" xmi:id="_gAqDwGmyEeut-7Jtw0RIUA">
+      <staticRegion xmi:id="_gkiM4GmyEeut-7Jtw0RIUA">
+        <corner1 xmi:id="_hTeWgGmyEeut-7Jtw0RIUA" x="-150.0" y="-260.0" z="-40.0"/>
+        <corner2 xmi:id="_hq6mIGmyEeut-7Jtw0RIUA" x="245.0" y="20.0" z="100.0"/>
+      </staticRegion>
+    </region>
+  </goals>
+  <goals xmi:id="_Zc7K0HrmEeu4teJ7JJepvg" name="trackDistances">
+    <requirements xmi:id="_sS9nQHrnEeu4teJ7JJepvg" latestFinishTime="1190.0"/>
+    <participants xsi:type="atlas:StaticParticipants" xmi:id="_mxQSMHrnEeu4teJ7JJepvg" participants="_I_DTsJzTEeun4sDYCEayRA _MGfmMJxZEeuXP_f35b_qpg _KOUjMJzTEeun4sDYCEayRA"/>
+    <action xsi:type="atlas:TrackDistances" xmi:id="_hnXnQHrnEeu4teJ7JJepvg"/>
+    <region xsi:type="atlas:StaticGoalRegion" xmi:id="_o7vMwHrnEeu4teJ7JJepvg">
+      <staticRegion xmi:id="_rNudgHrnEeu4teJ7JJepvg">
+        <corner1 xmi:id="_rNudgXrnEeu4teJ7JJepvg" x="-150.0" y="-260.0" z="-40.0"/>
+        <corner2 xmi:id="_rNudgnrnEeu4teJ7JJepvg" x="245.0" y="20.0" z="100.0"/>
+      </staticRegion>
+    </region>
+  </goals>
+  <behaviours xmi:id="_YhyHgKSDEeuQyL0nmvHVPQ" className="BHV_Waypoint">
+    <bvars xmi:id="_aKrX8KSDEeuQyL0nmvHVPQ" varName="WAYPOINT_COMPLETE"/>
+  </behaviours>
+  <objects xmi:id="_DXIVsHRpEeqNXdfjikxLMQ" y="-160.0" label="1"/>
+  <objects xmi:id="_D2ADAHRpEeqNXdfjikxLMQ" x="185.0" y="-45.0" isHazard="true" label="2"/>
+  <objects xmi:id="_EPx08HRpEeqNXdfjikxLMQ" x="80.0" y="-130.0" label="3"/>
+</atlas:Mission>
