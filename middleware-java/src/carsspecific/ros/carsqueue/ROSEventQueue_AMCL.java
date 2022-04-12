@@ -109,8 +109,8 @@ public class ROSEventQueue_AMCL extends CARSLinkEventQueue<ROSEvent> {
 						Object contents;
 						SimulatorVariable sv = sv_o.get();
 						contents = rtu.getJSON().get("data").toString();	
-						core.notifySimVarUpdate(sv, rtu.getVehicleName(), contents);
-						if (sv.propagateToCI()) {
+						boolean shouldNotify = core.notifySimVarUpdate(sv, rtu.getVehicleName(), contents);
+						if (sv.propagateToCI() && shouldNotify) {
 							// TODO: we are currently using BehaviourVariableUpdate, change to SimulatorVariableUpdate
 							// TODO: types are currently flattened to strings to send to CI
 							BehaviourVariableUpdate bup = new BehaviourVariableUpdate(rtu.getVehicleName(), sv.getVarName(), contents);

@@ -20,16 +20,16 @@ public class TrackEnergyConsumption extends GoalAction {
 	
 	private double energyPerDistance;
 	private double energyPerTime;
-	private double energyPerRoom;
+
 	
 	private boolean writtenYet = false;
 
 	private double completionTime;
 	
-	public TrackEnergyConsumption(double energyPerDistance, double energyPerRoom, double energyPerTime) {
+	public TrackEnergyConsumption(double energyPerDistance, double energyPerTime) {
 		this.energyPerDistance = energyPerDistance;
 		this.energyPerTime = energyPerTime;
-		this.energyPerRoom = energyPerRoom;
+		// energyPerRoom is now in the CheckRoomsCompleted Goal
 	}
 
 	protected Optional<GoalResult> test(Mission mission, GoalParticipants participants) {
@@ -93,15 +93,15 @@ public class TrackEnergyConsumption extends GoalAction {
 					linearEnergyModel(r,currentLocation, newLocation);
 				} catch (MissingProperty e) {
 					e.printStackTrace();
-				}		
+				}
 		}});
 		
-		// use a watcher on the /roomsCompleted - deplete energy by fixed value
-		// for every room visited
-		core.setupSimVarWatcher("/roomCompleted", (svar, robotName, val) -> {
-			if (g.isReady(core.getTime())) {
-				core.depleteEnergyOnRobot(robotName, energyPerRoom);
-			}
-		});
+		// Now done in CheckRoomsCompleted
+		
+//		core.setupSimVarWatcher("/roomCompleted", (svar, robotName, val) -> {
+//			if (g.isReady(core.getTime())) {
+//				core.depleteEnergyOnRobot(robotName, energyPerRoom);
+//			}
+//		});
 	}
 }

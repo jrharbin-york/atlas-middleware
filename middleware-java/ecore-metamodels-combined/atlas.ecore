@@ -27,9 +27,15 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="points" lowerBound="3"
         upperBound="-1" eType="#//Point" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="EnvironmentalObject" eSuperTypes="#//Point">
+  <eClassifiers xsi:type="ecore:EClass" name="EnvironmentalObject">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="isHazard" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="location" eType="#//Point"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EnvironmentalObjectGrouping" eSuperTypes="#//Component">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="objects" upperBound="-1"
+        eType="#//EnvironmentalObject" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EnvironmentalObstacleRegion">
     <eStructuralFeatures xsi:type="ecore:EReference" name="region" eType="#//Rectangle"
@@ -162,8 +168,9 @@
         eType="#//Component"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="MutationAlgorithm">
-    <eLiterals name="RANDOM_SEARCH"/>
-    <eLiterals name="GA_SEARCH" value="1"/>
+    <eLiterals name="EXHAUSTIVE_SEARCH"/>
+    <eLiterals name="RANDOM_SEARCH" value="1"/>
+    <eLiterals name="GA_SEARCH" value="2"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Robot" eSuperTypes="#//Component"/>
   <eClassifiers xsi:type="ecore:EClass" name="Computer" eSuperTypes="#//Component"/>
@@ -219,13 +226,14 @@
   <eClassifiers xsi:type="ecore:EClass" name="Visit" eSuperTypes="#//GoalAction"/>
   <eClassifiers xsi:type="ecore:EClass" name="Patrol" eSuperTypes="#//GoalAction"/>
   <eClassifiers xsi:type="ecore:EClass" name="Cover" eSuperTypes="#//GoalAction"/>
-  <eClassifiers xsi:type="ecore:EClass" name="CheckRoomsCompleted" eSuperTypes="#//GoalAction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CheckRoomsCompleted" eSuperTypes="#//GoalAction">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="energyPerRoom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Avoid" eSuperTypes="#//GoalAction"/>
   <eClassifiers xsi:type="ecore:EClass" name="TrackDistances" eSuperTypes="#//GoalAction"/>
   <eClassifiers xsi:type="ecore:EClass" name="TrackEnergyConsumption" eSuperTypes="#//GoalAction">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="energyPerDistance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="energyPerTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="energyPerRoom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ReturnOnLowEnergy" eSuperTypes="#//GoalAction">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="energyThreshold" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
@@ -337,8 +345,8 @@
         eType="#//Behaviour" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="simVariables" upperBound="-1"
         eType="#//SimulatorVariable" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="objects" upperBound="-1"
-        eType="#//EnvironmentalObject" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="objectGroupings" upperBound="-1"
+        eType="#//EnvironmentalObjectGrouping" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="obstacles" upperBound="-1"
         eType="#//EnvironmentalObstacle" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="obstacleRegion" eType="#//EnvironmentalObstacleRegion"

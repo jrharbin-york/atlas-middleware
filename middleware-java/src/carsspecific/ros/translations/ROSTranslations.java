@@ -42,7 +42,9 @@ public class ROSTranslations extends CARSTranslations {
 	}
 
 	public void returnHome(String robotName) {
-		System.out.println("ROSTranslations: setCoordinates unimplemented");			
+		//System.out.println("ROSTranslations: setCoordinates unimplemented");
+		//sendCARSUpdate(robotName, robotName + "/rooms", "");
+		sendCARSUpdate(robotName, robotName + "/go_home", "HOME");
 	}
 
 	public void setCoordinates(String robotName, List<Point> coords, int repeatCount) {

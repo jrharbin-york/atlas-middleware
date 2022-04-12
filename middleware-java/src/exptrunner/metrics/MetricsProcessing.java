@@ -205,7 +205,7 @@ public class MetricsProcessing {
 
 			List<String> names = new ArrayList<String>();
 
-			if (metrics.contains(Metrics.WORST_CASE_WAYPOINT_COMPLETION_FROM_CI)) {
+			if (metrics.contains(Metrics.WORST_CASE_WAYPOINT_COMPLETION_TIME_FROM_CI)) {
 				Scanner swReader;
 				swReader = new Scanner(new File("/tmp/completeTimings.log"));
 				double worstCase = 0.0;
@@ -231,8 +231,8 @@ public class MetricsProcessing {
 					
 				}
 
-				if (metrics.contains(Metrics.WORST_CASE_WAYPOINT_COMPLETION_FROM_CI)) {
-					metricResults.put(Metrics.WORST_CASE_WAYPOINT_COMPLETION_FROM_CI, worstCase);
+				if (metrics.contains(Metrics.WORST_CASE_WAYPOINT_COMPLETION_TIME_FROM_CI)) {
+					metricResults.put(Metrics.WORST_CASE_WAYPOINT_COMPLETION_TIME_FROM_CI, worstCase);
 				}
 				
 				if (DEBUG_CHECK_REALISTIC_COMPLETION_TIME && worstCase < 100.0) {

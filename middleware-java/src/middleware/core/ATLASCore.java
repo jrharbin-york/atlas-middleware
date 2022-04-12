@@ -248,6 +248,11 @@ public abstract class ATLASCore {
 	public double getRobotEnergyRemaining(Robot r) {
 		return r.getEnergyRemaining();
 	}
+	
+	public double getRobotEnergyRemaining(String rname) {
+		Robot r = mission.getRobot(rname);
+		return r.getEnergyRemaining();
+	}
 
 	public void setupEnergyOnRobots() {
 		for (Robot r : mission.getAllRobots()) {
@@ -318,12 +323,16 @@ public abstract class ATLASCore {
 		simVarWatchers.put(topic, current);
 	}
 
-	public void notifySimVarUpdate(SimulatorVariable sv, String robotName, Object value) {
+	// The boolean value indicates if this sim variable should be propagated to the CI.
+	// This allows local events a chance to override this
+	public boolean notifySimVarUpdate(SimulatorVariable sv, String robotName, Object value) {
+		boolean shouldNotify = true;
 		List<SimVarUpdateLambda> lambdas = simVarWatchers.get(sv.getVarName());
 		if (lambdas != null) {
 			for (SimVarUpdateLambda l : lambdas) {
-				l.op(sv, robotName, value);
+				shouldNotify = shouldNotify && (l.op(sv, robotName, value));
 			}
 		}
+		return shouldNotify;
 	}
 }

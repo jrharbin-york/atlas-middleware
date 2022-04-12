@@ -27,14 +27,17 @@ public class ComputerCIshoreside_healthcare_dynamicenergy {
 
 	private static Map<String, List<Integer>> workassignments = new HashMap<String, List<Integer>>();
 	private static Map<String, List<Integer>> outstandingWork = new HashMap<String, List<Integer>>();
-	
+
+	private static Map<String, Double> robotEnergy = new HashMap<String, Double>();
 	private static Map<String, Point> robotLocations = new HashMap<String, Point>();
 	private static Map<Integer, Point> roomLocations = new HashMap<Integer, Point>();
 	private static Map<String, Double> emptyRobots = new HashMap<String, Double>();
 
+	private static final double ENERGY_GO_HOME_THRESHOLD = 19000.0;
+
 	private static Mission mission;
 
-	// 	This is reset from the DSL
+	// This is reset from the DSL
 	private static double MIN_BATTERY;
 
 	private static void loadRoomLocationsFromDSL() throws MissingProperty {
@@ -85,7 +88,7 @@ public class ComputerCIshoreside_healthcare_dynamicenergy {
 		work.put(rname, rooms);
 
 	}
-	
+
 	private static void addWorkassignment(Map<String, List<Integer>> work, String rname, Integer closestRoom) {
 		addAssignment(work, rname, closestRoom);
 		addAssignment(outstandingWork, rname, closestRoom);
@@ -104,6 +107,31 @@ public class ComputerCIshoreside_healthcare_dynamicenergy {
 		}
 	}
 	
+	private static double minEnergyAnyRobot() {
+		double minVal = Double.MAX_VALUE;
+		for (Map.Entry<String,Double> e : robotEnergy.entrySet()) {
+			String robotID = e.getKey();
+			if (!emptyRobots.containsKey(robotID)) {
+				double energy = e.getValue();
+				if (energy < minVal) {
+					minVal = energy;
+				}
+			}
+		}
+		return minVal;
+	}
+	
+	private static int robotCountForBatteryDynamicEnergy(String robotID) {
+		if (robotEnergy.containsKey(robotID)) {
+			double thisRobotEnergy = robotEnergy.get(robotID);
+			double minEnergy = minEnergyAnyRobot();
+			int robotCount = (int)Math.round(thisRobotEnergy / minEnergy);
+			return robotCount;
+		} else {
+			return 0;
+		}
+	}
+
 	private static double findMinimalBatteryEnergy() {
 		double minBattery = Double.MAX_VALUE;
 		for (Robot r : mission.getAllRobots()) {
@@ -119,7 +147,7 @@ public class ComputerCIshoreside_healthcare_dynamicenergy {
 		return minBattery;
 	}
 
-	public static Map<String, List<Integer>> workAssignmentsByEnergy(Set<Integer> pendingRooms) {
+	public static Map<String, List<Integer>> workAssignmentsByEnergy(Set<Integer> pendingRooms, boolean useStartingEnergy) {
 		Map<String, List<Integer>> assignments = new HashMap<String, List<Integer>>();
 
 		while (!pendingRooms.isEmpty()) {
@@ -127,7 +155,14 @@ public class ComputerCIshoreside_healthcare_dynamicenergy {
 				// Need to give the higher energy robots TWO goes at selection in the loop
 				String robotID = e.getKey();
 				Point robotLoc = e.getValue();
-				int robotCount = robotCountForBattery(robotID);
+				
+				int robotCount;
+				if (useStartingEnergy) {
+					robotCount = robotCountForBattery(robotID);
+				} else {
+					robotCount = robotCountForBatteryDynamicEnergy(robotID);
+				}
+				
 				System.out.println("robotCount = " + robotCount);
 				for (int i = 0; i < robotCount; i++) {
 
@@ -151,13 +186,13 @@ public class ComputerCIshoreside_healthcare_dynamicenergy {
 
 		return assignments;
 	}
-	
+
 	public static void closestExtraWorkAssignments(Set<Integer> pendingRooms, Set<String> excludeRobots) {
-		
+
 		// while there is work pending...
 		while (pendingRooms.size() > 0) {
 			// round-robin over all robots
-			for (Map.Entry<String,Point> erobots : robotLocations.entrySet()) {
+			for (Map.Entry<String, Point> erobots : robotLocations.entrySet()) {
 				String rname = erobots.getKey();
 				if (!excludeRobots.contains(rname)) {
 					Point robotLoc = erobots.getValue();
@@ -167,6 +202,32 @@ public class ComputerCIshoreside_healthcare_dynamicenergy {
 						Integer closestRoom = closestRoom_o.get();
 						addWorkassignment(workassignments, rname, closestRoom);
 						pendingRooms.remove(closestRoom);
+					}
+				}
+			}
+		}
+	}
+
+	public static void energyBasedExtraWorkAssignments(Set<Integer> pendingRooms, Set<String> excludeRobots) {
+		// while there is work pending...
+		while (pendingRooms.size() > 0) {
+			// round-robin over all robots
+			for (Map.Entry<String, Point> erobots : robotLocations.entrySet()) {
+				String robotID = erobots.getKey();
+				Point robotLoc = erobots.getValue();
+				// This is the change to use dynamic energy at this time - if it causes a problem, revert it
+				int robotCount = robotCountForBatteryDynamicEnergy(robotID);
+
+				for (int i = 0; i < robotCount; i++) {
+					String rname = erobots.getKey();
+					if (!excludeRobots.contains(rname)) {
+						// find the closest room to the given robot
+						Optional<Integer> closestRoom_o = closestRoomTo(robotLoc, pendingRooms);
+						if (closestRoom_o.isPresent()) {
+							Integer closestRoom = closestRoom_o.get();
+							addWorkassignment(workassignments, rname, closestRoom);
+							pendingRooms.remove(closestRoom);
+						}
 					}
 				}
 			}
@@ -189,7 +250,7 @@ public class ComputerCIshoreside_healthcare_dynamicenergy {
 			}
 		}
 	}
-
+	
 	public static void loadDSL() throws DSLLoadFailed, MissingProperty {
 		DSLLoader dslloader = new GeneratedDSLLoader();
 		mission = dslloader.loadMission();
@@ -201,7 +262,7 @@ public class ComputerCIshoreside_healthcare_dynamicenergy {
 		try {
 			loadDSL();
 			Set<Integer> pendingRooms = new HashSet<>(roomLocations.keySet());
-			workassignments = workAssignmentsByEnergy(pendingRooms);	
+			workassignments = workAssignmentsByEnergy(pendingRooms, true);
 			sendAllWorkAssignments(workassignments);
 		} catch (DSLLoadFailed e) {
 			e.printStackTrace();
@@ -225,13 +286,19 @@ public class ComputerCIshoreside_healthcare_dynamicenergy {
 	}
 
 	public static void EnergyUpdateHook(EnergyUpdate energyUpdate, String robotName) {
-		// System.out.println("EnergyUpdateHook - energy value is " +
-		// energyUpdate.getEnergyValue());
-		if (energyUpdate.getEnergyValue() < 1e-6) {
-			// Battery is empty
+		
+		
+		if (energyUpdate.getEnergyValue() < ENERGY_GO_HOME_THRESHOLD) {
+			// Battery is empty or at the minimal threshold
+
 			if (!emptyRobots.containsKey(robotName)) {
+				// Return the robot which has expired or nearly expired to go back home
+				System.out.println("Sending " + robotName + " home...");
+				API.returnHome(robotName);
+
+				// Reassign the work that the robot is carrying
 				System.out.println("Reassigning work due to no energy on " + robotName + " ...");
-				emptyRobots.put(robotName, 0.0);
+				emptyRobots.put(robotName, energyUpdate.getEnergyValue());
 				reassignWork(robotName);
 				System.out.println("Reassigning work done on " + robotName);
 			}
@@ -242,13 +309,12 @@ public class ComputerCIshoreside_healthcare_dynamicenergy {
 		if (outstandingWork.containsKey(robotName)) {
 			Set<Integer> newPendingRooms = new HashSet<>(outstandingWork.get(robotName));
 			if (newPendingRooms.size() > 0) {
-				closestExtraWorkAssignments(newPendingRooms, emptyRobots.keySet());
+				energyBasedExtraWorkAssignments(newPendingRooms, emptyRobots.keySet());
 				sendAllWorkAssignments(outstandingWork);
 			}
 		} else {
 			CollectiveIntLog.logCI("No work for " + robotName + " to reassign");
 		}
-		
 	}
 
 	public static void BehaviourVariableHook(String key, String value, String robotName_uc, Double timeNow) {
@@ -267,6 +333,6 @@ public class ComputerCIshoreside_healthcare_dynamicenergy {
 			rooms.remove(Integer.valueOf(room));
 			outstandingWork.put(robotName, rooms);
 		}
-		
+
 	}
 }

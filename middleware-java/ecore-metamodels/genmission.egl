@@ -97,8 +97,9 @@ public class GeneratedDSLLoader implements DSLLoader {
 	
 	[* Add environmental objects *]
 	[% var objectID = 0; %]
-	[% for (o in m.objects) { %]
-	EnvironmentalObject eo[%= objectID++ %] = new EnvironmentalObject([%= o.label %], new Point([%= o.x %],[%= o.y %],[%= o.z %]), [%= o.isHazard %]);
+	[% for (og in m.objectGroupings) { %]
+		[% for (o in og.objects) { %]
+	EnvironmentalObject eo[%= objectID++ %] = new EnvironmentalObject([%= o.label %], new Point([%= o.location.x %],[%= o.location.y %],[%= o.location.z %]), [%= o.isHazard %]);
 	mission.addObject(eo[%= objectID %]);
 	[% EObjectLookup.put(o, o.label); %]
 	[% } %]
@@ -115,6 +116,7 @@ public class GeneratedDSLLoader implements DSLLoader {
 	EnvironmentalObstacle eob[%= obstacleID %] = new EnvironmentalObstacle("[%= o.label %]", eopoints[%= obstacleID %]);
 	mission.addObstacle(eob[%= obstacleID %]);
 	[% obstacleID++; %]
+	[% } %]
 	[% } %]
 	[* End environmental obstacles *]
 	
@@ -165,11 +167,11 @@ public class GeneratedDSLLoader implements DSLLoader {
 		[% } %]
 		
 		[% if (goalAction.isKindOf(TrackEnergyConsumption)) { %]
-		GoalAction ga[%= goalnum %] = new TrackEnergyConsumption([%= goalAction.energyPerDistance %], [%= goalAction.energyPerRoom %], [%= goalAction.energyPerTime %]);
+		GoalAction ga[%= goalnum %] = new TrackEnergyConsumption([%= goalAction.energyPerDistance %], [%= goalAction.energyPerTime %]);
 		[% } %]
 		
 		[% if (goalAction.isKindOf(CheckRoomsCompleted)) { %]
-		GoalAction ga[%= goalnum %] = new CheckRoomsCompleted();
+		GoalAction ga[%= goalnum %] = new CheckRoomsCompleted([%= goalAction.energyPerRoom %]);
 		[% } %]
 		
 		[% if (goalAction.isKindOf(StayInRegion)) { %]

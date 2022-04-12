@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="ASCII"?>
-<atlas:Mission xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:atlas="http://www.github.com/jrharbin-york/atlas-middleware/dsl/atlas" xmi:id="_8OLx8HP4Eeqc6cv9mBHIKw" endTime="600.0" stopVehicleOnNoEnergy="true">
+<atlas:Mission xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:atlas="http://www.github.com/jrharbin-york/atlas-middleware/dsl/atlas" xmi:id="_8OLx8HP4Eeqc6cv9mBHIKw" endTime="450.0" stopVehicleOnNoEnergy="true">
   <mutProgram xmi:id="_J543gKfxEeyth8kMdDG_FA">
     <mutationGroups xmi:id="_KpnrUKfxEeyth8kMdDG_FA" minRequiredFromGroup="2" maxRequiredFromGroup="3" members="_gx4mIHP-Eeqc6cv9mBHIKw _hNarkHP-Eeqc6cv9mBHIKw _hkfHwHP-Eeqc6cv9mBHIKw"/>
     <mutationGroups xmi:id="_Oo2hAKfxEeyth8kMdDG_FA" minRequiredFromGroup="1" maxRequiredFromGroup="1" members="_X79rIKfxEeyth8kMdDG_FA _XdRiAKWWEeyG79PXMexeYw"/>
     <mutationGroups xmi:id="_a5BnQKfzEeyth8kMdDG_FA" minRequiredFromGroup="1" maxRequiredFromGroup="1" members="_t28UsKfxEeyth8kMdDG_FA _aaycAKWWEeyG79PXMexeYw"/>
     <mutationGroups xmi:id="_eBEWQKfzEeyth8kMdDG_FA" minRequiredFromGroup="1" maxRequiredFromGroup="1" members="_6tdUIKfxEeyth8kMdDG_FA _eoB4gKWWEeyG79PXMexeYw"/>
+    <mutationGroups xmi:id="_0INzYLZ0Eeyz0pNG2VaCQg" minRequiredFromGroup="2" maxRequiredFromGroup="2" members="_toxQQLZfEeyz0pNG2VaCQg _4phn8LZfEeyz0pNG2VaCQg"/>
   </mutProgram>
   <robots xmi:id="_gx4mIHP-Eeqc6cv9mBHIKw" name="tb3_0" mutable="true">
     <componentProperties xsi:type="atlas:PointProperty" xmi:id="_C4ey0HQREeqc6cv9mBHIKw" name="startLocation">
@@ -21,7 +22,7 @@
       <params>COURSE</params>
     </subcomponents>
     <subcomponents xsi:type="atlas:Battery" xmi:id="_XdRiAKWWEeyG79PXMexeYw" name="STANDARD-0" mutable="true" totalEnergy="71280"/>
-    <subcomponents xsi:type="atlas:Battery" xmi:id="_X79rIKfxEeyth8kMdDG_FA" name="HIGH-0" mutable="true" totalEnergy="178200"/>
+    <subcomponents xsi:type="atlas:Battery" xmi:id="_X79rIKfxEeyth8kMdDG_FA" name="HIGH-0" mutable="true" totalEnergy="220000"/>
   </robots>
   <robots xmi:id="_hNarkHP-Eeqc6cv9mBHIKw" name="tb3_1" mutable="true">
     <componentProperties xsi:type="atlas:PointProperty" xmi:id="_FOiEMHQREeqc6cv9mBHIKw" name="startLocation">
@@ -38,7 +39,7 @@
       <params>COURSE</params>
     </subcomponents>
     <subcomponents xsi:type="atlas:Battery" xmi:id="_aaycAKWWEeyG79PXMexeYw" name="STANDARD-1" mutable="true" totalEnergy="71280"/>
-    <subcomponents xsi:type="atlas:Battery" xmi:id="_t28UsKfxEeyth8kMdDG_FA" name="HIGH-1" mutable="true" totalEnergy="178200"/>
+    <subcomponents xsi:type="atlas:Battery" xmi:id="_t28UsKfxEeyth8kMdDG_FA" name="HIGH-1" mutable="true" totalEnergy="220000"/>
   </robots>
   <robots xmi:id="_hkfHwHP-Eeqc6cv9mBHIKw" name="tb3_2" mutable="true">
     <componentProperties xsi:type="atlas:PointProperty" xmi:id="_Jyhz0HQREeqc6cv9mBHIKw" name="startLocation">
@@ -55,20 +56,9 @@
       <params>COURSE</params>
     </subcomponents>
     <subcomponents xsi:type="atlas:Battery" xmi:id="_eoB4gKWWEeyG79PXMexeYw" name="STANDARD-2" mutable="true" totalEnergy="71280"/>
-    <subcomponents xsi:type="atlas:Battery" xmi:id="_6tdUIKfxEeyth8kMdDG_FA" name="HIGH-2" mutable="true" totalEnergy="178200"/>
+    <subcomponents xsi:type="atlas:Battery" xmi:id="_6tdUIKfxEeyth8kMdDG_FA" name="HIGH-2" mutable="true" totalEnergy="220000"/>
   </robots>
   <computers xmi:id="_fXV6wHP-Eeqc6cv9mBHIKw" name="controller"/>
-  <goals xmi:id="_kwYOQHP5Eeqc6cv9mBHIKw" name="mutualAvoidance">
-    <requirements xmi:id="_LWQjUHQEEeqc6cv9mBHIKw" latestFinishTime="500.0"/>
-    <participants xsi:type="atlas:StaticParticipants" xmi:id="_zbOjAHQCEeqc6cv9mBHIKw" participants="_gx4mIHP-Eeqc6cv9mBHIKw _hNarkHP-Eeqc6cv9mBHIKw _hkfHwHP-Eeqc6cv9mBHIKw"/>
-    <action xsi:type="atlas:AvoidOthers" xmi:id="_kqonEHQDEeqc6cv9mBHIKw" clearance="0.2"/>
-    <region xsi:type="atlas:StaticGoalRegion" xmi:id="_l2ZbIHP5Eeqc6cv9mBHIKw">
-      <staticRegion xmi:id="_mgPpYHP5Eeqc6cv9mBHIKw">
-        <corner1 xmi:id="_nGbfoHP5Eeqc6cv9mBHIKw"/>
-        <corner2 xmi:id="_nao1EHP5Eeqc6cv9mBHIKw" x="1000.0" y="1000.0"/>
-      </staticRegion>
-    </region>
-  </goals>
   <goals xmi:id="_Zc7K0HrmEeu4teJ7JJepvg" name="trackDistances">
     <requirements xmi:id="_sS9nQHrnEeu4teJ7JJepvg" latestFinishTime="1190.0"/>
     <participants xsi:type="atlas:StaticParticipants" xmi:id="_mxQSMHrnEeu4teJ7JJepvg" participants="_gx4mIHP-Eeqc6cv9mBHIKw _hNarkHP-Eeqc6cv9mBHIKw _hkfHwHP-Eeqc6cv9mBHIKw"/>
@@ -83,7 +73,7 @@
   <goals xmi:id="_42Mf8KbSEeyQXZHshd3NIw" name="checkRoomsCompleted">
     <requirements xmi:id="_42Mf8abSEeyQXZHshd3NIw" latestFinishTime="1500.0"/>
     <participants xsi:type="atlas:StaticParticipants" xmi:id="_42NHAKbSEeyQXZHshd3NIw" participants="_gx4mIHP-Eeqc6cv9mBHIKw _hNarkHP-Eeqc6cv9mBHIKw _hkfHwHP-Eeqc6cv9mBHIKw"/>
-    <action xsi:type="atlas:CheckRoomsCompleted" xmi:id="_8G2_cKbSEeyQXZHshd3NIw"/>
+    <action xsi:type="atlas:CheckRoomsCompleted" xmi:id="_8G2_cKbSEeyQXZHshd3NIw" energyPerRoom="18000.0"/>
     <region xsi:type="atlas:StaticGoalRegion" xmi:id="_42NHAqbSEeyQXZHshd3NIw">
       <staticRegion xmi:id="_42NHA6bSEeyQXZHshd3NIw">
         <corner1 xmi:id="_42NHBKbSEeyQXZHshd3NIw"/>
@@ -96,7 +86,7 @@
   <goals xmi:id="_SlcFAKqnEeyzD4i5VcA_4Q" name="trackEnergyHealthcare">
     <requirements xmi:id="_ZWjzgKqnEeyzD4i5VcA_4Q" latestFinishTime="1500.0"/>
     <participants xsi:type="atlas:StaticParticipants" xmi:id="_XVMYsKqnEeyzD4i5VcA_4Q" participants="_gx4mIHP-Eeqc6cv9mBHIKw _hNarkHP-Eeqc6cv9mBHIKw _hkfHwHP-Eeqc6cv9mBHIKw"/>
-    <action xsi:type="atlas:TrackEnergyConsumption" xmi:id="_gqYmcKqnEeyzD4i5VcA_4Q" energyPerDistance="40.0" energyPerTime="11.0" energyPerRoom="9500.0"/>
+    <action xsi:type="atlas:TrackEnergyConsumption" xmi:id="_gqYmcKqnEeyzD4i5VcA_4Q" energyPerDistance="40.0" energyPerTime="11.0"/>
     <region xsi:type="atlas:StaticGoalRegion" xmi:id="_OUXk4KsJEeyLetgpoq5lEQ">
       <staticRegion xmi:id="_O4zusKsJEeyLetgpoq5lEQ">
         <corner1 xmi:id="_P4S1wKsJEeyLetgpoq5lEQ"/>
@@ -109,24 +99,44 @@
   <simVariables xmi:id="_AvocIKU4EeyM7Iq1FrTa_A" varName="/amcl_pose" simType="geometry_msgs/PoseWithCovarianceStamped" tag="POSITION" isVehicleSpecific="true" propagateToCI="true"/>
   <simVariables xmi:id="_e1KFQKU4EeyM7Iq1FrTa_A" varName="/roomCompleted" simType="std_msgs/Int32" isVehicleSpecific="true" propagateToCI="true"/>
   <simVariables xmi:id="_kJcLYK3VEeyHdc0ODMoOCA" varName="/rooms" simType="std_msgs/String" isVehicleSpecific="true"/>
-  <objects xmi:id="_FPg74K68EeyCnLjRHSqbCg" x="3.01" y="-4.41" label="1"/>
-  <objects xmi:id="_05amoK78EeyCnLjRHSqbCg" x="2.13" y="-4.45" label="2"/>
-  <objects xmi:id="_05amoK78EeyCnLjRHSqbCg" x="1.21" y="-4.38" label="3"/>
-  <objects xmi:id="_05amoK78EeyCnLjRHSqbCg" x="0.32" y="-4.33" label="4"/>
-  <objects xmi:id="_05amoK78EeyCnLjRHSqbCg" x="-0.7" y="-4.4" label="5"/>
-  <objects xmi:id="_05amoK78EeyCnLjRHSqbCg" x="-1.65" y="-4.34" label="6"/>
-  <objects xmi:id="_05amoK78EeyCnLjRHSqbCg" x="-2.57" y="-4.3" label="7"/>
-  <objects xmi:id="_05amoK78EeyCnLjRHSqbCg" x="-3.58" y="-4.31" label="8"/>
-  <objects xmi:id="_05amoK78EeyCnLjRHSqbCg" x="-4.51" y="-4.23" label="9"/>
-  <objects xmi:id="_05amoK78EeyCnLjRHSqbCg" x="-5.39" y="-4.15" label="10"/>
-  <objects xmi:id="_FPg74K68EeyCnLjRHSqbCg" x="-5.37" y="-2.3" label="11"/>
-  <objects xmi:id="_05amoK78EeyCnLjRHSqbCg" x="-4.46" y="-2.28" label="12"/>
-  <objects xmi:id="_05amoK78EeyCnLjRHSqbCg" x="-3.5" y="-2.27" label="13"/>
-  <objects xmi:id="_05amoK78EeyCnLjRHSqbCg" x="-2.59" y="-2.29" label="14"/>
-  <objects xmi:id="_05amoK78EeyCnLjRHSqbCg" x="-1.68" y="-2.31" label="15"/>
-  <objects xmi:id="_05amoK78EeyCnLjRHSqbCg" x="-0.64" y="-2.34" label="16"/>
-  <objects xmi:id="_05amoK78EeyCnLjRHSqbCg" x="0.18" y="-2.4" label="17"/>
-  <objects xmi:id="_05amoK78EeyCnLjRHSqbCg" x="1.11" y="-2.34" label="18"/>
-  <objects xmi:id="_05amoK78EeyCnLjRHSqbCg" x="2.13" y="-2.39" label="19"/>
-  <objects xmi:id="_05amoK78EeyCnLjRHSqbCg" x="3.02" y="-2.45" label="20"/>
+  <objectGroupings xmi:id="_toxQQLZfEeyz0pNG2VaCQg" name="Group1-Rooms-1-to-6" mutable="true">
+    <objects xmi:id="_ynVcALZfEeyz0pNG2VaCQg" label="1">
+      <location xmi:id="_foBncLZhEeyz0pNG2VaCQg" x="3.01" y="-4.41"/>
+    </objects>
+    <objects xmi:id="_z5mVILZfEeyz0pNG2VaCQg" label="2">
+      <location xmi:id="_hevRcLZhEeyz0pNG2VaCQg" x="2.13" y="-4.45"/>
+    </objects>
+    <objects xmi:id="_0tepILZfEeyz0pNG2VaCQg" label="3">
+      <location xmi:id="_hyJVoLZhEeyz0pNG2VaCQg" x="1.21" y="-4.38"/>
+    </objects>
+    <objects xmi:id="_19W8oLZfEeyz0pNG2VaCQg" label="4">
+      <location xmi:id="_iNM58LZhEeyz0pNG2VaCQg" x="0.32" y="-4.33"/>
+    </objects>
+    <objects xmi:id="_2aKNYLZfEeyz0pNG2VaCQg" label="5">
+      <location xmi:id="_imp7wLZhEeyz0pNG2VaCQg" x="-0.7" y="-4.4"/>
+    </objects>
+    <objects xmi:id="_212D0LZfEeyz0pNG2VaCQg" label="6">
+      <location xmi:id="_i87twLZhEeyz0pNG2VaCQg" x="-1.65" y="-4.34"/>
+    </objects>
+  </objectGroupings>
+  <objectGroupings xmi:id="_4phn8LZfEeyz0pNG2VaCQg" name="Group2-Rooms-7-to-12" mutable="true">
+    <objects xmi:id="_4phn8bZfEeyz0pNG2VaCQg" label="7">
+      <location xmi:id="_jaiPwLZhEeyz0pNG2VaCQg" x="-2.57" y="-4.3"/>
+    </objects>
+    <objects xmi:id="_4phn8rZfEeyz0pNG2VaCQg" label="8">
+      <location xmi:id="_jzW_cLZhEeyz0pNG2VaCQg" x="-3.58" y="-4.31"/>
+    </objects>
+    <objects xmi:id="_4phn87ZfEeyz0pNG2VaCQg" label="9">
+      <location xmi:id="_kOkUwLZhEeyz0pNG2VaCQg" x="-4.51" y="-4.23"/>
+    </objects>
+    <objects xmi:id="_4phn9LZfEeyz0pNG2VaCQg" label="10">
+      <location xmi:id="_kmHSELZhEeyz0pNG2VaCQg" x="-5.39" y="-4.15"/>
+    </objects>
+    <objects xmi:id="_4phn9bZfEeyz0pNG2VaCQg" label="11">
+      <location xmi:id="_lANNELZhEeyz0pNG2VaCQg" x="-5.37" y="-2.3"/>
+    </objects>
+    <objects xmi:id="_4phn9rZfEeyz0pNG2VaCQg" label="12">
+      <location xmi:id="_lWpXILZhEeyz0pNG2VaCQg" x="-4.46" y="-2.28"/>
+    </objects>
+  </objectGroupings>
 </atlas:Mission>

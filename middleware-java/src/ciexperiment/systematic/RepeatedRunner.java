@@ -139,7 +139,7 @@ public class RepeatedRunner {
 	public static void expt_caseStudy1() throws EolModelLoadingException, EglRuntimeException, URISyntaxException, IOException, InterruptedException {
 		List<Metrics> l = new ArrayList<Metrics>();
 		l.add(Metrics.PURE_MISSED_DETECTIONS);
-		l.add(Metrics.WORST_CASE_WAYPOINT_COMPLETION_FROM_CI);
+		l.add(Metrics.WORST_CASE_WAYPOINT_COMPLETION_TIME_FROM_CI);
 		String sourceModelFile = "experiment-models/casestudy1/mission-basis.model";
 		String standardCI = "atlascollectiveint.expt.casestudy1.ComputerCIshoreside_standard"; 
 		String advancedCI = "atlascollectiveint.expt.casestudy1.ComputerCIshoreside_advanced"; 

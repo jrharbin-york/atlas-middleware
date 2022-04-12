@@ -30,6 +30,8 @@ public class CheckRoomsCompleted extends GoalAction {
 	FileWriter roomsOutput;
 
 	private boolean writtenYet = false;
+	
+	private double energyPerRoom;
 
 	private ATLASCore core;
 
@@ -47,6 +49,10 @@ public class CheckRoomsCompleted extends GoalAction {
 		public String toFileLine() {
 			return this.robotName + "," + this.room + "," + this.time + "\n";
 		}
+	}
+	
+	public CheckRoomsCompleted(double energyPerRoom) {
+		this.energyPerRoom = energyPerRoom;
 	}
 
 	private void logToFile(RoomServicedRecord rsr) {
@@ -77,6 +83,18 @@ public class CheckRoomsCompleted extends GoalAction {
 		roomsPending.put(robotName, roomsForRobot);
 		System.out.println("CheckRoomsCompleted: registerRoomCompleted: robot " + robotName + " completed room " + room);
 		System.out.println("CheckRoomsCompleted: roomsForRobot " + robotName + " is " + roomsForRobot.toString());
+	}
+	
+	private boolean registerRoomCompletedIfEnergy(String robotName, Integer val, double time) {
+		if (core.getRobotEnergyRemaining(robotName) > energyPerRoom) {
+			core.depleteEnergyOnRobot(robotName, energyPerRoom);
+			registerRoomCompleted(robotName, val, time);
+			return true;
+		} else {
+			core.depleteEnergyOnRobot(robotName, energyPerRoom);
+			System.out.println("CheckRoomsCompleted: registerRoomCompleted: robot " + robotName + " lacked energy to complete room " + val);
+			return false;
+		}
 	}
 
 	protected Optional<GoalResult> test(Mission mission, GoalParticipants participants) {
@@ -146,16 +164,16 @@ public class CheckRoomsCompleted extends GoalAction {
 		core.setupSimVarWatcher("/roomCompleted", (svar, robotName, val) -> {
 			double time = core.getTime();
 			if (val instanceof Integer) {
-				registerRoomCompleted(robotName, (Integer) val, time);
+				return registerRoomCompletedIfEnergy(robotName, (Integer) val, time);
 			}
 			if (val instanceof String) {
 				System.out.println("CheckRoomsCompleted: registerRoom debugging: string is " + (String) val);
 				Integer i = Integer.parseInt((String) val);
-				registerRoomCompleted(robotName, i, time);
+				return registerRoomCompletedIfEnergy(robotName, i, time);
 			}
+			
+			return false;
 		});
-		
-
 		
 		// Set up watcher that will be triggered on this simulator variable
 		core.setupSimVarWatcher("/rooms", (svar, robotName, val) -> {
@@ -181,6 +199,8 @@ public class CheckRoomsCompleted extends GoalAction {
 			}
 			roomsPending.put(robotName,  roomsForRobot);
 			
+			return true;
+			
 		});
 
 		core.setupPositionWatcher((gps) -> {
@@ -190,6 +210,8 @@ public class CheckRoomsCompleted extends GoalAction {
 			}
 		});
 	}
+
+
 
 	private void checkMissionCompletedForRobot(String robotName, Point newLoc, double time) {
 		List<Integer> roomsToDo = roomsPending.get(robotName);
