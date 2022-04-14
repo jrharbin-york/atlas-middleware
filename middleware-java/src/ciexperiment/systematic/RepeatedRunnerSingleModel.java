@@ -118,7 +118,7 @@ public class RepeatedRunnerSingleModel {
 	}
 	
 	public static void expt_caseStudyHealthcare() {
-		double runtime = 500.0;
+		double runtime = 450.0;
 		System.out.println("Case study runtime is " + runtime);
 		try {
 			Thread.sleep(1000);
@@ -138,16 +138,16 @@ public class RepeatedRunnerSingleModel {
 		//String sourceModelFile = "experiment-models/healthcare/missionHealthcare-basis.model-d045d342-4a3f-45e1-b7c0-c7e7c752aab2.model";
 		//String sourceModelFile = "experiment-models/healthcare/missionHealthcare-basis.model-b6032518-c185-4b69-b177-35d3c8bac6f7.model";
 		
-		String sourceModelFile = "experiment-models/healthcare/missionHealthcare-basis.model-c933ce9d-f812-4142-bbc3-090f7f00999e.model";
-
+		String sourceModelFile = "experiment-models/healthcare/missionHealthcare-basis.model-2550e0fd-9547-4e31-93fd-900950399e3f.model";
+	
 		String standardCI = "atlascollectiveint.expt.healthcare.ComputerCIshoreside_healthcare";
 		String dynamicCI = "atlascollectiveint.expt.healthcare.ComputerCIshoreside_healthcare_dynamicenergy";
 
 		ArrayList<String> ciOptions = new ArrayList<String>();
-		//ciOptions.add(standardCI);
+		ciOptions.add(standardCI);
 		ciOptions.add(dynamicCI);
 		
-		runCIExperimentSingleModel(sourceModelFile, l, newMetrics, "casestudyHealthcare_repeated-c933ce9d", ciOptions, 10, runtime, "ROS");
+		runCIExperimentSingleModel(sourceModelFile, l, newMetrics, "casestudyHealthcare_repeated-2550e0fd", ciOptions, 10, runtime, "ROS");
 	}
 
 	public static void expt2_test(String modelFile, String output) {

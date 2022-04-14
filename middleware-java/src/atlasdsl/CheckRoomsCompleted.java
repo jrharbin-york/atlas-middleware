@@ -31,7 +31,7 @@ public class CheckRoomsCompleted extends GoalAction {
 
 	private boolean writtenYet = false;
 	
-	private double energyPerRoom;
+	protected double energyPerRoomMean;
 
 	private ATLASCore core;
 
@@ -52,7 +52,11 @@ public class CheckRoomsCompleted extends GoalAction {
 	}
 	
 	public CheckRoomsCompleted(double energyPerRoom) {
-		this.energyPerRoom = energyPerRoom;
+		this.energyPerRoomMean = energyPerRoom;
+	}
+	
+	public double getEnergyPerRoom() {
+		return energyPerRoomMean;
 	}
 
 	private void logToFile(RoomServicedRecord rsr) {
@@ -86,12 +90,13 @@ public class CheckRoomsCompleted extends GoalAction {
 	}
 	
 	private boolean registerRoomCompletedIfEnergy(String robotName, Integer val, double time) {
-		if (core.getRobotEnergyRemaining(robotName) > energyPerRoom) {
-			core.depleteEnergyOnRobot(robotName, energyPerRoom);
+		double energyThisTime = getEnergyPerRoom();
+		if (core.getRobotEnergyRemaining(robotName) > energyThisTime) {
+			core.depleteEnergyOnRobot(robotName, energyThisTime);
 			registerRoomCompleted(robotName, val, time);
 			return true;
 		} else {
-			core.depleteEnergyOnRobot(robotName, energyPerRoom);
+			core.depleteEnergyOnRobot(robotName, energyThisTime);
 			System.out.println("CheckRoomsCompleted: registerRoomCompleted: robot " + robotName + " lacked energy to complete room " + val);
 			return false;
 		}

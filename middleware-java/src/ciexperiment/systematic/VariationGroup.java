@@ -2,7 +2,7 @@ package ciexperiment.systematic;
 
 import java.util.ArrayList;
 
-public class MutationGroup {
+public class VariationGroup {
 	
 	ArrayList<String> memberIds = new ArrayList<String>();
 	String groupID = "";

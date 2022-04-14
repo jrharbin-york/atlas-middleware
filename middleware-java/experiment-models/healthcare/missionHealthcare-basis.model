@@ -5,7 +5,7 @@
     <mutationGroups xmi:id="_Oo2hAKfxEeyth8kMdDG_FA" minRequiredFromGroup="1" maxRequiredFromGroup="1" members="_X79rIKfxEeyth8kMdDG_FA _XdRiAKWWEeyG79PXMexeYw"/>
     <mutationGroups xmi:id="_a5BnQKfzEeyth8kMdDG_FA" minRequiredFromGroup="1" maxRequiredFromGroup="1" members="_t28UsKfxEeyth8kMdDG_FA _aaycAKWWEeyG79PXMexeYw"/>
     <mutationGroups xmi:id="_eBEWQKfzEeyth8kMdDG_FA" minRequiredFromGroup="1" maxRequiredFromGroup="1" members="_6tdUIKfxEeyth8kMdDG_FA _eoB4gKWWEeyG79PXMexeYw"/>
-    <mutationGroups xmi:id="_0INzYLZ0Eeyz0pNG2VaCQg" minRequiredFromGroup="2" maxRequiredFromGroup="2" members="_toxQQLZfEeyz0pNG2VaCQg _4phn8LZfEeyz0pNG2VaCQg"/>
+    <mutationGroups xmi:id="_0INzYLZ0Eeyz0pNG2VaCQg" minRequiredFromGroup="2" maxRequiredFromGroup="2" members="_toxQQLZfEeyz0pNG2VaCQg _4phn8LZfEeyz0pNG2VaCQg _urEbALqiEeyataTIo6Ybng"/>
   </mutProgram>
   <robots xmi:id="_gx4mIHP-Eeqc6cv9mBHIKw" name="tb3_0" mutable="true">
     <componentProperties xsi:type="atlas:PointProperty" xmi:id="_C4ey0HQREeqc6cv9mBHIKw" name="startLocation">
@@ -73,7 +73,7 @@
   <goals xmi:id="_42Mf8KbSEeyQXZHshd3NIw" name="checkRoomsCompleted">
     <requirements xmi:id="_42Mf8abSEeyQXZHshd3NIw" latestFinishTime="1500.0"/>
     <participants xsi:type="atlas:StaticParticipants" xmi:id="_42NHAKbSEeyQXZHshd3NIw" participants="_gx4mIHP-Eeqc6cv9mBHIKw _hNarkHP-Eeqc6cv9mBHIKw _hkfHwHP-Eeqc6cv9mBHIKw"/>
-    <action xsi:type="atlas:CheckRoomsCompleted" xmi:id="_8G2_cKbSEeyQXZHshd3NIw" energyPerRoom="18000.0"/>
+    <action xsi:type="atlas:CheckRoomsCompletedGaussianEnergy" xmi:id="_ARVZ8LtaEey3avuAqmGjQQ" energyPerRoomMean="14000.0" energyPerRoomStdDev="3000.0" randomSeed="4364337254"/>
     <region xsi:type="atlas:StaticGoalRegion" xmi:id="_42NHAqbSEeyQXZHshd3NIw">
       <staticRegion xmi:id="_42NHA6bSEeyQXZHshd3NIw">
         <corner1 xmi:id="_42NHBKbSEeyQXZHshd3NIw"/>
@@ -137,6 +137,26 @@
     </objects>
     <objects xmi:id="_4phn9rZfEeyz0pNG2VaCQg" label="12">
       <location xmi:id="_lWpXILZhEeyz0pNG2VaCQg" x="-4.46" y="-2.28"/>
+    </objects>
+  </objectGroupings>
+  <objectGroupings xmi:id="_urEbALqiEeyataTIo6Ybng" name="Group3-Rooms-13-to-18" mutable="true">
+    <objects xmi:id="_urEbAbqiEeyataTIo6Ybng" label="13">
+      <location xmi:id="_urEbArqiEeyataTIo6Ybng" x="-3.5" y="-2.27"/>
+    </objects>
+    <objects xmi:id="_urEbA7qiEeyataTIo6Ybng" label="14">
+      <location xmi:id="_urEbBLqiEeyataTIo6Ybng" x="-2.59" y="-2.29"/>
+    </objects>
+    <objects xmi:id="_urEbBbqiEeyataTIo6Ybng" label="15">
+      <location xmi:id="_urEbBrqiEeyataTIo6Ybng" x="-1.68" y="-2.31"/>
+    </objects>
+    <objects xmi:id="_urEbB7qiEeyataTIo6Ybng" label="16">
+      <location xmi:id="_urEbCLqiEeyataTIo6Ybng" x="-0.64" y="-2.34"/>
+    </objects>
+    <objects xmi:id="_urEbCbqiEeyataTIo6Ybng" label="17">
+      <location xmi:id="_urEbCrqiEeyataTIo6Ybng" x="0.18" y="-2.4"/>
+    </objects>
+    <objects xmi:id="_urEbC7qiEeyataTIo6Ybng" label="18">
+      <location xmi:id="_urEbDLqiEeyataTIo6Ybng" x="1.11" y="-2.34"/>
     </objects>
   </objectGroupings>
 </atlas:Mission>

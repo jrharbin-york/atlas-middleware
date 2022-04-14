@@ -67,11 +67,11 @@ public class ModelsTransformer {
 
 		Set<Set<EObject>> allCombinationsSet = Sets.powerSet(mutableObjects);
 		Set<Set<EObject>> allAcceptableSets = new HashSet<Set<EObject>>();
-		List<MutationGroup> allMutationGroupsWithMemberIds = new ArrayList<MutationGroup>();
-		Collection<EObject> mutationGroups = sourceModel.getAllOfType("MutationGroup");
+		List<VariationGroup> allVariationGroupsWithMemberIds = new ArrayList<VariationGroup>();
+		Collection<EObject> mutationGroups = sourceModel.getAllOfType("VariationGroup");
 
 		for (EObject mutGroup : mutationGroups) {
-			MutationGroup mg = new MutationGroup();
+			VariationGroup mg = new VariationGroup();
 			EStructuralFeature maxLimit = mutGroup.eClass().getEStructuralFeature("maxRequiredFromGroup");
 			EStructuralFeature minLimit = mutGroup.eClass().getEStructuralFeature("minRequiredFromGroup");
 			mg.setMaxLimit((Integer) mutGroup.eGet(maxLimit));
@@ -86,7 +86,7 @@ public class ModelsTransformer {
 				String memberId = sourceModel.getElementId(member);
 				mg.getMemberIds().add(memberId);
 			}
-			allMutationGroupsWithMemberIds.add(mg);
+			allVariationGroupsWithMemberIds.add(mg);
 		}
 
 		List<EObject> missions = (List<EObject>) sourceModel.getAllOfType("Mission");
@@ -129,11 +129,11 @@ public class ModelsTransformer {
 
 				if (!rejected) {
 					HashMap<String, Integer> groupIdToCountersMap = new HashMap<String, Integer>();
-					for (MutationGroup mg : allMutationGroupsWithMemberIds) {
+					for (VariationGroup mg : allVariationGroupsWithMemberIds) {
 						groupIdToCountersMap.put(mg.getGroupID(), 0);
 					}
 					for (EObject aMutableObjectInTheSet : aSet) {
-						for (MutationGroup mg : allMutationGroupsWithMemberIds) {
+						for (VariationGroup mg : allVariationGroupsWithMemberIds) {
 							if (mg.getMemberIds().contains(sourceModel.getElementId(aMutableObjectInTheSet))) {
 								groupIdToCountersMap.put(mg.getGroupID(),
 										groupIdToCountersMap.get(mg.getGroupID()) + 1);
@@ -141,7 +141,7 @@ public class ModelsTransformer {
 						}
 
 					}
-					for (MutationGroup mg : allMutationGroupsWithMemberIds) {
+					for (VariationGroup mg : allVariationGroupsWithMemberIds) {
 						String mgId = mg.getGroupID();
 						int mgMax = mg.getMaxLimit();
 						int mgMin = mg.getMinLimit();
