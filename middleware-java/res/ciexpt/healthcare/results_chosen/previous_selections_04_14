@@ -1,0 +1,10 @@
+total 32
+drwxrwxr-x 2 jharbin jharbin 4096 Apr 14 15:05 .
+drwxr-xr-x 9 jharbin users   4096 Apr 14 13:43 ..
+lrwxrwxrwx 1 jharbin jharbin   65 Apr 14 00:41 ciexpt-casestudy-healthcare.res -> ../2022_04_13/ciexpt-casestudy-healthcare-segfaults-corrected.res
+lrwxrwxrwx 1 jharbin users     70 Apr  1 05:10 ciexpt-casestudy-repeated-optimal.res -> ../2022_03_30/ciexpt-casestudyHealthcare_repeated-d045d342_partial.res
+lrwxrwxrwx 1 jharbin jharbin   70 Apr  1 13:56 ciexpt-casestudy-repeated-worst.res -> ../2022_03_30/ciexpt-casestudyHealthcare_repeated-b6032518_partial.res
+-rwx------ 1 jharbin jharbin   77 Apr 14 07:02 find_configs_with_all_rooms_energytracking.sh
+-rwx------ 1 jharbin jharbin   74 Apr 14 01:33 find_configs_with_all_rooms_standard.sh
+-rw-rw-r-- 1 jharbin jharbin  619 Apr 12 14:29 previous_selections_04_12
+-rw-rw-r-- 1 jharbin jharbin    0 Apr 14 15:05 previous_selections_04_14

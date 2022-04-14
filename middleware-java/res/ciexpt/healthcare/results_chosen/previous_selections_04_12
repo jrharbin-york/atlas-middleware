@@ -1,0 +1,7 @@
+total 16
+drwxrwxr-x 2 jharbin jharbin 4096 Apr 12 14:29 .
+drwxr-xr-x 7 jharbin users   4096 Apr 12 14:28 ..
+lrwxrwxrwx 1 jharbin users     45 Apr  1 04:28 ciexpt-casestudy-healthcare.res -> ../2022_03_30/ciexpt-casestudy-healthcare.res
+lrwxrwxrwx 1 jharbin users     70 Apr  1 05:10 ciexpt-casestudy-repeated-optimal.res -> ../2022_03_30/ciexpt-casestudyHealthcare_repeated-d045d342_partial.res
+lrwxrwxrwx 1 jharbin jharbin   70 Apr  1 13:56 ciexpt-casestudy-repeated-worst.res -> ../2022_03_30/ciexpt-casestudyHealthcare_repeated-b6032518_partial.res
+-rw-rw-r-- 1 jharbin jharbin    0 Apr 12 14:29 previous_selections
