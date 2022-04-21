@@ -65,7 +65,7 @@
   <goals xmi:id="_42Mf8KbSEeyQXZHshd3NIw" name="checkRoomsCompleted">
     <requirements xmi:id="_42Mf8abSEeyQXZHshd3NIw" latestFinishTime="1500.0"/>
     <participants xsi:type="atlas:StaticParticipants" xmi:id="_42NHAKbSEeyQXZHshd3NIw" participants="_gx4mIHP-Eeqc6cv9mBHIKw _hNarkHP-Eeqc6cv9mBHIKw"/>
-    <action xsi:type="atlas:CheckRoomsCompleted" xmi:id="_8G2_cKbSEeyQXZHshd3NIw"/>
+    <action xsi:type="atlas:CheckRoomsCompleted" xmi:id="_8G2_cKbSEeyQXZHshd3NIw" energyPerRoom="18000.0"/>
     <region xsi:type="atlas:StaticGoalRegion" xmi:id="_42NHAqbSEeyQXZHshd3NIw">
       <staticRegion xmi:id="_42NHA6bSEeyQXZHshd3NIw">
         <corner1 xmi:id="_42NHBKbSEeyQXZHshd3NIw"/>
@@ -78,7 +78,7 @@
   <goals xmi:id="_SlcFAKqnEeyzD4i5VcA_4Q" name="trackEnergyHealthcare">
     <requirements xmi:id="_ZWjzgKqnEeyzD4i5VcA_4Q" latestFinishTime="1500.0"/>
     <participants xsi:type="atlas:StaticParticipants" xmi:id="_XVMYsKqnEeyzD4i5VcA_4Q" participants="_gx4mIHP-Eeqc6cv9mBHIKw _hNarkHP-Eeqc6cv9mBHIKw"/>
-    <action xsi:type="atlas:TrackEnergyConsumption" xmi:id="_gqYmcKqnEeyzD4i5VcA_4Q" energyPerDistance="40.0" energyPerTime="11.0" energyPerRoom="18000.0"/>
+    <action xsi:type="atlas:TrackEnergyConsumption" xmi:id="_gqYmcKqnEeyzD4i5VcA_4Q" energyPerDistance="40.0" energyPerTime="11.0"/>
     <region xsi:type="atlas:StaticGoalRegion" xmi:id="_OUXk4KsJEeyLetgpoq5lEQ">
       <staticRegion xmi:id="_O4zusKsJEeyLetgpoq5lEQ">
         <corner1 xmi:id="_P4S1wKsJEeyLetgpoq5lEQ"/>

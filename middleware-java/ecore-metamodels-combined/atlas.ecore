@@ -154,12 +154,12 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="subcomponents" upperBound="-1"
         eType="#//Component" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="MutationProgram">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mutAlg" eType="#//MutationAlgorithm"/>
+  <eClassifiers xsi:type="ecore:EClass" name="VariationProgram">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mutAlg" eType="#//VariationAlgorithm"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="mutationGroups" upperBound="-1"
-        eType="#//MutationGroup" containment="true"/>
+        eType="#//VariationGroup" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="MutationGroup">
+  <eClassifiers xsi:type="ecore:EClass" name="VariationGroup">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="minRequiredFromGroup" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
         defaultValueLiteral="0"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxRequiredFromGroup" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
@@ -167,7 +167,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="members" upperBound="-1"
         eType="#//Component"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EEnum" name="MutationAlgorithm">
+  <eClassifiers xsi:type="ecore:EEnum" name="VariationAlgorithm">
     <eLiterals name="EXHAUSTIVE_SEARCH"/>
     <eLiterals name="RANDOM_SEARCH" value="1"/>
     <eLiterals name="GA_SEARCH" value="2"/>
@@ -228,6 +228,11 @@
   <eClassifiers xsi:type="ecore:EClass" name="Cover" eSuperTypes="#//GoalAction"/>
   <eClassifiers xsi:type="ecore:EClass" name="CheckRoomsCompleted" eSuperTypes="#//GoalAction">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="energyPerRoom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CheckRoomsCompletedGaussianEnergy" eSuperTypes="#//GoalAction">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="energyPerRoomMean" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="energyPerRoomStdDev" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="randomSeed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Avoid" eSuperTypes="#//GoalAction"/>
   <eClassifiers xsi:type="ecore:EClass" name="TrackDistances" eSuperTypes="#//GoalAction"/>
@@ -332,7 +337,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Mission">
     <eStructuralFeatures xsi:type="ecore:EReference" name="mutProgram" lowerBound="1"
-        eType="#//MutationProgram" containment="true"/>
+        eType="#//VariationProgram" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="robots" upperBound="-1"
         eType="#//Robot" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="computers" upperBound="-1"

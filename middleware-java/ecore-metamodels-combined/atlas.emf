@@ -176,18 +176,18 @@ class Component {
  	val Component[*] subcomponents;
  }
 
-class MutationProgram {
-	attr MutationAlgorithm mutAlg;
-	val MutationGroup[*] mutationGroups;
+class VariationProgram {
+	attr VariationAlgorithm mutAlg;
+	val VariationGroup[*] mutationGroups;
 }
 
-class MutationGroup {
+class VariationGroup {
 	attr int minRequiredFromGroup = 0;
 	attr int maxRequiredFromGroup = 0;
 	ref Component[*] members;
 }
 
-enum MutationAlgorithm {
+enum VariationAlgorithm {
 	EXHAUSTIVE_SEARCH;
 	RANDOM_SEARCH;
 	GA_SEARCH;
@@ -285,6 +285,12 @@ class Cover extends GoalAction {
 
 class CheckRoomsCompleted extends GoalAction {
 	attr double energyPerRoom;
+}
+
+class CheckRoomsCompletedGaussianEnergy extends GoalAction {
+	attr double energyPerRoomMean;
+	attr double energyPerRoomStdDev;
+	attr long randomSeed;
 }
 
 class Avoid extends GoalAction {
@@ -407,7 +413,7 @@ class Behaviour {
 // Use rooms as environmental object
 
 class Mission {
-	val MutationProgram[1] mutProgram;
+	val VariationProgram[1] mutProgram;
 	val Robot[*] robots;
 	val Computer[*] computers;
 	val Region[*] regions;

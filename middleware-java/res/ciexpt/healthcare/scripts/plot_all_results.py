@@ -9,6 +9,9 @@ from matplotlib.ticker import MaxNLocator
 max_rooms = 12
 TIME_OFFSET = 115
 
+plt.rc('axes', titlesize=12)
+plt.rc('axes', labelsize=14)
+
 def load_file_expt1(filename):
     df = pd.read_csv(filename, header=None, skiprows=0)
     df.columns = ['ModelName','CompletedRooms','TotalEnergyRemaining','CompletionTimeWorstCase','CIName']
@@ -38,17 +41,17 @@ def plot_integer_hist(ax, data, col, xlabel, ylabel, max_x, colour):
 
 def plot_expt1_both_ci_combined(expt1_data, filename_pdf):
     fig, ax = plt.subplots(nrows=2, ncols=1)
-    plt.suptitle("Completed room count for both collective intelligences");
+#   plt.suptitle("Completed room count for both collective intelligences");
     fig.tight_layout(rect=[0, 0.03, 1, 0.95])
-    plot_integer_hist(ax[1], expt1_data['energytracking'], 'CompletedRooms', 'Completed rooms count for energy-tracking CI', 'Frequency', max_rooms, 'blue')
-    plot_integer_hist(ax[0], expt1_data['standard'], 'CompletedRooms', 'Completed rooms count for standard CI', 'Frequency', max_rooms, 'green')
-    plt.savefig(filename_pdf)
+    plot_integer_hist(ax[1], expt1_data['energytracking'], 'CompletedRooms', 'Completed rooms for energy-tracking CI', 'Frequency', max_rooms, 'blue')
+    plot_integer_hist(ax[0], expt1_data['standard'], 'CompletedRooms', 'Completed rooms for standard CI', 'Frequency', max_rooms, 'green')
+    plt.savefig(filename_pdf, bbox_inches="tight")
 
 def plot_expt1_standard_only(expt1_data, filename_pdf):
     fig, ax = plt.subplots()
-    plot_integer_hist(ax, expt1_data['standard'], 'CompletedRooms', 'Completed rooms count for standard CI', 'Frequency', max_rooms, 'green')
-    plt.title("Completed room count for standard collective intelligence");
-    plt.savefig(filename_pdf)
+    plot_integer_hist(ax, expt1_data['standard'], 'CompletedRooms', 'Completed rooms for standard CI', 'Frequency', max_rooms, 'green')
+#   plt.title("Completed room count for standard collective intelligence");
+    plt.savefig(filename_pdf, bbox_inches="tight")
 
 # plot example: https://colab.research.google.com/drive/1PQ6ZRQ9WWbu3-DfzE9Nq8IM6vAMfFfml?usp=sharing
     
@@ -58,10 +61,10 @@ def plot_expt1_scatter_plot(expt1_data, filename_pdf):
     adv = expt1_data['energytracking']
     ax.plot(std['CompletedRooms'], std['TotalEnergyRemaining'], 'gx', adv['CompletedRooms'], adv['TotalEnergyRemaining'], 'bo', markerfacecolor="none")
     ax.set_xlabel("Completed Rooms");
-    ax.set_ylabel("Total energy remaining on robots at end");
+    ax.set_ylabel("Total energy at end");
     plt.legend(["Standard CI", "Energy Tracking CI"]);
-    plt.title("Completed rooms and total energy remaining at the end");
-    plt.savefig(filename_pdf)
+#   plt.title("Completed rooms and total energy remaining at the end");
+    plt.savefig(filename_pdf, bbox_inches="tight")
 
 def plot_expt1_scatter_plot_3d(expt1_data, filename_pdf):
     ax = plt.axes(projection="3d")
@@ -71,11 +74,13 @@ def plot_expt1_scatter_plot_3d(expt1_data, filename_pdf):
     adv_time_corrected = adv['CompletionTimeWorstCase'] - TIME_OFFSET
     ax.plot3D(std['CompletedRooms'], std['TotalEnergyRemaining'], std_time_corrected, 'gx')
     ax.plot3D(adv['CompletedRooms'], adv['TotalEnergyRemaining'], adv_time_corrected, 'bo', markerfacecolor="none")
+
     ax.set_xlabel("Completed Rooms");
-    ax.set_ylabel("Total energy remaining on robots at end");
+    ax.set_ylabel("Energy at end");
+    ax.set_zlabel("Mission completion time");
     plt.legend(["Standard CI", "Energy Tracking CI"]);
-    plt.title("Completed rooms and total energy remaining at the end");
-    plt.savefig(filename_pdf)
+#   plt.title("All metrics");
+    plt.savefig(filename_pdf, bbox_inches="tight")
     
 def plot_expt1_scatter_plot_standardonly(expt1_data, filename_pdf):
     fig, ax = plt.subplots()
@@ -85,9 +90,9 @@ def plot_expt1_scatter_plot_standardonly(expt1_data, filename_pdf):
     
     ax.plot(std['CompletedRooms'], std['TotalEnergyRemaining'], 'gx')
     ax.set_xlabel("Completed Rooms");
-    ax.set_ylabel("Total energy remaining on robots at end");
-    plt.title("Completed rooms and total energy remaining at the end");
-    plt.savefig(filename_pdf)
+    ax.set_ylabel("Total energy at end");
+#   plt.title("Completed rooms and total energy remaining at the end");
+    plt.savefig(filename_pdf, bbox_inches="tight")
 
 def plot_expt1_scatter_plot_standardonly_3d(expt1_data, filename_pdf):
     ax = plt.axes(projection="3d")
@@ -97,9 +102,10 @@ def plot_expt1_scatter_plot_standardonly_3d(expt1_data, filename_pdf):
     std_time_corrected = std['CompletionTimeWorstCase'] - TIME_OFFSET
     ax.plot(std['CompletedRooms'], std['TotalEnergyRemaining'], std_time_corrected, 'gx')
     ax.set_xlabel("Completed Rooms");
-    ax.set_ylabel("Total energy remaining on robots at end");
-    plt.title("Completed rooms and total energy remaining at the end");
-    plt.savefig(filename_pdf)
+    ax.set_ylabel("Energy at end");
+    ax.set_zlabel("Mission completion time");
+#   plt.title("All metrics");
+    plt.savefig(filename_pdf, bbox_inches="tight")
 
 def plot_repeated_results_energy_finishtime(expt1_data, filename_pdf):
     fig, ax = plt.subplots()
@@ -113,9 +119,9 @@ def plot_repeated_results_energy_finishtime(expt1_data, filename_pdf):
     
     ax.plot(std['TotalEnergyRemaining'], std_time_corrected, 'gx', adv['TotalEnergyRemaining'], adv_time_corrected, 'bo')
     ax.set_xlabel("Total energy at end");
-    ax.set_ylabel("Completion time for the worst case of all robots");
-    plt.title("Energy reminaing on all robots \n versus worst case completion time of all robots over multiple runs of the same model", wrap=True)
-    plt.savefig(filename_pdf)
+    ax.set_ylabel("Mission completion time");
+#   plt.title("Energy reminaing on all robots \n versus worst case completion time of all robots over multiple runs of the same model", wrap=True)
+    plt.savefig(filename_pdf, bbox_inches="tight")
 
 def plot_repeated_results_rooms_energy(expt1_data, filename_pdf):
     fig, ax = plt.subplots()
@@ -126,9 +132,9 @@ def plot_repeated_results_rooms_energy(expt1_data, filename_pdf):
 
     ax.plot(std['CompletedRooms'], std['TotalEnergyRemaining'], 'gx', adv['CompletedRooms'], adv['TotalEnergyRemaining'], 'bo')
     ax.set_xlabel("Completed Rooms");
-    ax.set_ylabel("Total energy remaing on all robots");
-    plt.title("Completed rooms versus the total energy remaining on the robots over multiple runs of the same model", wrap=True)
-    plt.savefig(filename_pdf)  
+    ax.set_ylabel("Total energy at end");
+#   plt.title("Completed rooms versus the total energy remaining on the robots over multiple runs of the same model", wrap=True)
+    plt.savefig(filename_pdf, bbox_inches="tight")  
 
 def plot_all_healthcare():
     # Healthcare all configurations
