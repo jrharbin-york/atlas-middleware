@@ -1,0 +1,90 @@
+[% out.setContentType("Java"); %]
+
+package atlascollectiveint.custom;
+
+import atlascollectiveint.api.*;
+import atlascollectiveint.logging.CollectiveIntLog;
+import atlasdsl.*;
+import atlassharedclasses.*;
+import atlasdsl.loader.DSLLoadFailed;
+
+import java.lang.*;
+import java.util.*;
+import java.util.stream.*;
+
+[* We can auto-generate the DSL loader here in the CI if a boolean parameter is set *]
+[% var genloadDSL = false; 
+   var useEnergyUpdateHook = true;
+   var useBehaviourUpdateHook = true;
+%]
+
+public class [%= ciClassName %] {
+	[* We can auto-generate the DSL loader if a boolean parameter is set *]
+	public static void init() {
+	[% if (genloadDSL) { %]
+		try {		
+			loadDSL();
+		} catch (DSLLoadFailed e) {
+			e.printStackTrace();
+		} catch (MissingProperty e) {
+			e.printStackTrace();
+		}
+	[% } %]
+	}
+	
+	[% if (genloadDSL) { %]
+	public static void loadDSL() throws DSLLoadFailed, MissingProperty {
+		DSLLoader dslloader = new GeneratedDSLLoader();
+		mission = dslloader.loadMission();
+		loadRoomLocationsFromDSL();
+	}
+	[% } %]
+
+	
+	[* Generate the sensor hooks according to all the sensors present in the model *]
+	[% for (sensorType in getAllSensorTypesInModel()) { %]
+		[%  var argumentString = getArgumentsForSensor(sensorType);
+			//var sensorTypeName = getSensorTypeName(sensorType); 
+		%]
+	public static void [%= sensorType %]DetectionHook([%= argumentString %]) {
+
+	}
+	[% } %]
+
+	[% if (useEnergyUpdateHook) { %] 
+	public static void EnergyUpdateHook(EnergyUpdate energyUpdate, String robotName) {
+		
+	}
+	[% } %]
+	
+	[% if (useBehaviourUpdateHook) { %]
+	public static void BehaviourVariableHook(String key, String value, String robotName_uc, Double timeNow) {
+	
+	}
+	[% } %]
+}
+	
+[% 
+operation getAllSensorTypesInModel() { 
+	var sensors = M!Sensor.getAllOfKind();
+	var sensorTypes = new Set();
+	for (s in sensors) {
+		sensorTypes.add(s.type);
+	}
+	return sensorTypes;
+}
+
+operation getArgumentsForSensor(sensorType) {
+	if (sensorType == M!SensorType#SONAR) {
+		return "SensorDetection detection, String robotName";
+	}
+	
+	if (sensorType == M!SensorType#GPS_POSITION) {
+		return "Double x, Double y, String robotName";
+	}
+	
+	if (sensorType == M!SensorType#CAMERA) {
+		return "SensorDetection detection, String robotName";
+	}
+}
+%]
