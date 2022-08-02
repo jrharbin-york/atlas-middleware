@@ -1,0 +1,391 @@
+@namespace(uri="http://www.github.com/jrharbin-york/atlas-middleware/dsl/atlas", prefix="atlas")
+package Atlas;
+
+abstract class Region {
+}
+
+class Point {
+	attr double x;
+	attr double y;
+	attr double z;
+}
+
+class Rectangle extends Region {
+	val Point[1] corner1;
+	val Point[1] corner2;
+}
+
+class Circle extends Region {
+	val Point[1] centre;
+	attr double radius;
+}
+
+class Line extends Region {
+	val Point[2..*] points;
+}
+
+class Polygon extends Region {
+	val Point[3..*] points;
+}
+
+class EnvironmentalObject extends Point {
+	attr boolean isHazard;
+	attr int label;
+}
+
+class EnvironmentalObstacleRegion {
+	val Rectangle region;
+}
+
+class EnvironmentalObstacle {
+	val Polygon poly;
+	attr String label;
+}
+
+class FaultTimeProperties {
+	attr double earliestFaultStart;
+	attr double latestFaultEnd;
+	attr double maxFaultLength;
+	attr int maxFaultRepeatCount;
+	attr double faultProb;
+}
+
+abstract class FaultImpact {
+	
+}
+
+abstract class MessageImpact extends FaultImpact {
+	ref Message[1]#affectingFaults affectedMessage;
+}
+
+class DelayMessage extends MessageImpact {
+	attr double delayLength;
+}
+
+class DeleteMessage extends MessageImpact {
+	
+}
+
+class SubFieldSpec {
+	attr boolean randomSelection;
+	// TODO: change this to allow min or max field numbers here
+	attr int fieldStartNum;
+	attr int fieldRangeLength;
+}
+
+class MutateMessage extends MessageImpact {
+	ref MessageField[1] affectedField;
+	val MessageChange[1] newValue;
+	val SubFieldSpec[0..1] subfieldSpec;
+}
+
+abstract class MessageChange {
+	
+}
+
+class IntMessageChange extends MessageChange {
+	attr int absoluteValue;
+	attr int incrementValue;
+}
+
+class StringMessageChange extends MessageChange {
+	attr String absoluteValue;
+}
+
+class FloatMessageChange extends MessageChange {
+	attr double absoluteValue;
+	attr double incrementValue;
+	attr double multFactor;
+}
+
+class PointMessageChange extends MessageChange {
+	val Point[0..1] absoluteValue;
+	val Point[0..1] maxOffsetValue;
+}
+
+abstract class ComponentImpact extends FaultImpact {
+	ref Component[1] affectedComponent;
+}
+
+class DisabledComponent extends ComponentImpact {
+	
+}
+
+class MotionFault extends ComponentImpact {
+	attr String affectedProperty;
+	attr String newValue;
+}
+
+class EnergyLoss extends ComponentImpact {
+	attr int fixedEnergyLoss;
+	//attr int powerDraw;
+	// For now, energy loss is fixed. The Component must be a Battery
+}
+
+class Fault {
+	attr String name;
+	val Region[0..1] affectedRegion;
+	val FaultTimeProperties[1] affectedTime;
+	val FaultImpact[1] impact;
+}
+
+class MessageField {
+	attr String name;
+}
+
+class Message {
+	attr String name;
+	ref Component[1] from;
+	ref Component[1] to;
+	val MessageField[1..*] fields;
+}
+
+class Model {
+ val Component[*] components;
+}
+
+abstract class ComponentProperty {
+ attr String name; 
+}
+
+class IntProperty extends ComponentProperty {
+ attr int value;
+}
+
+class PointProperty extends ComponentProperty {
+	val Point value;
+}
+
+class StringProperty extends ComponentProperty {
+ attr String value;
+}
+
+class DoubleProperty extends ComponentProperty {
+ attr double value;
+}
+
+class Component {
+	// TODO: should have maps here
+	attr String name;
+	attr Boolean mutable = false;
+ 	val ComponentProperty[] componentProperties;
+ 	val Component[*] subcomponents;
+ }
+
+class VariationProgram {
+	attr VariationAlgorithm mutAlg;
+	val VariationGroup[*] mutationGroups;
+}
+
+class VariationGroup {
+	attr String name;
+	attr int minRequiredFromGroup = 0;
+	attr int maxRequiredFromGroup = 0;
+	ref Component[*] members;
+}
+
+enum VariationAlgorithm {
+	SEQUENTIAL_SCAN;
+	GA_SEARCH;
+}
+
+class Robot extends Component {
+}
+
+class Computer extends Component {
+}
+
+enum SensorType {
+ SONAR = 1;
+ GPS_POSITION = 2;
+ CAMERA = 3;
+}
+
+enum ActuatorType {
+ MOTOR = 1;
+}
+
+class Sensor extends Component {
+ attr SensorType type;
+ attr String[1..*] detections;
+}
+
+class Actuator extends Component {
+ attr ActuatorType type;
+ attr String[1..*] commands;
+}
+
+class ProcessingUnit extends Component {
+ 
+}
+
+class MotionSource extends Component {
+ 	attr double energyPerDistance;
+ 	attr String[0..*] params;
+}
+
+abstract class EnergyResource extends Component {
+ 
+}
+
+class Battery extends EnergyResource {
+ attr int totalEnergy; 
+}
+
+class EnergySource extends EnergyResource {
+ attr int productionRate;
+}
+
+class GoalResultField {
+	attr String name;
+}
+
+class IntResultField extends GoalResultField {
+	attr int value;
+}
+
+class StringResultField extends GoalResultField {
+	attr String value;
+}
+
+class FloatResultField extends GoalResultField {
+	attr float value;
+}
+
+class RobotResultField extends GoalResultField {
+	
+}
+
+class PointResultField extends GoalResultField {
+	
+}
+
+class GoalResult {
+	val GoalResultField[0..*] contents;	
+}
+
+abstract class GoalAction {
+	
+}
+
+class Visit extends GoalAction {
+	
+}
+
+class Patrol extends GoalAction {
+	
+}
+
+class Cover extends GoalAction {
+	
+}
+
+class Avoid extends GoalAction {
+	
+}
+
+class TrackDistances extends GoalAction {
+	
+}
+
+class ReturnOnLowEnergy extends GoalAction {
+	attr double energyThreshold;
+}
+
+class StayInRegion extends GoalAction {
+	attr boolean stopOnFirstViolation;
+}
+
+class AvoidOthers extends GoalAction {
+	attr double clearance;
+	attr boolean advancedAvoidance;
+}
+
+class DiscoverObjects extends GoalAction {
+	ref EnvironmentalObject[*] objects;
+	attr int verificationsMalicious;
+	attr int verificationsBenign;
+}
+
+class SensorCover extends Cover {
+	attr double density;
+	attr int samplesPerUnit;
+	attr SensorType sensortype;
+	attr boolean collective;
+}
+
+abstract class GoalParticipants {
+	
+}
+
+enum logicOps {
+	ADD = 1;
+	SUBTRACT = 2;
+}
+
+class RelativeParticipants extends GoalParticipants {
+	ref Goal parentGoal;
+	ref StaticParticipants staticRobots;
+	attr logicOps setOperation;
+	attr String fieldName;
+	attr int participantLimit;
+}
+
+class StaticParticipants extends GoalParticipants {
+	ref Robot[*] participants;
+}
+
+class GoalTemporalConstraints {
+	ref Goal[*] dependencies;
+	attr double earliestStartTime;
+	attr double latestFinishTime;
+}
+
+abstract class GoalRegion {
+	
+}
+
+class StaticGoalRegion extends GoalRegion {
+	val Rectangle staticRegion;
+}
+
+class DynamicGoalRegion extends GoalRegion {
+	ref Goal[1] relativeToGoal;
+	attr String relativeToGoalField;
+	attr double relativeRange;
+}
+
+class Goal {
+	attr String name;
+	attr int priority;
+	val GoalTemporalConstraints requirements;
+	val GoalParticipants participants;
+	val GoalAction action;
+	val GoalRegion[0..1] region;
+	ref Behaviour[*] behaviours;
+}
+
+class BehaviourVariable {
+	attr String varName;
+}
+
+class Behaviour {
+	attr String className;
+	val BehaviourVariable[*] bvars;
+}
+
+class Mission {
+	val VariationProgram[1] mutProgram;
+	val Robot[*] robots;
+	val Computer[*] computers;
+	val Region[*] regions;
+	val Goal[*] goals;
+	val Behaviour[*] behaviours;
+	val EnvironmentalObject[*] objects;
+	val EnvironmentalObstacle[*] obstacles;
+	val EnvironmentalObstacleRegion obstacleRegion;
+	val Message[*] messages;
+	val Fault[*] faults;
+	attr double endTime;
+	attr boolean stopVehicleOnNoEnergy;
+}
